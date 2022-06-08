@@ -1,0 +1,34 @@
+a {
+    text-decoration: none !important;
+}
+
+a:hover {
+    color: #269926;
+}
+
+.btn-apple {
+    color: #fff;
+    background-color: #269926;
+    border-color: #269926;
+}
+
+.btn-apple:hover {
+    color: #fff;
+    background-color: #269926;
+    border-color: #269926;
+}
+
+.btn-outline-apple {
+    color: #269926;
+    border-color: #269926;
+}
+
+.btn-outline-apple:hover {
+    color: #fff;
+    background-color: #269926;
+    border-color: #269926;
+}
+
+.form {
+    max-width: 50%;
+}
