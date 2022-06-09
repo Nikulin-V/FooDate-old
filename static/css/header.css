@@ -1,0 +1,20 @@
+.navbar-brand {
+    float: left;
+    margin-left: 30px;
+}
+
+#logo {
+    width: 50px;
+    height: 50px;
+}
+
+.nav-link {
+    color: #1d7373;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 500;
+    align-self: center;
+}
+
+.nav-link:hover {
+    color: #269926;
+}
