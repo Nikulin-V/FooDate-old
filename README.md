@@ -1,5 +1,3 @@
-<img height="200" src="C:\Users\Vasily\PycharmProjects\foodate\static\images\fav\android-chrome-512x512.png" alt="FooDate logo"/>
-
 ## FooDate web application
 
 ### Setup:
