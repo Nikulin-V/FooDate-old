@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class HomepageConfig(AppConfig):
+class AppMobileConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'homepage'
+    name = 'app_mobile'

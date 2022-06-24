@@ -29,6 +29,33 @@ a:hover {
     border-color: #269926;
 }
 
+.btn-white {
+    color: #1d7373;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+.btn-white:hover {
+    color: #1d7373;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+.btn-outline-white {
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+.btn-outline-white:hover {
+    color: #1d7373;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
 .form {
     max-width: 50%;
+}
+
+.form-control {
+    border: none;
 }

@@ -7,17 +7,30 @@
           <img id="logo" src="{% static 'images/fav/android-chrome-512x512.png' %}"
                alt="Logo" loading="lazy">
         </a>
-        <a class="nav-link" href="/">Главная</a>
+        <a class="nav-link" href="{% url 'home' host 'app' %}">Главная</a>
         {% if user.is_authenticated %}
             {% if user.is_superuser %}
-                <a class="nav-link" href="/admin">Панель администрирования</a>
+                <a class="nav-link" href="{% url 'admin:index' host 'app' %}">
+                    Панель администрирования
+                </a>
             {% endif %}
 
-            <a class="nav-link" href="/auth/profile">Мой профиль</a>
-            <a class="nav-link" href="/auth/logout">Выйти</a>
+            <a class="nav-link" href="{% url 'app' host 'app' %}">
+                Холодильник
+            </a>
+            <a class="nav-link" href="{% url 'profile' host 'app' %}">
+                Профиль
+            </a>
+            <a class="btn btn-outline-apple nav-btn" href="{% url 'logout' host 'app' %}">
+                Выйти
+            </a>
         {% else %}
-            <a class="nav-link" href="/auth/login">Вход</a>
-            <a class="nav-link" href="/auth/signup">Регистрация</a>
+            <a class="btn btn-outline-apple nav-btn" href="{% url 'login' host 'app' %}">
+                Вход
+            </a>
+            <a class="btn btn-outline-apple nav-btn" href="{% url 'signup' host 'app' %}">
+                Регистрация
+            </a>
         {% endif %}
     </nav>
     <hr>
