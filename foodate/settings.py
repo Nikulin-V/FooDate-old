@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_hosts',
+    'django_user_agents',
 ]
 
 MIDDLEWARE = [
@@ -34,6 +35,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
     'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
@@ -42,6 +44,7 @@ ROOT_HOSTCONF = 'foodate.hosts'
 DEFAULT_HOST = 'app'
 PARENT_HOST = 'foodate.ru'
 HOST_SCHEME = 'http://'
+SESSION_COOKIE_DOMAIN = '.foodate.ru'
 
 TEMPLATES = [
     {
@@ -116,3 +119,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/auth/profile/'
 LOGOUT_REDIRECT_URL = '/auth/login/'
+
+# User Agents
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
+USER_AGENTS_CACHE = 'default'
