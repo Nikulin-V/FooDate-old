@@ -1,0 +1,33 @@
+<div class="mx-auto text-center w-75">
+    <h4 class="mt-3">Регистрация</h4>
+    <hr>
+    <form method="post" class="form-control">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <label for="id_username">Логин:</label>
+            {{ form.username }}
+        </div>
+        <div class="row mb-3">
+            {{ form.first_name.label_tag }}
+            {{ form.first_name }}
+        </div>
+        <div class="row mb-3">
+            {{ form.last_name.label_tag }}
+            {{ form.last_name }}
+        </div>
+        <div class="row mb-3">
+            {{ form.password.label_tag }}
+            {{ form.password }}
+        </div>
+        <div class="row mb-3">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+        </div>
+        <div class="text-danger">
+            {% for error in form.errors.values %}
+                {{ error }}
+            {% endfor %}
+        </div>
+        <input class="btn btn-apple mx-auto" type="submit" value="Зарегистрироваться"/>
+    </form>
+</div>

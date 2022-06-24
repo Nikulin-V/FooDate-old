@@ -1,0 +1,49 @@
+{% if next %}
+    {% if user.is_authenticated %}
+        {% include "users/include/error_403.html" %}
+    {% else %}
+        {% include "users/include/error_401.html" %}'
+    {% endif %}
+{% endif %}
+
+<div class="mt-5 mx-auto text-center">
+    <h3 class="mb-5">Вход</h3>
+
+    <form method="post" action="{% url 'login' host 'app' %}"
+          class="form-control mx-auto" style="max-width: 500px">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <div class="col-2"></div>
+            <div class="col-1">
+                Логин/Email:
+            </div>
+            <div class="col-8">
+                {{ form.username }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2"></div>
+            <div class="col-1">
+                {{ form.password.label_tag }}
+            </div>
+            <div class="col-8">
+                {{ form.password }}
+            </div>
+        </div>
+        {% if form.errors %}
+            <p class="mt-3 text-danger">Неверный логин или пароль. Попробуйте снова</p>
+        {% endif %}
+        <div class="row mt-4">
+            <input class="w-25 btn btn-apple mx-auto" type="submit" value="Войти"/>
+            <a class="nav-link" href="{% url 'password_reset' host 'app' %}">
+                Забыли пароль?
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#myModal").modal('show');
+    });
+</script>

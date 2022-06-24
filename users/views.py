@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -68,6 +68,7 @@ class SignupView(View):
 
             user.set_password(form.cleaned_data['password'])
             user.save()
-            return HttpResponseRedirect(reverse('login'))
+            login(request, user)
+            return HttpResponseRedirect(reverse('home'))
         context = {'form': form}
         return render(request, self.template, context)

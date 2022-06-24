@@ -1,0 +1,143 @@
+#logo {
+    width: 50px;
+    height: 50px;
+}
+
+.nav-link {
+    color: #ffffff;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 500;
+    align-self: center;
+}
+
+.nav-link:hover {
+    color: #269926;
+}
+
+.list-group-item {
+    text-align: center;
+    background-color: rgba(38, 153, 38, 0);
+    border-color: white;
+}
+
+.nav-btn {
+    align-self: center;
+    margin: 0 5px;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 18px;
+}
+
+
+label .menu {
+    position: fixed;
+    right: -100px;
+    top: -100px;
+    z-index: 100;
+    width: 175px;
+    height: 165px;
+    background: #269926;
+    border-radius: 50% 50% 50% 30%;
+    -webkit-transition: .5s ease-in-out;
+    transition: .5s ease-in-out;
+    box-shadow: 0 0 0 0 #269926, 0 0 0 0 #269926;
+    cursor: pointer;
+}
+
+label .hamburger {
+    position: absolute;
+    top: 125px;
+    right: 120px;
+    width: 30px;
+    height: 2px;
+    background: #ffffff;
+    display: block;
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transition: .5s ease-in-out;
+    transition: .5s ease-in-out;
+}
+
+label .hamburger:after, label .hamburger:before {
+    -webkit-transition: .5s ease-in-out;
+    transition: .5s ease-in-out;
+    content: "";
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+}
+
+label .hamburger:before {
+    top: -10px;
+}
+
+label .hamburger:after {
+    bottom: -10px;
+}
+
+label input {
+    display: none;
+}
+
+label input:checked + .menu {
+    box-shadow: 0 0 0 100vw #269926, 0 0 0 100vh #269926;
+    border-radius: 0;
+}
+
+label input:checked + .menu .hamburger {
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+label input:checked + .menu .hamburger:after {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    bottom: 0;
+}
+
+label input:checked + .menu .hamburger:before {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    top: 0;
+}
+
+label input:checked + .menu + ul {
+    visibility: visible;
+}
+
+label ul {
+    z-index: 200;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+    -webkit-transition: .25s 0s ease-in-out;
+    transition: .25s 0s ease-in-out;
+}
+
+label a {
+    margin: 5px;
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: x-large !important;
+}
+
+label a:hover {
+    color: #1d7373 !important;
+}
+
+#logo {
+    height: 50px;
+    width: 50px;
+    z-index: 1000;
+}

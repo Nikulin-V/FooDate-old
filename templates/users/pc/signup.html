@@ -1,0 +1,58 @@
+<div class="mt-5 mx-auto text-center">
+    <h3 class="mb-5">Регистрация</h3>
+
+    <form method="post" class="form-control mx-auto text-center" style="max-width: 500px">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <div class="col-2"></div>
+            <div class="col-1">
+                <label for="id_username">Логин:</label>
+            </div>
+            <div class="col-8">
+                {{ form.username }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2"></div>
+            <div class="col-1">
+                {{ form.first_name.label_tag }}
+            </div>
+            <div class="col-8">
+                {{ form.first_name }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2"></div>
+            <div class="col-1">
+                {{ form.last_name.label_tag }}
+            </div>
+            <div class="col-8">
+                {{ form.last_name }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2"></div>
+            <div class="col-1">
+                {{ form.password.label_tag }}
+            </div>
+            <div class="col-8">
+                {{ form.password }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2"></div>
+            <div class="col-1">
+                {{ form.password2.label_tag }}
+            </div>
+            <div class="col-8">
+                {{ form.password2 }}
+            </div>
+        </div>
+        <div class="text-danger">
+            {% for error in form.errors.values %}
+                {{ error }}
+            {% endfor %}
+        </div>
+        <input class="btn btn-apple mx-auto" type="submit" value="Зарегистрироваться"/>
+    </form>
+</div>

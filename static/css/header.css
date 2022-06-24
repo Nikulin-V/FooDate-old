@@ -18,3 +18,8 @@
 .nav-link:hover {
     color: #269926;
 }
+
+.nav-btn {
+    align-self: center;
+    margin: 0 5px;
+}

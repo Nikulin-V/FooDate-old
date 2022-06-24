@@ -1,0 +1,59 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/mobile_header.css' %}">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<label>
+    <input type="checkbox">
+    <span class="menu">
+        <span class="hamburger"></span>
+    </span>
+    <ul class="list-group list-group-flush" id="header">
+        <li class="list-group-item text-center">
+            <a href="{% url 'home' host 'app_mobile' %}">
+                {% include 'include/logo100x100.html' %}
+            </a>
+        </li>
+        <li class="list-group-item">
+            <a href="{% url 'home' host 'app_mobile' %}">
+                Главная
+            </a>
+        </li>
+        {% if user.is_authenticated %}
+            {% if user.is_superuser %}
+                <li class="list-group-item">
+                    <a class="nav-link" href="{% url 'admin:index' host 'app' %}">
+                        Панель администрирования
+                    </a>
+                </li>
+            {% endif %}
+
+            <li class="list-group-item">
+                <a class="nav-link" href="{% url 'app' host 'app_mobile' %}">
+                    Холодильник
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="nav-link" href="{% url 'profile' host 'app' %}">
+                    Профиль
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="btn-outline-white btn nav-btn" href="{% url 'logout' host 'app' %}">
+                    Выйти
+                </a>
+            </li>
+        {% else %}
+            <li class="list-group-item">
+                <a class="btn-outline-white btn nav-btn" href="{% url 'login' host 'app' %}">
+                    Вход
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="btn-outline-white btn nav-btn" href="{% url 'signup' host 'app' %}">
+                    Регистрация
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</label>
