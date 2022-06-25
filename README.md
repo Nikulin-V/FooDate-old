@@ -26,7 +26,12 @@ DEBUG = True
 pip install -r requirements.txt
 ```
 
-5. Start the server (--insecure for production or DEBUG=False)
+5. Migrate the database
+```commandline
+python manage.py migrate
+```
+
+6. Start the server (--insecure for production or DEBUG=False)
 ```commandline
 python manage.py runserver host:port --insecure
 ```

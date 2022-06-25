@@ -16,6 +16,11 @@ ALLOWED_HOSTS = ['foodate.ru', 'm.foodate.ru', 'book.foodate.ru']
 # Application definition
 
 INSTALLED_APPS = [
+    'app.apps.AppConfig',
+    'app_mobile.apps.AppMobileConfig',
+    'book.apps.BookConfig',
+    'users.apps.UsersConfig',
+    'core.apps.CoreConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -24,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_hosts',
     'django_user_agents',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
