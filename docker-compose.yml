@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:445
+    ports:
+      - "445:445"
+    depends_on:
+      - db
+
+  db:
+    image: nouchka/sqlite3:latest
+    volumes:
+      - .:/home/vasil1y/apps/foodate
+    environment:
+      - SQLITE3_DB=db.sqlite3

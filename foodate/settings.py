@@ -10,6 +10,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', False) in ('1', 'True', 'true', 'T', 't')
+SCHEME = 'https'
 
 ALLOWED_HOSTS = ['foodate.ru', 'm.foodate.ru', 'book.foodate.ru']
 
@@ -49,8 +50,9 @@ ROOT_URLCONF = 'app.urls'
 ROOT_HOSTCONF = 'foodate.hosts'
 DEFAULT_HOST = 'app'
 PARENT_HOST = 'foodate.ru'
-HOST_SCHEME = 'http://'
+HOST_SCHEME = f'{SCHEME}://'
 SESSION_COOKIE_DOMAIN = '.foodate.ru'
+CSRF_TRUSTED_ORIGINS = [f'{SCHEME}://*.foodate.ru']
 
 TEMPLATES = [
     {
