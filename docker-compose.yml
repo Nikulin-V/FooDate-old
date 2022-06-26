@@ -15,4 +15,4 @@ services:
     volumes:
       - .:/home/vasil1y/apps/foodate
     environment:
-      - SQLITE3_DB=/db.sqlite3
+      - SQLITE3_DB=/foodate/db.sqlite3
