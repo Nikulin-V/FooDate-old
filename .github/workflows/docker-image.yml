@@ -32,6 +32,9 @@ jobs:
   deploy:
     needs: [test, build]
     runs-on: self-hosted
+    environment:
+      name: development
+      url: https://foodate.ru
     steps:
     - uses: actions/checkout@v1
     - name: Deploy to foodate.ru
