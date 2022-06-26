@@ -20,7 +20,7 @@
             </a>
         </li>
         {% if user.is_authenticated %}
-            {% if user.is_superuser %}
+            {% if user.is_staff %}
                 <li class="list-group-item">
                     <a class="nav-link" href="{% url 'admin:index' host 'app' %}">
                         Панель администрирования
