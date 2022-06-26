@@ -31,7 +31,7 @@ class Product(models.Model):
                                          ])
 
     def __str__(self):
-        return f'<Product> {self.id} | {self.product_card.slug} {self.amount}{self.amount_unit}'
+        return f'<Product> {self.pk} | {self.product_card.slug} {self.amount}{self.amount_unit}'
 
     class Meta:
         verbose_name = 'Продукт'
