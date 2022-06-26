@@ -26,8 +26,8 @@ jobs:
     - name: Build the Docker image
       run: |
         docker login -u gitlab-ci-token -p ${{ secrets.GITLAB_TOKEN }} ${{ secrets.GITLAB_URL }}
-        docker build . --file Dockerfile --tag ${{ secrets.GITLAB_IMAGE }}:$GITHUB_REF
-        docker push ${{ secrets.GITLAB_IMAGE }}:$GITHUB_REF
+        docker build . --file Dockerfile --tag ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
+        docker push ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
 
   deploy:
     needs: [test, build]
@@ -37,6 +37,6 @@ jobs:
     - name: Deploy to permkrovlya.ru
       run: |
         docker login -u gitlab-ci-token -p ${{ secrets.GITLAB_TOKEN }} ${{ secrets.GITLAB_URL }}
-        docker pull ${{ secrets.GITLAB_IMAGE }}:$GITHUB_REF
+        docker pull ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
         docker rm -f foodate || true
-        docker run -d -p 445:445 --name foodate --env DEBUG=False --env SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}' ${{ secrets.GITLAB_IMAGE }}:$GITHUB_REF
+        docker run -d -p 445:445 --name foodate --env DEBUG=False --env SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}' ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
