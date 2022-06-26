@@ -13,6 +13,6 @@ services:
   db:
     image: nouchka/sqlite3:latest
     volumes:
-      - foodate_db:/code
+      - ./db/db.sqlite3:/code/db.sqlite3
     environment:
       - SQLITE3_DB=/code/db.sqlite3
