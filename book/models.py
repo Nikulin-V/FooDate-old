@@ -13,8 +13,8 @@ class ProductCategoryManager(models.Manager):
 class ProductCategory(models.Model):
     categories = ProductCategoryManager()
 
-    name = models.CharField('Название', max_length=255)
-    slug = models.CharField(max_length=255, validators=[validators.validate_slug])
+    name = models.CharField('Название', max_length=255, unique=True)
+    slug = models.CharField(max_length=255, validators=[validators.validate_slug], unique=True)
 
     def __str__(self):
         return self.slug[:15]
@@ -31,8 +31,8 @@ class ProductSubcategoryManager(models.Manager):
 class ProductSubcategory(models.Model):
     subcategories = ProductSubcategoryManager()
 
-    name = models.CharField('Название', max_length=255)
-    slug = models.CharField(max_length=255, validators=[validators.validate_slug])
+    name = models.CharField('Название', max_length=255, unique=True)
+    slug = models.CharField(max_length=255, validators=[validators.validate_slug], unique=True)
 
     def __str__(self):
         return self.slug[:15]
@@ -50,9 +50,10 @@ class ProductCardManager(models.Manager):
 class ProductCard(PublishedBaseModel):
     cards = ProductCardManager()
 
-    title = models.CharField('Название', max_length=255)
+    title = models.CharField('Название', max_length=255, unique=True)
     name = models.CharField('Наименование', max_length=255, null=True)
-    slug = models.CharField(max_length=255, validators=[validators.validate_slug], null=True)
+    slug = models.CharField(max_length=255, null=True, unique=True,
+                            validators=[validators.validate_slug])
     category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True,
                                  related_name='products', verbose_name='Категория продуктов')
     subcategory = models.ForeignKey(ProductSubcategory, on_delete=models.SET_NULL, null=True,
@@ -72,8 +73,8 @@ class ProductCard(PublishedBaseModel):
         return self.slug[:15]
 
     class Meta:
-        verbose_name = 'Продукт'
-        verbose_name_plural = 'Продукты'
+        verbose_name = 'Карточка продукта'
+        verbose_name_plural = 'Карточки продуктов'
 
 
 class RecipeCategoryManager(models.Manager):
@@ -83,8 +84,8 @@ class RecipeCategoryManager(models.Manager):
 class RecipeCategory(models.Model):
     categories = RecipeCategoryManager()
 
-    name = models.CharField('Название', max_length=255)
-    slug = models.CharField(max_length=255, validators=[validators.validate_slug])
+    name = models.CharField('Название', max_length=255, unique=True)
+    slug = models.CharField(max_length=255, validators=[validators.validate_slug], unique=True)
 
     def __str__(self):
         return self.slug[:15]
@@ -103,7 +104,8 @@ class Recipe(PublishedBaseModel):
     recipes = RecipeManager()
 
     name = models.CharField('Название', max_length=255)
-    slug = models.CharField(max_length=255, validators=[validators.validate_slug], null=True)
+    slug = models.CharField(max_length=255, null=True, unique=True,
+                            validators=[validators.validate_slug])
     category = models.ForeignKey(RecipeCategory, on_delete=models.SET_NULL, null=True,
                                  related_name='products', verbose_name='Категория рецептов')
     people_count = models.IntegerField('Кол-во человек', default=1,
