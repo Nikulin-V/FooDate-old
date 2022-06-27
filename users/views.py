@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordResetView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
