@@ -127,10 +127,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/auth/profile/'
 LOGOUT_REDIRECT_URL = '/auth/login/'
-AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend']
+AUTHENTICATION_BACKENDS = ['core.backends.EmailAuthBackend']
+
+
+# Email
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_FILE_PATH = BASE_DIR / 'sent_email'
 
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST = 'smtp.yandex.ru'

@@ -42,8 +42,7 @@ urlpatterns = [
         PasswordResetView.as_view(
             template_name='users/password_reset.html',
             subject_template_name='users/password_reset_subject.txt',
-            html_email_template_name='users/password_reset_email.html',
-            title='FooDate'
+            html_email_template_name='users/password_reset_email.html'
         ),
         name='password_reset',
     ),
