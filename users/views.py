@@ -13,6 +13,7 @@ User = get_user_model()
 
 class ProfileView(LoginRequiredMixin, View):
     """User profile page"""
+
     template = 'users/profile.html'
     form = UserChangeForm
 
@@ -51,6 +52,7 @@ class ProfileView(LoginRequiredMixin, View):
 
 class SignupView(View):
     """Registration page"""
+
     template = 'users/signup.html'
 
     def get(self, request):
