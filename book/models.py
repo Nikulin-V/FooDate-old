@@ -4,21 +4,19 @@ from django.utils.safestring import mark_safe
 from tinymce.models import HTMLField
 
 from core.choices import TEMPERATURE_UNITS, ENERGY_UNITS
-from core.models import PublishedBaseModel, PhotoBaseModel
+from core.models import PublishedBaseModel, PhotoBaseModel, NameSlugBaseModel
 
 
 class ProductCategoryManager(models.Manager):
     pass
 
 
-class ProductCategory(models.Model):
+class ProductCategory(NameSlugBaseModel):
     categories = ProductCategoryManager()
 
     name = models.CharField('Название', max_length=255, unique=True)
-    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug])
-
-    def __str__(self):
-        return self.name[:50]
+    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug],
+                            null=True, blank=True)
 
     class Meta:
         verbose_name = 'Категорию продуктов'
@@ -29,11 +27,14 @@ class ProductSubcategoryManager(models.Manager):
     pass
 
 
-class ProductSubcategory(models.Model):
+class ProductSubcategory(NameSlugBaseModel):
     subcategories = ProductSubcategoryManager()
 
     name = models.CharField('Название', max_length=255, unique=True)
-    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug])
+    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug],
+                            null=True, blank=True)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True,
+                                 related_name='subcategories', verbose_name='Категория продуктов')
 
     def __str__(self):
         return self.name[:50]
@@ -48,22 +49,13 @@ class ProductCardManager(models.Manager):
         self.get_queryset().filter(is_published=True)
 
 
-class ProductCard(PublishedBaseModel, PhotoBaseModel):
+class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     cards = ProductCardManager()
 
-    title = models.CharField('Название', max_length=255, unique=True)
-    name = models.CharField('Наименование', max_length=255, null=True, blank=True)
-    slug = models.CharField(
-        max_length=255, null=True, blank=True, unique=True, validators=[validators.validate_slug]
-    )
-    category = models.ForeignKey(
-        ProductCategory,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='products',
-        verbose_name='Категория продуктов',
-    )
+    name = models.CharField('Название', max_length=255, unique=True)
+    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug],
+                            null=True, blank=True)
+    designation = models.CharField('Наименование', max_length=255)
     subcategory = models.ForeignKey(
         ProductSubcategory,
         on_delete=models.SET_NULL,
@@ -126,9 +118,6 @@ class ProductCard(PublishedBaseModel, PhotoBaseModel):
         'book.ProductPhoto', verbose_name='Фотографии', related_name='products'
     )
 
-    def __str__(self):
-        return self.name[:50]
-
     class Meta:
         verbose_name = 'Карточку продукта'
         verbose_name_plural = 'Карточки продуктов'
@@ -154,10 +143,8 @@ class RecipeCategory(models.Model):
     categories = RecipeCategoryManager()
 
     name = models.CharField('Название', max_length=255, unique=True)
-    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug])
-
-    def __str__(self):
-        return self.name[:50]
+    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug],
+                            null=True, blank=True)
 
     class Meta:
         verbose_name = 'Категорию рецептов'
@@ -172,10 +159,9 @@ class RecipeManager(models.Manager):
 class Recipe(PublishedBaseModel, PhotoBaseModel):
     recipes = RecipeManager()
 
-    name = models.CharField('Название', max_length=255)
-    slug = models.CharField(
-        max_length=255, null=True, blank=True, unique=True, validators=[validators.validate_slug]
-    )
+    name = models.CharField('Название', max_length=255, unique=True)
+    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug],
+                            null=True, blank=True)
     category = models.ForeignKey(
         RecipeCategory,
         on_delete=models.SET_NULL,
@@ -213,9 +199,6 @@ class Recipe(PublishedBaseModel, PhotoBaseModel):
     gallery = models.ManyToManyField(
         'book.RecipePhoto', verbose_name='Фотографии', related_name='products'
     )
-
-    def __str__(self):
-        return self.name[:50]
 
     class Meta:
         verbose_name = 'Рецепт'

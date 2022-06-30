@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.core import validators
 from django.db import models
+from slugify import slugify
 
 from book.models import ProductCard
 from core.choices import AMOUNT_UNIT
@@ -14,7 +15,8 @@ class ProductManager(models.Manager):
 class Product(models.Model):
     products = ProductManager()
 
-    slug = models.CharField(max_length=255, validators=[validators.validate_slug], unique=True)
+    slug = models.CharField(max_length=255, validators=[validators.validate_slug], unique=True,
+                            blank=True, null=True)
     product_card = models.ForeignKey(
         ProductCard, on_delete=models.DO_NOTHING, related_name='products'
     )
@@ -25,6 +27,11 @@ class Product(models.Model):
                                            validators=[validators.MaxValueValidator(datetime.now)])
     purchase_date = models.DateTimeField('Дата покупки', null=True, blank=True,
                                          validators=[validators.MaxValueValidator(datetime.now)])
+
+    def save(self, *args, **kwargs):
+        super(Product, self).save(*args, **kwargs)
+        self.slug = slugify(f'{self.product_card.name} {self.pk}')
+        super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'<Product> {self.pk} | {self.product_card.slug} {self.amount}{self.amount_unit}'

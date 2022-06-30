@@ -1,6 +1,24 @@
+from django.core import validators
 from django.db import models
 from django.utils.safestring import mark_safe
+from slugify import slugify
 from sorl.thumbnail import get_thumbnail
+
+
+class NameSlugBaseModel(models.Model):
+    name = models.CharField('Название', max_length=255, unique=True)
+    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug],
+                            blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(NameSlugBaseModel, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name[:50]
+
+    class Meta:
+        abstract = True
 
 
 class PublishedBaseModel(models.Model):
