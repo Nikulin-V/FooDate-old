@@ -10,9 +10,10 @@ services:
     depends_on:
       - db
 
-  db:
+  db_and_uploads:
     image: nouchka/sqlite3:latest
     volumes:
       - ./db.sqlite3:/code/db.sqlite3
+      - ./static/uploads:/code/static/uploads
     environment:
       - SQLITE3_DB=/code/db.sqlite3
