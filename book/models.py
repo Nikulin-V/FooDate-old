@@ -8,7 +8,16 @@ from core.models import PublishedBaseModel, PhotoBaseModel, NameSlugBaseModel
 
 
 class ProductCategoryManager(models.Manager):
-    pass
+    def get_active(self) -> dict['ProductCategory', list['ProductSubcategory']]:
+        """
+        Returns dictionary with category if it has active subcategories as key and its subcategories
+        """
+        active_categories = dict()
+        for category in self.get_queryset():
+            active_subcategories = ProductSubcategory.subcategories.get_active(category)
+            if active_subcategories:
+                active_categories[category] = active_subcategories
+        return active_categories
 
 
 class ProductCategory(NameSlugBaseModel):
@@ -24,7 +33,16 @@ class ProductCategory(NameSlugBaseModel):
 
 
 class ProductSubcategoryManager(models.Manager):
-    pass
+    def get_active(self, category) -> list['ProductSubcategory']:
+        """
+        Returns list with subcategories from category with published ProductCards
+        """
+        active_subcategories = []
+        published_cards = ProductCard.cards.get_published()
+        for subcategory in self.get_queryset().filter(category=category):
+            if published_cards.filter(subcategory=subcategory):
+                active_subcategories.append(subcategory)
+        return active_subcategories
 
 
 class ProductSubcategory(NameSlugBaseModel):
@@ -46,7 +64,7 @@ class ProductSubcategory(NameSlugBaseModel):
 
 class ProductCardManager(models.Manager):
     def get_published(self):
-        self.get_queryset().filter(is_published=True)
+        return self.get_queryset().filter(is_published=True)
 
 
 class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):

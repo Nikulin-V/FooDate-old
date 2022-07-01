@@ -7,7 +7,12 @@
           <img id="logo" src="{% static 'images/fav/android-chrome-512x512.png' %}"
                alt="Logo" loading="lazy">
         </a>
-        <a class="nav-link" href="{% url 'home' host 'app' %}">Главная</a>
+        <a class="nav-link" href="{% url 'home' host 'app' %}">
+            Главная
+        </a>
+        <a class="nav-link" href="{% url 'products' host 'book' %}">
+            Продукты
+        </a>
         {% if user.is_authenticated %}
             {% if user.is_staff %}
                 <a class="nav-link" href="{% url 'admin:index' host 'app' %}">
