@@ -39,7 +39,11 @@ urlpatterns = [
     ),
     path(
         'password_reset/',
-        PasswordResetView.as_view(template_name='users/password_reset.html'),
+        PasswordResetView.as_view(
+            template_name='users/password_reset.html',
+            subject_template_name='users/password_reset_subject.txt',
+            html_email_template_name='users/password_reset_email.html'
+        ),
         name='password_reset',
     ),
     path(
