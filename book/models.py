@@ -78,17 +78,10 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     )
     min_storage_temperature = models.FloatField('Минимальная температура хранения', null=True,
                                                 blank=True)
-    min_storage_temperature_unit = models.CharField(
-        'Единица измерения минимальной температуры хранения',
-        choices=TEMPERATURE_UNITS,
-        null=True,
-        blank=True,
-        max_length=3,
-    )
     max_storage_temperature = models.FloatField('Максимальная температура хранения', null=True,
                                                 blank=True)
-    max_storage_temperature_unit = models.CharField(
-        'Единица измерения максимальной температуры хранения',
+    storage_temperature_unit = models.CharField(
+        'Единица измерения температуры хранения',
         choices=TEMPERATURE_UNITS,
         null=True,
         blank=True,
