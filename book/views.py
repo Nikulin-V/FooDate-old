@@ -14,6 +14,7 @@ class HomeView(View):
 
 class ProductsView(View):
     template = 'book/products.html'
+    template_mobile = 'book/mobile/products.html'
 
     def get(self, request):
         args = request.GET
@@ -38,7 +39,9 @@ class ProductsView(View):
             'products': product_cards.values('name', 'image')
         }
 
-        return render(request, self.template, context)
+        template = self.template if request.user_agent.is_pc else self.template_mobile
+
+        return render(request, template, context)
 
 
 class RecipesView(View):
