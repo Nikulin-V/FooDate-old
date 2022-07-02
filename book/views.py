@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
 
@@ -20,19 +21,25 @@ class ProductsView(View):
         args = request.GET
         category_slug = args.get('category')
         subcategory_slug = args.get('subcategory')
+        search = args.get('search')
 
         categories = ProductCategory.categories.get_active()
+        product_cards = ProductCard.cards.only('name', 'image').all()
 
         if category_slug:
-            product_cards = ProductCard.cards.only('name', 'image').filter(
+            product_cards = product_cards.only('name', 'image').filter(
                 subcategory__category__slug=category_slug
             ).all()
-        elif subcategory_slug:
-            product_cards = ProductCard.cards.only('name', 'image').filter(
+        if subcategory_slug:
+            product_cards = product_cards.only('name', 'image').filter(
                 subcategory__slug=subcategory_slug
             ).all()
-        else:
-            product_cards = ProductCard.cards.only('name', 'image').all()
+        if search:
+            product_cards = product_cards.filter(
+                Q(name__iregex=search) or Q(slug__iregex=search) or
+                Q(designation__iregex=search) or Q(subcategory__category__name__iregex=search)
+                or Q(subcategory__name__iregex=search)
+            )
 
         context = {
             'categories': categories,

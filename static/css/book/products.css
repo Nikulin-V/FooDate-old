@@ -5,3 +5,9 @@ main {
 #all-heading {
     background-color: rgba(112, 198, 112, 0.2);
 }
+
+@media (max-device-width: 520px) {
+    .products-categories {
+        font-size: small;
+    }
+}

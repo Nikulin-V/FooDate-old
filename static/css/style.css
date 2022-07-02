@@ -75,6 +75,11 @@ a.text-apple:focus {
     max-width: 50%;
 }
 
-.form-control {
-    border: none;
+.form-control:focus {
+    border-color: #269926;
+    box-shadow: none;
+}
+
+.btn:focus {
+    box-shadow: none;
 }

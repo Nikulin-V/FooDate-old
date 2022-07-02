@@ -11,20 +11,21 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-3 accordion" id="productsAccordion">
+            <div class="accordion" id="productsAccordion">
                 <div class="card border-apple">
-                    <div class="card-header p-0" id="all-heading"
-                         ondblclick="location.href = '/products'">
-                        <a class="btn btn-link btn-block text-left text-apple w-100" type="button"
+                    <div class="card-header p-0" id="all-heading">
+                        <a class="btn btn-link btn-block text-left text-apple products-categories"
+                           type="button"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#all-collapse"
                                 aria-expanded="true"
-                                aria-controls="all-collapse">
+                                aria-controls="all-collapse"
+                        ondblclick="location.href = '/products'">
                             Все продукты
                         </a>
                     </div>
 
-                    <div id="all-collapse" class="collapse show"
+                    <div id="all-collapse" class="collapse"
                          aria-labelledby="all-heading"
                          data-bs-parent="#productsAccordion">
                         <div class="card-body p-0" id="categoriesAccordion">
@@ -32,29 +33,29 @@
                                 {% for category, subcategories in categories.items %}
                                     <li class="list-group-item p-0">
                                         <div class="subcategory-card">
-                                            <div class="p-0" id="{{ category.slug }}-heading"
-                                            ondblclick="location.href = '/products?category={{ category.slug }}'">
+                                            <div class="p-0" id="{{ category.slug }}-heading">
                                                 <a class="btn btn-link btn-block text-left
-                                                text-apple w-100"
+                                                text-apple products-categories"
                                                    type="button" data-bs-toggle="collapse"
                                                    data-bs-target="#{{ category.slug }}-collapse"
                                                    aria-expanded="true"
-                                                   aria-controls="{{ category.slug }}-collapse">
+                                                   aria-controls="{{ category.slug }}-collapse"
+                                                   ondblclick="location.href = '/products?category={{ category.slug }}'">
                                                     {{ category.name }}
                                                 </a>
                                             </div>
+
                                             <div id="{{ category.slug }}-collapse"
-                                                 class="p-1 collapse"
+                                                 class="pb-1 collapse"
                                                  aria-labelledby="{{ category.slug }}-heading"
                                                  data-bs-parent="#categoriesAccordion">
                                                 <div>
                                                     <ul class="text-apple">
                                                         {% for subcategory in subcategories %}
                                                             <li>
-                                                                <a href="?category={{ category.slug }}&subcategory={{ subcategory.slug }}">
-                                                                    <div class="text-apple">
-                                                                        {{ subcategory.name }}
-                                                                    </div>
+                                                                <a href="?subcategory={{ subcategory.slug }}"
+                                                                class="text-apple products-categories">
+                                                                    {{ subcategory.name }}
                                                                 </a>
                                                             </li>
                                                         {% endfor %}
@@ -69,18 +70,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="row mb-3">
-                    <div class="col-8">
-                        <input class="form-control" id="searchbar" type="text"
-                           placeholder="Введите название продукта..." aria-label="Строка поиска">
-                    </div>
-                    <div class="col-4">
-                        <button type="submit" class="btn btn-apple" onclick="search()">
-                            Найти продукт
-                        </button>
-                    </div>
-                </div>
+            <div>
                 <div class="row row-cols-1 row-cols-md-4 g-4">
                     {% for product in products %}
                         <div class="col">
@@ -95,21 +85,10 @@
                                 </div>
                             </div>
                         </div>
-                    {% empty %}
-                        <div class="w-100">
-                            По Вашему запросу ничего не нашлось :(
-                        </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        const categorySlug = getUrlParameter('category')
-        const categoryCollapse = document.getElementById(categorySlug + '-collapse');
-        const bsCollapse = new bootstrap.Collapse(categoryCollapse, {
-            toggle: true
-        });
-    </script>
-    <script type="text/javascript" src="{% static 'js/searchbar.js' %}"></script>
+
 {% endblock %}
