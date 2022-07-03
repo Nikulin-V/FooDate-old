@@ -83,3 +83,21 @@ a.text-apple:focus {
 .btn:focus {
     box-shadow: none;
 }
+
+.form-check-input {
+    border-color: #008500;
+}
+
+.form-check-input:checked {
+    border-color: #008500;
+    background-color: #008500;
+}
+
+.form-check-input:focus {
+    box-shadow: none;
+}
+
+.page-link:focus {
+    box-shadow: none;
+    color: #008500;
+}

@@ -6,6 +6,7 @@
 
 {% load static %}
 {% load uploads %}
+{% load range_ %}
 {% block content %}
     <link href="{% static 'css/book/products.css' %}" rel="stylesheet">
 
@@ -14,7 +15,7 @@
             <div class="col-3 accordion" id="productsAccordion">
                 <div class="card border-apple">
                     <div class="card-header p-0" id="all-heading"
-                         ondblclick="location.href = '/products'">
+                         ondblclick="location.href = '/products?' + cardsPerPageQuery">
                         <a class="btn btn-link btn-block text-left text-apple w-100" type="button"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#all-collapse"
@@ -33,7 +34,7 @@
                                     <li class="list-group-item p-0">
                                         <div class="subcategory-card">
                                             <div class="p-0" id="{{ category.slug }}-heading"
-                                            ondblclick="location.href = '/products?category={{ category.slug }}'">
+                                            ondblclick="location.href = '/products?category={{ category.slug }}&' + cardsPerPageQuery">
                                                 <a class="btn btn-link btn-block text-left
                                                 text-apple w-100"
                                                    type="button" data-bs-toggle="collapse"
@@ -51,7 +52,7 @@
                                                     <ul class="text-apple">
                                                         {% for subcategory in subcategories %}
                                                             <li>
-                                                                <a href="?category={{ category.slug }}&subcategory={{ subcategory.slug }}">
+                                                                <a href="?category={{ category.slug }}&subcategory={{ subcategory.slug }}&cardsPerPage={{ cards_per_page }}">
                                                                     <div class="text-apple">
                                                                         {{ subcategory.name }}
                                                                     </div>
@@ -86,9 +87,15 @@
                         <div class="col">
                             <div class="card h-100">
                                 <div class="h-100 d-flex align-items-center">
-                                    <img src="{% uploads product.image %}"
-                                     class="card-img-top product-card-image img-fluid"
-                                         alt="{{ product.name }}">
+                                    {% if product.image %}
+                                        <img src="{% uploads product.image %}"
+                                         class="card-img-top product-card-image img-fluid"
+                                             alt="{{ product.name }}">
+                                    {% else %}
+                                        <img src="{% static 'images/no_food_image.png' %}"
+                                         class="card-img-top product-card-image img-fluid p-3"
+                                             alt="{{ product.name }}">
+                                    {% endif %}
                                 </div>
                                 <div class="card-body">
                                     <h6 class="card-title text-center">{{ product.name }}</h6>
@@ -103,13 +110,81 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-5">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if current_page != 1 and pages != 0%}
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous"
+                               onclick="let page = parseInt(getUrlParameter('page'));
+                               console.log(page)
+                               openPage(page ? page - 1 : 1)">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for _ in pages|range_ %}
+                        <li class="page-item">
+                            <a class="page-link" href="#"
+                               {% if current_page == forloop.counter %}
+                                    style="background-color: rgba(112, 198, 112, 0.2)"
+                               {% else %}
+                                    onclick="openPage({{ forloop.counter }})"
+                               {% endif %}
+                            >{{ forloop.counter }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if current_page != pages and pages != 0 %}
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next"
+                               onclick="let page = parseInt(getUrlParameter('page'));
+                               openPage(page ? page + 1 : 1)">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <div class="text-center small">
+            <div class="row justify-content-center mb-1">
+                На странице:
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-20" value="20"
+                        {% if cards_per_page == 20 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-20">20</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-40" value="40"
+                        {% if cards_per_page == 40 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-40">40</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-60" value="60"
+                        {% if cards_per_page == 20 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-60">60</label>
+            </div>
+        </div>
     </div>
     <script>
         const categorySlug = getUrlParameter('category')
         const categoryCollapse = document.getElementById(categorySlug + '-collapse');
+        // noinspection JSUnusedGlobalSymbols
         const bsCollapse = new bootstrap.Collapse(categoryCollapse, {
             toggle: true
         });
     </script>
     <script type="text/javascript" src="{% static 'js/searchbar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/products.js' %}"></script>
 {% endblock %}

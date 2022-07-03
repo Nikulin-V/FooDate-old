@@ -130,7 +130,7 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
         'Углеводы (в граммах)', null=True, blank=True, validators=[validators.MinValueValidator(0)]
     )
     image = models.ImageField(
-        upload_to='static/uploads/products/images',
+        upload_to='products/images',
         null=True,
         blank=True,
         verbose_name='Изображение продукта',
@@ -145,7 +145,7 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
 
 
 class ProductPhoto(PublishedBaseModel):
-    upload = models.ImageField(upload_to='static/uploads/products/gallery', null=True, blank=True)
+    upload = models.ImageField(upload_to='products/gallery', null=True, blank=True)
     product = models.ForeignKey(ProductCard, verbose_name='Продукт', on_delete=models.CASCADE)
 
     def image(self):
@@ -212,7 +212,7 @@ class Recipe(PublishedBaseModel, PhotoBaseModel):
         blank=True,
     )
     image = models.ImageField(
-        upload_to='static/uploads/recipes/images',
+        upload_to='recipes/images',
         null=True,
         blank=True,
         verbose_name='Изображение блюда',
@@ -227,7 +227,7 @@ class Recipe(PublishedBaseModel, PhotoBaseModel):
 
 
 class RecipePhoto(PublishedBaseModel):
-    upload = models.ImageField(upload_to='static/uploads/recipes/gallery', null=True, blank=True)
+    upload = models.ImageField(upload_to='recipes/gallery', null=True, blank=True)
     recipe = models.ForeignKey(Recipe, verbose_name='Рецепт', on_delete=models.CASCADE)
 
     def image(self):

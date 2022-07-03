@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.core import validators
 from django.db import models
+# noinspection PyPackageRequirements
 from slugify import slugify
 
 from book.models import ProductCard
