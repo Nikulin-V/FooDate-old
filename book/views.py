@@ -1,4 +1,3 @@
-from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
 
@@ -20,30 +19,21 @@ class ProductsView(View):
 
     def get(self, request):
         args = request.GET
-        category_slug = args.get('category')
-        subcategory_slug = args.get('subcategory')
-        search = args.get('search')
+        category_slug = args.get('category') or ''
+        subcategory_slug = args.get('subcategory') or ''
+        search = args.get('search') or ''
         cards_per_page = args.get('cardsPerPage')
         page = args.get('page')
 
         categories = ProductCategory.categories.get_active()
-        product_cards = ProductCard.cards.only('name', 'image').all()
 
-        if category_slug:
-            product_cards = product_cards.only('name', 'image').filter(
-                subcategory__category__slug=category_slug
-            ).all()
-        if subcategory_slug:
-            product_cards = product_cards.only('name', 'image').filter(
-                subcategory__slug=subcategory_slug
-            ).all()
+        product_cards = ProductCard.cards.search(search).only('name', 'image').filter(
+            subcategory__category__slug__regex=category_slug,
+            subcategory__slug__regex=subcategory_slug
+        )
+
         if search:
-            product_cards = product_cards.filter(
-                Q(name__iregex=search) or Q(slug__iregex=search) or
-                Q(designation__iregex=search) or Q(subcategory__category__name__iregex=search)
-                or Q(subcategory__name__iregex=search)
-            )
-
+            product_cards = product_cards
         try:
             cards_per_page = int(cards_per_page)
         except TypeError:

@@ -1,5 +1,6 @@
 from django.core import validators
 from django.db import models
+from django.db.models import Q
 from django.utils.safestring import mark_safe
 from tinymce.models import HTMLField
 
@@ -12,12 +13,12 @@ class ProductCategoryManager(models.Manager):
         """
         Returns dictionary with category if it has active subcategories as key and its subcategories
         """
-        active_categories = dict()
-        for category in self.get_queryset():
-            active_subcategories = ProductSubcategory.subcategories.get_active(category)
-            if active_subcategories:
-                active_categories[category] = active_subcategories
-        return active_categories
+        return (
+            self.get_queryset()
+                .prefetch_related('subcategories')
+                .only('name')
+                .filter(subcategories__products__is_published=True)
+        )
 
 
 class ProductCategory(NameSlugBaseModel):
@@ -37,12 +38,13 @@ class ProductSubcategoryManager(models.Manager):
         """
         Returns list with subcategories from category with published ProductCards
         """
-        active_subcategories = []
-        published_cards = ProductCard.cards.get_published()
-        for subcategory in self.get_queryset().filter(category=category):
-            if published_cards.filter(subcategory=subcategory):
-                active_subcategories.append(subcategory)
-        return active_subcategories
+        return (
+            self.get_queryset()
+                .prefetch_related('products')
+                .select_related('category')
+                .only('name')
+                .filter(category=category, products__is_published=True)
+        )
 
 
 class ProductSubcategory(NameSlugBaseModel):
@@ -65,6 +67,13 @@ class ProductSubcategory(NameSlugBaseModel):
 class ProductCardManager(models.Manager):
     def get_published(self):
         return self.get_queryset().filter(is_published=True)
+
+    def search(self, search):
+        return self.get_published().filter(
+            Q(name__iregex=search) or Q(slug__iregex=search) or
+            Q(designation__iregex=search) or Q(subcategory__category__name__iregex=search)
+            or Q(subcategory__name__iregex=search)
+        )
 
 
 class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
