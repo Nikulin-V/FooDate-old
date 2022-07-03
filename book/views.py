@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import View
 
 from app.models import ProductCard
-from book.models import ProductCategory
+from book.models import ProductCategory, ProductPhoto
 from core.constants import CARDS_PER_PAGE
 
 
@@ -27,13 +27,11 @@ class ProductsView(View):
 
         categories = ProductCategory.categories.get_active()
 
-        product_cards = ProductCard.cards.search(search).only('name', 'image').filter(
+        product_cards = ProductCard.cards.search(search).only('name', 'slug', 'image').filter(
             subcategory__category__slug__regex=category_slug,
             subcategory__slug__regex=subcategory_slug
         )
 
-        if search:
-            product_cards = product_cards
         try:
             cards_per_page = int(cards_per_page)
         except TypeError:
@@ -56,9 +54,9 @@ class ProductsView(View):
         except ValueError:
             page = 0
 
-        product_cards = (
-            product_cards.values('name', 'image')[cards_per_page * page:cards_per_page * (page + 1)]
-        )
+        product_cards = product_cards.values(
+            'name', 'slug', 'image'
+        )[cards_per_page * page:cards_per_page * (page + 1)]
 
         context = {
             'categories': categories,
@@ -71,6 +69,19 @@ class ProductsView(View):
         template = self.template if request.user_agent.is_pc else self.template_mobile
 
         return render(request, template, context)
+
+
+class ProductView(View):
+    template = 'book/product.html'
+
+    def get(self, request, product_slug):
+        product: ProductCard = ProductCard.cards.filter(slug=product_slug).first()
+        photos = ProductPhoto.objects.filter(product=product, is_published=True).all()
+        context = {
+            'product': product,
+            'photos': photos
+        }
+        return render(request, self.template, context)
 
 
 class RecipesView(View):

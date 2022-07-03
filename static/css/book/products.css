@@ -11,6 +11,11 @@ main {
     background-color: rgba(112, 198, 112, 0.2);
 }
 
+.product-card:hover {
+    border-color: #269926;
+    color: black;
+}
+
 .page-link {
     color: #269926;
 }

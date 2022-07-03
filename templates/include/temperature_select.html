@@ -1,0 +1,14 @@
+<select class="form-select form-select-sm" id="temperature-select" aria-label="temperatureSelect">
+    <option value="℃"
+    {% if product.storage_temperature_unit == '℃' %}
+        selected
+    {% endif %}>℃</option>
+    <option value="℉"
+    {% if product.storage_temperature_unit == '℉' %}
+        selected
+    {% endif %}>℉</option>
+    <option value="K"
+    {% if product.storage_temperature_unit == 'K' %}
+        selected
+    {% endif %}>K</option>
+</select>

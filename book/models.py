@@ -13,12 +13,14 @@ class ProductCategoryManager(models.Manager):
         """
         Returns dictionary with category if it has active subcategories as key and its subcategories
         """
-        return (
+        active_categories = (
             self.get_queryset()
-                .prefetch_related('subcategories')
-                .only('name')
                 .filter(subcategories__products__is_published=True)
         )
+        return {
+            category: set(ProductSubcategory.subcategories.get_active(category))
+            for category in active_categories
+        }
 
 
 class ProductCategory(NameSlugBaseModel):
@@ -34,17 +36,11 @@ class ProductCategory(NameSlugBaseModel):
 
 
 class ProductSubcategoryManager(models.Manager):
-    def get_active(self, category) -> list['ProductSubcategory']:
+    def get_active(self, category) -> set['ProductSubcategory']:
         """
         Returns list with subcategories from category with published ProductCards
         """
-        return (
-            self.get_queryset()
-                .prefetch_related('products')
-                .select_related('category')
-                .only('name')
-                .filter(category=category, products__is_published=True)
-        )
+        return set(self.get_queryset().filter(category=category, products__is_published=True))
 
 
 class ProductSubcategory(NameSlugBaseModel):
@@ -86,10 +82,10 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     subcategory = models.ForeignKey(
         ProductSubcategory,
         on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
         related_name='products',
         verbose_name='Подкатегория продуктов',
+        null=True,
+        blank=True,
     )
     shelf_life = models.DurationField(
         'Срок годности',
@@ -110,6 +106,7 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     storage_temperature_unit = models.CharField(
         'Единица измерения температуры хранения',
         choices=TEMPERATURE_UNITS,
+        default=TEMPERATURE_UNITS[0],
         null=True,
         blank=True,
         max_length=3,
@@ -147,6 +144,18 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     gallery = models.ManyToManyField(
         'book.ProductPhoto', verbose_name='Фотографии', related_name='products'
     )
+
+    def save(self, *args, **kwargs):
+        if not self.subcategory:
+            super(ProductCard, self).save(*args, **kwargs)
+            self.subcategory, has_category = ProductSubcategory.subcategories.get_or_create(
+                name='Другое',
+            )
+            if not has_category:
+                self.subcategory.category = ProductCategory.categories.get_or_create(
+                    name='Другое',
+                )[0]
+        super(ProductCard, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Карточку продукта'

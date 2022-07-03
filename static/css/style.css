@@ -4,8 +4,17 @@ main {
     margin-right: auto;
 }
 
+td {
+    vertical-align: middle;
+}
+
+tr > td:first-child {
+    text-align: left;
+}
+
 a {
     text-decoration: none !important;
+    color: black;
 }
 
 a:hover {
@@ -94,6 +103,11 @@ a.text-apple:focus {
 }
 
 .form-check-input:focus {
+    box-shadow: none;
+}
+
+.form-select:focus {
+    border-color: #269926;
     box-shadow: none;
 }
 

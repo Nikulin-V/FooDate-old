@@ -1,0 +1,7 @@
+.product-img {
+    max-height: 500px;
+}
+
+#storage-temperature {
+    white-space: nowrap;
+}

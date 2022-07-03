@@ -85,7 +85,7 @@
                 <div class="row row-cols-1 row-cols-md-4 g-4">
                     {% for product in products %}
                         <div class="col">
-                            <div class="card h-100">
+                            <a class="card h-100 product-card" href="/products/{{ product.slug }}">
                                 <div class="h-100 d-flex align-items-center">
                                     {% if product.image %}
                                         <img src="{% uploads product.image %}"
@@ -100,7 +100,7 @@
                                 <div class="card-body">
                                     <h6 class="card-title text-center">{{ product.name }}</h6>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     {% empty %}
                         <div class="w-100">
@@ -117,7 +117,6 @@
                         <li class="page-item">
                             <a class="page-link" href="#" aria-label="Previous"
                                onclick="let page = parseInt(getUrlParameter('page'));
-                               console.log(page)
                                openPage(page ? page - 1 : 1)">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
@@ -186,5 +185,5 @@
     </script>
     <script type="text/javascript" src="{% static 'js/searchbar.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/products.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/book/products.js' %}"></script>
 {% endblock %}
