@@ -9,7 +9,7 @@ from core.models import PublishedBaseModel, PhotoBaseModel, NameSlugBaseModel
 
 
 class ProductCategoryManager(models.Manager):
-    def get_active(self) -> dict['ProductCategory', list['ProductSubcategory']]:
+    def get_active(self):
         """
         Returns dictionary with category if it has active subcategories as key and its subcategories
         """
@@ -36,7 +36,7 @@ class ProductCategory(NameSlugBaseModel):
 
 
 class ProductSubcategoryManager(models.Manager):
-    def get_active(self, category) -> set['ProductSubcategory']:
+    def get_active(self, category):
         """
         Returns list with subcategories from category with published ProductCards
         """
