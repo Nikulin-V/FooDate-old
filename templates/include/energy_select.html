@@ -1,0 +1,10 @@
+<select class="form-select form-select-sm" id="energy-value-select" aria-label="energyValueSelect">
+    <option value="ккал"
+    {% if product.energy_value_unit == 'ккал' %}
+        selected
+    {% endif %}>ккал</option>
+    <option value="кДж"
+    {% if product.energy_value_unit == 'кДж' %}
+        selected
+    {% endif %}>кДж</option>
+</select>

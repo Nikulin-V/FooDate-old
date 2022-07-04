@@ -1,3 +1,4 @@
+import mimetypes
 import os
 from pathlib import Path
 
@@ -115,6 +116,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+MEDIA_URL = 'uploads/'
+MEDIA_ROOT = BASE_DIR / 'uploads'
 
 # Default primary key field type
 
@@ -126,7 +129,6 @@ LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/auth/profile/'
 LOGOUT_REDIRECT_URL = '/auth/login/'
 AUTHENTICATION_BACKENDS = ['core.backends.EmailAuthBackend']
-
 
 # Email
 
@@ -150,3 +152,13 @@ CACHES = {
 }
 
 USER_AGENTS_CACHE = 'default'
+
+if DEBUG:
+    ALLOWED_HOSTS += ['127.0.0.1']
+    INTERNAL_IPS = ['192.168.0.77', '127.0.0.1']
+    INSTALLED_APPS += ['debug_toolbar']
+    MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+    mimetypes.add_type('application/javascript', '.js')
+    DEBUG_TOOLBAR_CONFIG = {
+        'INTERCEPT_REDIRECTS': False,
+    }

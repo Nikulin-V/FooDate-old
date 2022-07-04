@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Книга продуктов
+{% endblock %}
+
+{% load static %}
+{% load uploads %}
+{% block content %}
+    <link href="{% static 'css/book/products.css' %}" rel="stylesheet">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="accordion" id="productsAccordion">
+                <div class="card border-apple">
+                    <div class="card-header p-0" id="all-heading">
+                        <a class="btn btn-link btn-block text-left text-apple products-categories"
+                           type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#all-collapse"
+                                aria-expanded="true"
+                                aria-controls="all-collapse"
+                        ondblclick="location.href = '/products'">
+                            Все продукты
+                        </a>
+                    </div>
+
+                    <div id="all-collapse" class="collapse"
+                         aria-labelledby="all-heading"
+                         data-bs-parent="#productsAccordion">
+                        <div class="card-body p-0" id="categoriesAccordion">
+                            <ul class="list-group">
+                                {% for category, subcategories in categories.items %}
+                                    <li class="list-group-item p-0">
+                                        <div class="subcategory-card">
+                                            <div class="p-0" id="{{ category.slug }}-heading">
+                                                <a class="btn btn-link btn-block text-left
+                                                text-apple products-categories"
+                                                   type="button" data-bs-toggle="collapse"
+                                                   data-bs-target="#{{ category.slug }}-collapse"
+                                                   aria-expanded="true"
+                                                   aria-controls="{{ category.slug }}-collapse"
+                                                   ondblclick="location.href = '/products?category={{ category.slug }}'">
+                                                    {{ category.name }}
+                                                </a>
+                                            </div>
+
+                                            <div id="{{ category.slug }}-collapse"
+                                                 class="pb-1 collapse"
+                                                 aria-labelledby="{{ category.slug }}-heading"
+                                                 data-bs-parent="#categoriesAccordion">
+                                                <div>
+                                                    <ul class="text-apple">
+                                                        {% for subcategory in subcategories %}
+                                                            <li>
+                                                                <a href="?subcategory={{ subcategory.slug }}"
+                                                                class="text-apple products-categories">
+                                                                    {{ subcategory.name }}
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row row-cols-1 row-cols-md-4 g-4">
+                    {% for product in products %}
+                        <div class="col">
+                            <div class="card h-100">
+                                <div class="h-100 d-flex align-items-center">
+                                    <img src="{% uploads product.image %}"
+                                     class="card-img-top product-card-image img-fluid"
+                                         alt="{{ product.name }}">
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center">{{ product.name }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

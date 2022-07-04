@@ -1,5 +1,6 @@
 from django.core import validators
 from django.db import models
+from django.db.models import Q
 from django.utils.safestring import mark_safe
 from tinymce.models import HTMLField
 
@@ -8,7 +9,18 @@ from core.models import PublishedBaseModel, PhotoBaseModel, NameSlugBaseModel
 
 
 class ProductCategoryManager(models.Manager):
-    pass
+    def get_active(self):
+        """
+        Returns dictionary with category if it has active subcategories as key and its subcategories
+        """
+        active_categories = (
+            self.get_queryset()
+                .filter(subcategories__products__is_published=True)
+        )
+        return {
+            category: set(ProductSubcategory.subcategories.get_active(category))
+            for category in active_categories
+        }
 
 
 class ProductCategory(NameSlugBaseModel):
@@ -24,7 +36,11 @@ class ProductCategory(NameSlugBaseModel):
 
 
 class ProductSubcategoryManager(models.Manager):
-    pass
+    def get_active(self, category):
+        """
+        Returns list with subcategories from category with published ProductCards
+        """
+        return set(self.get_queryset().filter(category=category, products__is_published=True))
 
 
 class ProductSubcategory(NameSlugBaseModel):
@@ -46,7 +62,14 @@ class ProductSubcategory(NameSlugBaseModel):
 
 class ProductCardManager(models.Manager):
     def get_published(self):
-        self.get_queryset().filter(is_published=True)
+        return self.get_queryset().filter(is_published=True)
+
+    def search(self, search):
+        return self.get_published().filter(
+            Q(name__iregex=search) or Q(slug__iregex=search) or
+            Q(designation__iregex=search) or Q(subcategory__category__name__iregex=search)
+            or Q(subcategory__name__iregex=search)
+        )
 
 
 class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
@@ -59,10 +82,10 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     subcategory = models.ForeignKey(
         ProductSubcategory,
         on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
         related_name='products',
         verbose_name='Подкатегория продуктов',
+        null=True,
+        blank=True,
     )
     shelf_life = models.DurationField(
         'Срок годности',
@@ -83,6 +106,7 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     storage_temperature_unit = models.CharField(
         'Единица измерения температуры хранения',
         choices=TEMPERATURE_UNITS,
+        default=TEMPERATURE_UNITS[0],
         null=True,
         blank=True,
         max_length=3,
@@ -112,7 +136,7 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
         'Углеводы (в граммах)', null=True, blank=True, validators=[validators.MinValueValidator(0)]
     )
     image = models.ImageField(
-        upload_to='static/uploads/products/images',
+        upload_to='products/images',
         null=True,
         blank=True,
         verbose_name='Изображение продукта',
@@ -121,13 +145,25 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
         'book.ProductPhoto', verbose_name='Фотографии', related_name='products'
     )
 
+    def save(self, *args, **kwargs):
+        if not self.subcategory:
+            super(ProductCard, self).save(*args, **kwargs)
+            self.subcategory, has_category = ProductSubcategory.subcategories.get_or_create(
+                name='Другое',
+            )
+            if not has_category:
+                self.subcategory.category = ProductCategory.categories.get_or_create(
+                    name='Другое',
+                )[0]
+        super(ProductCard, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Карточку продукта'
         verbose_name_plural = 'Карточки продуктов'
 
 
 class ProductPhoto(PublishedBaseModel):
-    upload = models.ImageField(upload_to='static/uploads/products/gallery', null=True, blank=True)
+    upload = models.ImageField(upload_to='products/gallery', null=True, blank=True)
     product = models.ForeignKey(ProductCard, verbose_name='Продукт', on_delete=models.CASCADE)
 
     def image(self):
@@ -194,7 +230,7 @@ class Recipe(PublishedBaseModel, PhotoBaseModel):
         blank=True,
     )
     image = models.ImageField(
-        upload_to='static/uploads/recipes/images',
+        upload_to='recipes/images',
         null=True,
         blank=True,
         verbose_name='Изображение блюда',
@@ -209,7 +245,7 @@ class Recipe(PublishedBaseModel, PhotoBaseModel):
 
 
 class RecipePhoto(PublishedBaseModel):
-    upload = models.ImageField(upload_to='static/uploads/recipes/gallery', null=True, blank=True)
+    upload = models.ImageField(upload_to='recipes/gallery', null=True, blank=True)
     recipe = models.ForeignKey(Recipe, verbose_name='Рецепт', on_delete=models.CASCADE)
 
     def image(self):

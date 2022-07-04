@@ -1,0 +1,31 @@
+main {
+    width: 100%;
+}
+
+#productsAccordion > div {
+    position: sticky;
+    top: 10px;
+}
+
+#all-heading {
+    background-color: rgba(112, 198, 112, 0.2);
+}
+
+.product-card:hover {
+    border-color: #269926;
+    color: black;
+}
+
+.page-link {
+    color: #269926;
+}
+
+.page-link:hover {
+    color: #008500;
+}
+
+@media (max-device-width: 520px) {
+    .products-categories {
+        font-size: small;
+    }
+}
