@@ -7,15 +7,19 @@ from core.constants import CARDS_PER_PAGE
 
 
 class HomeView(View):
-    template = 'book/homepage.html'
+    template = 'error_pages/development.html'
+    template_mobile = 'error_pages/development.html'
 
     def get(self, request):
-        return render(request, self.template)
+        return render(
+            request,
+            self.template if request.user_agent.is_pc else self.template_mobile
+        )
 
 
 class ProductsView(View):
     template = 'book/products.html'
-    template_mobile = 'book/mobile/products.html'
+    template_mobile = 'error_pages/development.html'
 
     def get(self, request):
         args = request.GET
@@ -66,13 +70,16 @@ class ProductsView(View):
             'pages': max_page_number
         }
 
-        template = self.template if request.user_agent.is_pc else self.template_mobile
-
-        return render(request, template, context)
+        return render(
+            request,
+            self.template if request.user_agent.is_pc else self.template_mobile,
+            context
+        )
 
 
 class ProductView(View):
     template = 'book/product.html'
+    template_mobile = 'error_pages/development.html'
 
     def get(self, request, product_slug):
         product: ProductCard = ProductCard.cards.filter(slug=product_slug).first()
@@ -81,11 +88,19 @@ class ProductView(View):
             'product': product,
             'photos': photos
         }
-        return render(request, self.template, context)
+        return render(
+            request,
+            self.template if request.user_agent.is_pc else self.template_mobile,
+            context
+        )
 
 
 class RecipesView(View):
-    template = 'book/recipes.html'
+    template = 'error_pages/development.html'
+    template_mobile = 'error_pages/development.html'
 
     def get(self, request):
-        return render(request, self.template)
+        return render(
+            request,
+            self.template if request.user_agent.is_pc else self.template_mobile
+        )

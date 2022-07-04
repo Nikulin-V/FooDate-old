@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load user_agents %}
+{% load static %}
+
+{% block title %}
+    Страница находится на стадии разработки
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex flex-column center text-center">
+        {% if request|is_pc %}
+            <img src="{% static 'images/error_pages/development_pc.png' %}"
+                 class="mx-auto my-auto mt-5 w-25" alt="404 Not Found">
+        {% else %}
+            <img src="{% static 'images/error_pages/development_mobile.png' %}"
+                 class="mx-auto my-auto mt-5 w-75" alt="404 Not Found">
+        {% endif %}
+        <span class="text-apple mt-3 {% if request|is_pc %}h4{% endif %}">
+            Эта страница находится на стадии разработки
+        </span>
+    </div>
+{% endblock %}

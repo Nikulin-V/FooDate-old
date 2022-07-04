@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load user_agents %}
+{% load static %}
+
+{% block title %}
+    Страница не найдена
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <img src="{% static 'images/error_pages/not-found.png' %}"
+             class="mx-auto my-auto mt-5
+            {% if request|is_pc %}
+                w-25
+            {% else %}
+                w-75
+            {% endif %}"
+             alt="404 Not Found">
+    </div>
+{% endblock %}

@@ -13,6 +13,11 @@ urlpatterns = [
     path('auth/', include('users.urls'), name='auth'),
 ]
 
+handler400 = 'app.error_views.bad_request'
+handler403 = 'app.error_views.forbidden'
+handler404 = 'app.error_views.not_found'
+handler500 = 'app.error_views.internal_server_error'
+
 if settings.DEBUG:
     urlpatterns += [path('__debug__/', include('debug_toolbar.urls'))]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
