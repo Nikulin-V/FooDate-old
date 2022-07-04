@@ -2,6 +2,133 @@ main {
     width: 100%;
 }
 
+.form-file {
+    --bs-form-file-height: calc(1.5em + 0.75rem + 2px);
+    position: relative;
+}
+
+.form-file-input {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: var(--bs-form-file-height);
+    margin: 0;
+    opacity: 0;
+    overflow: visible;
+}
+
+.form-file-label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    height: var(--bs-form-file-height);
+    border-color: #ced4da;
+    border-radius: .25rem;
+}
+
+.form-file-text {
+    display: block;
+    flex-grow: 1;
+    padding: .375rem .75rem;
+    overflow: hidden;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: #fff;
+    border-color: inherit;
+    border-style: solid;
+    border-width: 1px;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+}
+
+.form-file-button {
+    display: block;
+    flex-shrink: 0;
+    padding: .375rem .75rem;
+    margin-left: -1px !important;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: inherit;
+    border-style: solid;
+    border-width: 1px;
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+
+#newProductCardForm > div > div.row {
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed #70c670;
+    margin-bottom: 1rem;
+}
+
+#newProductCardForm div {
+    align-self: center;
+}
+
+#newProductCardForm input, #newProductCardForm textarea {
+    display: block;
+    width: 100%;
+    min-height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    outline-color: #269926;
+}
+
+#newProductCardForm input[type=number] {
+    width: 100px;
+}
+
+#newProductCardForm span {
+    align-self: center;
+    margin-left: .3rem;
+}
+
+#newProductCardForm select {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem 1.75rem .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    vertical-align: middle;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline-color: #269926;
+}
+
+
+label {
+    margin-bottom: .5rem;
+}
+
 #productsAccordion > div {
     position: sticky;
     top: 10px;

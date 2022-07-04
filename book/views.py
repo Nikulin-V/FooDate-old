@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views import View
 
 from app.models import ProductCard
+from book.forms import NewProductCardForm
 from book.models import ProductCategory, ProductPhoto
 from core.constants import CARDS_PER_PAGE
 
@@ -20,6 +21,7 @@ class HomeView(View):
 class ProductsView(View):
     template = 'book/products.html'
     template_mobile = 'error_pages/development.html'
+    form = NewProductCardForm
 
     def get(self, request):
         args = request.GET
@@ -67,7 +69,8 @@ class ProductsView(View):
             'products': product_cards,
             'cards_per_page': cards_per_page,
             'current_page': page + 1,
-            'pages': max_page_number
+            'pages': max_page_number,
+            'form': self.form
         }
 
         return render(

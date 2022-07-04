@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_hosts',
     'django_user_agents',
+    'durationwidget',
     'tinymce',
 ]
 

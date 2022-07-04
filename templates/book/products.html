@@ -12,8 +12,10 @@
 
     <div class="container">
         <div class="row justify-content-center">
+            <!-- All products accordion -->
             <div class="col-3 accordion" id="productsAccordion">
                 <div class="card border-apple">
+                    <!-- All products heading -->
                     <div class="card-header p-0" id="all-heading"
                          ondblclick="location.href = '/products?' + cardsPerPageQuery">
                         <a class="btn btn-link btn-block text-left text-apple w-100" type="button"
@@ -24,7 +26,7 @@
                             Все продукты
                         </a>
                     </div>
-
+                    <!-- Products subcategories accordion -->
                     <div id="all-collapse" class="collapse show"
                          aria-labelledby="all-heading"
                          data-bs-parent="#productsAccordion">
@@ -32,7 +34,8 @@
                             <ul class="list-group">
                                 {% for category, subcategories in categories.items %}
                                     <li class="list-group-item p-0">
-                                        <div class="subcategory-card">
+                                        <div class="category-card">
+                                            <!-- Product category -->
                                             <div class="p-0" id="{{ category.slug }}-heading"
                                             ondblclick="location.href = '/products?category={{ category.slug }}&' + cardsPerPageQuery">
                                                 <a class="btn btn-link btn-block text-left
@@ -44,6 +47,7 @@
                                                     {{ category.name }}
                                                 </a>
                                             </div>
+                                            <!-- Product subcategories -->
                                             <div id="{{ category.slug }}-collapse"
                                                  class="p-1 collapse"
                                                  aria-labelledby="{{ category.slug }}-heading"
@@ -71,20 +75,42 @@
                 </div>
             </div>
             <div class="col">
+                <!-- Search bar row -->
                 <div class="row mb-3">
-                    <div class="col-8">
-                        <input class="form-control" id="searchbar" type="text"
-                           placeholder="Введите название продукта..." aria-label="Строка поиска">
-                    </div>
-                    <div class="col-4">
-                        <button type="submit" class="btn btn-apple" onclick="search()">
-                            Найти продукт
-                        </button>
-                    </div>
+                    {% if user.is_authenticated %}
+                        <div class="col-7">
+                            <input class="form-control w-100" id="searchbar" type="text"
+                               placeholder="Введите название продукта..." aria-label="Строка поиска">
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-apple w-100" onclick="search()">
+                                Найти продукт
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-outline-apple w-100"
+                                    data-bs-toggle="modal" data-bs-target="#newProductCardModal"
+                                    style="white-space: nowrap">
+                                Добавить продукт
+                            </button>
+                        </div>
+                    {% else %}
+                        <div class="col-9">
+                            <input class="form-control w-100" id="searchbar" type="text"
+                               placeholder="Введите название продукта..." aria-label="Строка поиска">
+                        </div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-apple w-100" onclick="search()">
+                                Найти продукт
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
+                <!-- Product cards grid -->
                 <div class="row row-cols-1 row-cols-md-4 g-4">
                     {% for product in products %}
                         <div class="col">
+                            <!-- Product card -->
                             <a class="card h-100 product-card" href="/products/{{ product.slug }}">
                                 <div class="h-100 d-flex align-items-center">
                                     {% if product.image %}
@@ -111,6 +137,7 @@
             </div>
         </div>
         <div class="row mt-5">
+            <!-- Pages navigation -->
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
                     {% if current_page != 1 and pages != 0%}
@@ -145,6 +172,7 @@
                 </ul>
             </nav>
         </div>
+        <!-- Products per page number -->
         <div class="text-center small">
             <div class="row justify-content-center mb-1">
                 На странице:
@@ -175,6 +203,137 @@
             </div>
         </div>
     </div>
+    <!-- New product card modal -->
+    {% if user.is_authenticated %}
+        <div class="modal fade" id="newProductCardModal"
+             data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="newProductCardModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="newProductCardModalLabel">
+                            Добавить продукт
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <form method="post" id="newProductCardForm">
+                        {% csrf_token %}
+                        <div class="modal-body mx-auto text-center w-50">
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.subcategory.label_tag }}
+                                </div>
+                                <div class="col">
+                                    {{ form.subcategory }}
+                                </div>
+                                {{ form.subcategory.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.name.label_tag }}
+                                </div>
+                                <div class="col">
+                                    {{ form.subcategory }}
+                                </div>
+                                {{ form.name.errors }}
+                            </div>
+                            <div class="row">
+                                <div>
+                                    {{ form.shelf_life.label_tag }}
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    {{ form.shelf_life }}
+                                </div>
+                                {{ form.shelf_life.errors }}
+                            </div>
+                            <div class="row">
+                                <div>
+                                    {{ form.shelf_life_after_opening.label_tag }}
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    {{ form.shelf_life_after_opening }}
+                                </div>
+                                {{ form.shelf_life_after_opening.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Температура хранения:</label>
+                                </div>
+                                <div class="col d-flex align-center justify-content-center">
+                                    <span class="mx-2">от </span>{{ form.min_storage_temperature }}
+                                    <span class="mx-2">до </span>{{ form.max_storage_temperature }}
+                                    <span class="mx-2"></span>{{ form.storage_temperature_unit }}
+                                </div>
+                                {{ form.min_storage_temperature.errors }}
+                                {{ form.max_storage_temperature.errors }}
+                                {{ form.storage_temperature_unit.errors }}
+                            </div>
+                            <div class="row">
+                                {{ form.composition.label_tag }}
+                                {{ form.composition }}
+                                {{ form.composition.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.energy_value.label_tag }}
+                                </div>
+                                <div class="col d-flex align-center justify-content-center">
+                                    {{ form.energy_value }}
+                                    <span class="mx-2"></span>{{ form.energy_value_unit }}
+                                </div>
+                                {{ form.energy_value.errors }}
+                                {{ form.energy_value_unit.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Белки
+                                </div>
+                                <div class="col d-flex">
+                                    {{ form.proteins }}<span>г.</span>
+                                </div>
+                                {{ form.proteins.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Жиры
+                                </div>
+                                <div class="col d-flex">
+                                    {{ form.fats }}<span>г.</span>
+                                </div>
+                                {{ form.fats.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Углеводы
+                                </div>
+                                <div class="col d-flex">
+                                    {{ form.carbohydrates }}<span>г.</span>
+                                </div>
+                                {{ form.carbohydrates.errors }}
+                            </div>
+                            <div class="d-flex align-center justify-content-center">
+                                <div class="form-file">
+                                    <input class="form-control form-file-input"
+                                           id="id_image"
+                                           type="file" name="image" accept="image/*">
+                                    <label class="form-file-label"
+                                           for="id_image">
+                                        <span class="form-file-text">Изображение продукта</span>
+                                        <span class="form-file-button">Загрузить</span>
+                                    </label>
+                                </div>
+                            </div>
+                            {{ form.image.errors }}
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="submit" class="btn btn-apple">Сохранить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
     <script>
         const categorySlug = getUrlParameter('category')
         const categoryCollapse = document.getElementById(categorySlug + '-collapse');
