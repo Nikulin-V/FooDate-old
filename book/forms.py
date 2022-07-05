@@ -1,6 +1,7 @@
 from django import forms
 
 from book.models import ProductCard
+from core.fields import CustomCaptchaField
 from core.widgets import CustomTimeDurationWidget
 
 
@@ -15,6 +16,7 @@ class NewProductCardForm(forms.ModelForm):
         widget=CustomTimeDurationWidget(show_minutes=False, show_seconds=False),
         required=False
     )
+    captcha = CustomCaptchaField()
 
     class Meta:
         model = ProductCard
