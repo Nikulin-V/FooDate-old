@@ -82,10 +82,9 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     designation = models.CharField('Наименование', max_length=255)
     subcategory = models.ForeignKey(
         ProductSubcategory,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.DO_NOTHING,
         related_name='products',
-        verbose_name='Подкатегория продуктов',
-        default=ProductSubcategory.subcategories.get_or_create(name='Другое')
+        verbose_name='Подкатегория продуктов'
     )
     shelf_life = models.DurationField(
         'Срок годности',
