@@ -18,7 +18,7 @@ class NewProductCardForm(forms.ModelForm):
 
     class Meta:
         model = ProductCard
-        fields = ('subcategory', 'name', 'shelf_life', 'shelf_life_after_opening',
+        fields = ('subcategory', 'name', 'designation', 'shelf_life', 'shelf_life_after_opening',
                   'min_storage_temperature', 'max_storage_temperature',
                   'storage_temperature_unit', 'composition', 'energy_value', 'energy_value_unit',
                   'proteins', 'fats', 'carbohydrates', 'image')

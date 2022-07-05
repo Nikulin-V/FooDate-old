@@ -7,7 +7,7 @@ main {
     position: relative;
 }
 
-.form-file-input {
+#id_image {
     position: relative;
     z-index: 2;
     width: 100%;
@@ -53,8 +53,8 @@ main {
     padding: .375rem .75rem;
     margin-left: -1px !important;
     line-height: 1.5;
-    color: #495057;
-    background-color: #e9ecef;
+    color: white;
+    background-color: #269926;
     border-color: inherit;
     border-style: solid;
     border-width: 1px;

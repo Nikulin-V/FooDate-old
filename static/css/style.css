@@ -115,3 +115,9 @@ a.text-apple:focus {
     box-shadow: none;
     color: #008500;
 }
+
+ul.errorlist li {
+    list-style-type: none;
+    color: #dc3545;
+    white-space: nowrap;
+}
