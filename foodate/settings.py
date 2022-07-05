@@ -31,7 +31,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_hosts',
     'django_user_agents',
+    'durationwidget',
     'tinymce',
+    'hcaptcha',
 ]
 
 MIDDLEWARE = [
@@ -152,6 +154,12 @@ CACHES = {
 }
 
 USER_AGENTS_CACHE = 'default'
+
+# hCaptcha
+
+HCAPTCHA_SITEKEY = '4e5c5150-8547-4f93-bffb-94d4132c22b3'
+HCAPTCHA_SECRET = '0xF77ec604cD33Bc25C866A82ca8402A74ea10D75e'
+
 
 if DEBUG:
     ALLOWED_HOSTS += ['127.0.0.1']

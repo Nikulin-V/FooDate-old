@@ -1,6 +1,7 @@
 ## FooDate web application
 
-FooDate is not just a web application, it is your opportunity to reduce food costs and will help in the fight against world hunger.
+FooDate is not just a web application, it is your opportunity to reduce food costs and to help in 
+the fight against world hunger.
 
 Every year in the world, almost 1 billion tons of food is sent to waste.
 

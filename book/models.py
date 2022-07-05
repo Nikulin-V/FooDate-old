@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.utils.safestring import mark_safe
 from tinymce.models import HTMLField
 
+import core.validators
 from core.choices import TEMPERATURE_UNITS, ENERGY_UNITS
 from core.models import PublishedBaseModel, PhotoBaseModel, NameSlugBaseModel
 
@@ -81,11 +82,9 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     designation = models.CharField('Наименование', max_length=255)
     subcategory = models.ForeignKey(
         ProductSubcategory,
-        on_delete=models.SET_NULL,
+        on_delete=models.DO_NOTHING,
         related_name='products',
-        verbose_name='Подкатегория продуктов',
-        null=True,
-        blank=True,
+        verbose_name='Подкатегория продуктов'
     )
     shelf_life = models.DurationField(
         'Срок годности',
@@ -107,8 +106,6 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
         'Единица измерения температуры хранения',
         choices=TEMPERATURE_UNITS,
         default=TEMPERATURE_UNITS[0],
-        null=True,
-        blank=True,
         max_length=3,
     )
     composition = models.TextField('Состав', max_length=1023, null=True, blank=True)
@@ -117,23 +114,30 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
         null=True,
         blank=True,
         help_text='Энергетическая ценность на 100 грамм продукта',
-        validators=[validators.MinValueValidator(0)],
+        validators=[
+            core.validators.BiggerThanValidator(0)
+        ]
     )
     energy_value_unit = models.CharField(
         'Единица измерения энергетической ценности',
         choices=ENERGY_UNITS,
-        null=True,
-        blank=True,
+        default=ENERGY_UNITS[0],
         max_length=4,
     )
     proteins = models.FloatField(
-        'Белки (в граммах)', null=True, blank=True, validators=[validators.MinValueValidator(0)]
+        'Белки (в граммах)', null=True, blank=True, validators=[
+            core.validators.BiggerThanValidator(0)
+        ]
     )
     fats = models.FloatField(
-        'Жиры (в граммах)', null=True, blank=True, validators=[validators.MinValueValidator(0)]
+        'Жиры (в граммах)', null=True, blank=True, validators=[
+            core.validators.BiggerThanValidator(0)
+        ]
     )
     carbohydrates = models.FloatField(
-        'Углеводы (в граммах)', null=True, blank=True, validators=[validators.MinValueValidator(0)]
+        'Углеводы (в граммах)', null=True, blank=True, validators=[
+            core.validators.BiggerThanValidator(0)
+        ]
     )
     image = models.ImageField(
         upload_to='products/images',
@@ -210,7 +214,8 @@ class Recipe(PublishedBaseModel, PhotoBaseModel):
         verbose_name='Категория рецептов',
     )
     people_count = models.IntegerField(
-        'Кол-во человек', default=1, help_text='Количество человек, на которое рассчитано блюдо'
+        'Кол-во человек', default=1, help_text='Количество человек, на которое рассчитано блюдо',
+        validators=[validators.MinValueValidator(1)]
     )
     recipe = HTMLField('Рецепт', help_text='Подробно опишите процесс приготовления по шагам')
     products = models.ManyToManyField(
@@ -220,7 +225,9 @@ class Recipe(PublishedBaseModel, PhotoBaseModel):
         'Энергетическая ценность',
         null=True,
         blank=True,
-        validators=[validators.MinValueValidator(0)],
+        validators=[
+            core.validators.BiggerThanValidator(0)
+        ]
     )
     energy_value_unit = models.CharField(
         'Единица измерения энергетической ценности',

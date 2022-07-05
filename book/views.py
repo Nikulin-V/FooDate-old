@@ -1,9 +1,12 @@
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from django.views import View
 
 from app.models import ProductCard
+from book.forms import NewProductCardForm
 from book.models import ProductCategory, ProductPhoto
 from core.constants import CARDS_PER_PAGE
+from foodate.settings import MEDIA_ROOT
 
 
 class HomeView(View):
@@ -20,8 +23,9 @@ class HomeView(View):
 class ProductsView(View):
     template = 'book/products.html'
     template_mobile = 'error_pages/development.html'
+    form = NewProductCardForm
 
-    def get(self, request):
+    def get(self, request, saved=None):
         args = request.GET
         category_slug = args.get('category') or ''
         subcategory_slug = args.get('subcategory') or ''
@@ -67,7 +71,9 @@ class ProductsView(View):
             'products': product_cards,
             'cards_per_page': cards_per_page,
             'current_page': page + 1,
-            'pages': max_page_number
+            'pages': max_page_number,
+            'form': self.form() if saved is None else self.form(request.POST),
+            'saved': saved
         }
 
         return render(
@@ -75,6 +81,62 @@ class ProductsView(View):
             self.template if request.user_agent.is_pc else self.template_mobile,
             context
         )
+
+    def post(self, request):
+        form = self.form(request.POST)
+        saved = False
+        if form.is_valid():
+            subcategory = form.cleaned_data['subcategory']
+            name = form.cleaned_data['name']
+            designation = form.cleaned_data['designation']
+            shelf_life = form.cleaned_data['shelf_life']
+            shelf_life_after_opening = form.cleaned_data['shelf_life_after_opening']
+            min_storage_temperature, max_storage_temperature = None, None
+            if (form.cleaned_data['min_storage_temperature'] and
+                    form.cleaned_data['max_storage_temperature']):
+                min_storage_temperature, max_storage_temperature = sorted((
+                    form.cleaned_data['min_storage_temperature'] or '',
+                    form.cleaned_data['max_storage_temperature'] or ''
+                ))
+            elif (form.cleaned_data['min_storage_temperature'] or
+                  form.cleaned_data['max_storage_temperature']):
+                min_storage_temperature = (form.cleaned_data['min_storage_temperature'] or
+                                           form.cleaned_data['max_storage_temperature'])
+            storage_temperature_unit = form.cleaned_data['storage_temperature_unit']
+            composition = form.cleaned_data['composition']
+            energy_value = form.cleaned_data['energy_value']
+            energy_value_unit = form.cleaned_data['energy_value_unit']
+            proteins = form.cleaned_data['proteins']
+            fats = form.cleaned_data['fats']
+            carbohydrates = form.cleaned_data['carbohydrates']
+            filepath = ''
+            if request.FILES:
+                file = request.FILES['image']
+                fs = FileSystemStorage()
+                filepath = f'products/images/{file.name}'
+                fs.save(f'{MEDIA_ROOT}/{filepath}', file)
+
+            new_product_card = ProductCard.cards.create(
+                name=name,
+                designation=designation,
+                subcategory=subcategory,
+                shelf_life=shelf_life,
+                shelf_life_after_opening=shelf_life_after_opening,
+                min_storage_temperature=min_storage_temperature,
+                max_storage_temperature=max_storage_temperature,
+                storage_temperature_unit=storage_temperature_unit,
+                composition=composition,
+                energy_value=energy_value,
+                energy_value_unit=energy_value_unit,
+                proteins=proteins,
+                fats=fats,
+                carbohydrates=carbohydrates,
+                image=filepath
+            )
+            new_product_card.save()
+            saved = True
+
+        return self.get(request, saved)
 
 
 class ProductView(View):
