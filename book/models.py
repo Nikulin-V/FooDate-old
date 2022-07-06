@@ -16,7 +16,7 @@ class ProductCategoryManager(models.Manager):
         """
         active_categories = (
             self.get_queryset()
-                .filter(subcategories__products__is_published=True)
+                .filter(subcategories__product_cards__is_published=True)
         )
         return {
             category: set(ProductSubcategory.subcategories.get_active(category))
@@ -41,7 +41,7 @@ class ProductSubcategoryManager(models.Manager):
         """
         Returns list with subcategories from category with published ProductCards
         """
-        return set(self.get_queryset().filter(category=category, products__is_published=True))
+        return set(self.get_queryset().filter(category=category, product_cards__is_published=True))
 
 
 class ProductSubcategory(NameSlugBaseModel):
@@ -76,14 +76,11 @@ class ProductCardManager(models.Manager):
 class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     cards = ProductCardManager()
 
-    name = models.CharField('Название', max_length=255, unique=True)
-    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug],
-                            null=True, blank=True)
     designation = models.CharField('Наименование', max_length=255)
     subcategory = models.ForeignKey(
         ProductSubcategory,
         on_delete=models.DO_NOTHING,
-        related_name='products',
+        related_name='product_cards',
         verbose_name='Подкатегория продуктов'
     )
     shelf_life = models.DurationField(
@@ -146,7 +143,7 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
         verbose_name='Изображение продукта',
     )
     gallery = models.ManyToManyField(
-        'book.ProductPhoto', verbose_name='Фотографии', related_name='products'
+        'book.ProductPhoto', verbose_name='Фотографии', related_name='product_cards'
     )
 
     def save(self, *args, **kwargs):
