@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from app.models import Product
-from book.models import ProductCard
+from book.models import ProductCard, ProductSubcategory, ProductCategory
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -11,15 +11,25 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['username', 'first_name', 'last_name', 'email', 'date_joined']
 
 
-class ProductCardSerializer(serializers.HyperlinkedModelSerializer):
+class ProductCategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = ProductCard
+        model = ProductCategory
         fields = '__all__'
 
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
-    product_card = serializers.RelatedField(source='productcard.name', read_only=True)
+class ProductSubcategorySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ProductSubcategory
+        fields = '__all__'
 
+
+class ProductCardSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ProductCard
+        exclude = ['gallery']
+
+
+class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product
         exclude = ['user']
