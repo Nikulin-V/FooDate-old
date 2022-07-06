@@ -2,6 +2,7 @@ from django.core import validators
 from django.db import models
 from django.db.models import Q
 from django.utils.safestring import mark_safe
+from slugify import slugify
 from tinymce.models import HTMLField
 
 import core.validators
@@ -147,6 +148,17 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     )
 
     def save(self, *args, **kwargs):
+        # If ImageField is filled
+        if '/' not in self.image.name:
+            slug = slugify(self.name)
+            # Change name of new image
+            name_split = self.image.name.split('.')
+            path, extension = '.'.join(name_split)[:-1], name_split[-1]
+            path = path.split('/')[:-1]
+            extension = self.image.name.split('.')[-1]
+            path.append('.'.join((slug, extension)))
+            self.image.name = '/'.join(path)
+
         if not self.subcategory:
             super(ProductCard, self).save(*args, **kwargs)
             self.subcategory, has_category = ProductSubcategory.subcategories.get_or_create(
@@ -156,6 +168,7 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
                 self.subcategory.category = ProductCategory.categories.get_or_create(
                     name='Другое',
                 )[0]
+
         super(ProductCard, self).save(*args, **kwargs)
 
     class Meta:
@@ -166,6 +179,19 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
 class ProductPhoto(PublishedBaseModel):
     upload = models.ImageField(upload_to='products/gallery', null=True, blank=True)
     product = models.ForeignKey(ProductCard, verbose_name='Продукт', on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        # If ImageField is filled
+        if '/' not in self.upload.name:
+            slug = slugify(self.product.name)
+            # Change name of new image
+            name_split = self.upload.name.split('.')
+            path, extension = '.'.join(name_split)[:-1], name_split[-1]
+            path = path.split('/')[:-1]
+            extension = self.upload.name.split('.')[-1]
+            path.append('.'.join((slug, extension)))
+            self.upload.name = '/'.join(path)
+        super(ProductPhoto, self).save()
 
     def image(self):
         return mark_safe(f'<img src="{self.upload.url}" width="200"')

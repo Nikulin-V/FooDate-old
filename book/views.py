@@ -1,6 +1,7 @@
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from django.views import View
+from slugify import slugify
 
 from app.models import ProductCard
 from book.forms import NewProductCardForm
@@ -113,7 +114,8 @@ class ProductsView(View):
             if request.FILES:
                 file = request.FILES['image']
                 fs = FileSystemStorage()
-                filepath = f'products/images/{file.name}'
+                extension = file.name.split('.')[-1]
+                filepath = f'products/images/{slugify(name)}.{extension}'
                 fs.save(f'{MEDIA_ROOT}/{filepath}', file)
 
             new_product_card = ProductCard.cards.create(
