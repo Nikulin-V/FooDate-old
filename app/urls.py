@@ -11,6 +11,7 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls')),
     path('admin/', admin.site.urls, name='admin'),
     path('auth/', include('users.urls'), name='auth'),
+    path('api/', include('app.api.urls'), name='api')
 ]
 
 handler400 = 'app.error_views.bad_request'
