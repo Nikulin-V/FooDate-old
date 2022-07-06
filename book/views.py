@@ -1,6 +1,7 @@
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from django.views import View
+# noinspection PyPackageRequirements
 from slugify import slugify
 
 from app.models import ProductCard
