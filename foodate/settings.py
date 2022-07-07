@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'durationwidget',
     'tinymce',
     'hcaptcha',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -46,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
+    'core.middleware.RequestMiddleware',
     'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
@@ -108,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 
@@ -159,6 +161,11 @@ USER_AGENTS_CACHE = 'default'
 
 HCAPTCHA_SITEKEY = '4e5c5150-8547-4f93-bffb-94d4132c22b3'
 HCAPTCHA_SECRET = '0xF77ec604cD33Bc25C866A82ca8402A74ea10D75e'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
 
 
 if DEBUG:

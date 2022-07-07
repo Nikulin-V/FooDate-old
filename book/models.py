@@ -2,6 +2,8 @@ from django.core import validators
 from django.db import models
 from django.db.models import Q
 from django.utils.safestring import mark_safe
+# noinspection PyPackageRequirements
+from slugify import slugify
 from tinymce.models import HTMLField
 
 import core.validators
@@ -16,7 +18,7 @@ class ProductCategoryManager(models.Manager):
         """
         active_categories = (
             self.get_queryset()
-                .filter(subcategories__products__is_published=True)
+                .filter(subcategories__product_cards__is_published=True)
         )
         return {
             category: set(ProductSubcategory.subcategories.get_active(category))
@@ -41,7 +43,7 @@ class ProductSubcategoryManager(models.Manager):
         """
         Returns list with subcategories from category with published ProductCards
         """
-        return set(self.get_queryset().filter(category=category, products__is_published=True))
+        return set(self.get_queryset().filter(category=category, product_cards__is_published=True))
 
 
 class ProductSubcategory(NameSlugBaseModel):
@@ -76,14 +78,11 @@ class ProductCardManager(models.Manager):
 class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     cards = ProductCardManager()
 
-    name = models.CharField('Название', max_length=255, unique=True)
-    slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug],
-                            null=True, blank=True)
     designation = models.CharField('Наименование', max_length=255)
     subcategory = models.ForeignKey(
         ProductSubcategory,
         on_delete=models.DO_NOTHING,
-        related_name='products',
+        related_name='product_cards',
         verbose_name='Подкатегория продуктов'
     )
     shelf_life = models.DurationField(
@@ -146,10 +145,21 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
         verbose_name='Изображение продукта',
     )
     gallery = models.ManyToManyField(
-        'book.ProductPhoto', verbose_name='Фотографии', related_name='products'
+        'book.ProductPhoto', verbose_name='Фотографии', related_name='product_cards'
     )
 
     def save(self, *args, **kwargs):
+        # If ImageField is filled
+        if '/' not in self.image.name:
+            slug = slugify(self.name)
+            # Change name of new image
+            name_split = self.image.name.split('.')
+            path, extension = '.'.join(name_split)[:-1], name_split[-1]
+            path = path.split('/')[:-1]
+            extension = self.image.name.split('.')[-1]
+            path.append('.'.join((slug, extension)))
+            self.image.name = '/'.join(path)
+
         if not self.subcategory:
             super(ProductCard, self).save(*args, **kwargs)
             self.subcategory, has_category = ProductSubcategory.subcategories.get_or_create(
@@ -159,6 +169,7 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
                 self.subcategory.category = ProductCategory.categories.get_or_create(
                     name='Другое',
                 )[0]
+
         super(ProductCard, self).save(*args, **kwargs)
 
     class Meta:
@@ -169,6 +180,19 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
 class ProductPhoto(PublishedBaseModel):
     upload = models.ImageField(upload_to='products/gallery', null=True, blank=True)
     product = models.ForeignKey(ProductCard, verbose_name='Продукт', on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        # If ImageField is filled
+        if '/' not in self.upload.name:
+            slug = slugify(self.product.name)
+            # Change name of new image
+            name_split = self.upload.name.split('.')
+            path, extension = '.'.join(name_split)[:-1], name_split[-1]
+            path = path.split('/')[:-1]
+            extension = self.upload.name.split('.')[-1]
+            path.append('.'.join((slug, extension)))
+            self.upload.name = '/'.join(path)
+        super(ProductPhoto, self).save()
 
     def image(self):
         return mark_safe(f'<img src="{self.upload.url}" width="200"')

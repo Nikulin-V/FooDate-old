@@ -2,7 +2,8 @@ from durationwidget.widgets import TimeDurationWidget, LabeledNumberInput
 
 
 class CustomTimeDurationWidget(TimeDurationWidget):
-    def __init__(self, attrs=None, show_days=True, show_hours=True, show_minutes=True, show_seconds=True):
+    def __init__(self, attrs=None, show_days=True, show_hours=True,
+                 show_minutes=True, show_seconds=True):
         self.show_days = show_days
         self.show_hours = show_hours
         self.show_minutes = show_minutes

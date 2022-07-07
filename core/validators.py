@@ -1,4 +1,10 @@
+import datetime
+
+import pytz
+from django.core.exceptions import ValidationError
 from django.core.validators import BaseValidator
+
+from foodate.settings import TIME_ZONE
 
 
 class BiggerThanValidator(BaseValidator):
@@ -7,5 +13,12 @@ class BiggerThanValidator(BaseValidator):
         self.message = f'Убедитесь, что это значение больше {self.limit_value}'
         super().__init__(limit_value)
 
-    def compare(self, a, b):
-        return a <= b
+    def compare(self, value, limit):
+        return value <= limit
+
+
+def date_in_past(value: datetime.datetime):
+    time_zone = pytz.timezone(TIME_ZONE)
+    message = 'Убедитесь, что эти дата и время раньше или равны текущим'
+    if value.astimezone(time_zone) > datetime.datetime.now().astimezone(time_zone):
+        raise ValidationError(message)
