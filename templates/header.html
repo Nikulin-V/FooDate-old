@@ -10,8 +10,16 @@
         <a class="nav-link" href="{% url 'home' host 'app' %}">
             Главная
         </a>
+        {% if user.is_authenticated %}
+            <a class="nav-link" href="{% url 'app' host 'app' %}">
+                Холодильник
+            </a>
+        {% endif %}
         <a class="nav-link" href="{% url 'products' host 'book' %}">
             Продукты
+        </a>
+        <a class="nav-link" href="{% url 'recipes' host 'book' %}">
+            Рецепты
         </a>
         {% if user.is_authenticated %}
             {% if user.is_staff %}
@@ -20,9 +28,6 @@
                 </a>
             {% endif %}
 
-            <a class="nav-link" href="{% url 'app' host 'app' %}">
-                Холодильник
-            </a>
             <a class="nav-link" href="{% url 'profile' host 'app' %}">
                 Профиль
             </a>
