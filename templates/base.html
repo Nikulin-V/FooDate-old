@@ -5,6 +5,10 @@
         <title>{% block title %}FooDate{% endblock %}</title>
 
         {% load static %}
+        <script>
+            const staticUrl = "{% get_static_prefix %}";
+            const mediaUrl = "{% get_media_prefix %}";
+        </script>
 
         <!-- Favicon -->
         <link rel="apple-touch-icon" sizes="180x180"
@@ -32,9 +36,23 @@
         <!-- JQuery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+        <!-- React.js -->
+        <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
         <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Rajdhani&display=swap"
+              rel="stylesheet">
+
+        <!-- API -->
+        <script type="text/javascript" src="{% static 'js/api.js' %}"></script>
 
     </head>
     <body class="h-100 d-flex flex-column">

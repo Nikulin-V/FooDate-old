@@ -14,7 +14,7 @@ class HomeView(View):
 
 
 class AppView(View):
-    template = 'error_pages/development.html'
+    template = 'app/app.html'
     template_mobile = 'error_pages/development.html'
 
     def get(self, request):

@@ -28,7 +28,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Product.products.filter(user=get_user()).order_by(
-            (F('production_date') - F('product_card__shelf_life')).desc()
+            (F('production_date') - F('product_card__shelf_life'))
         )
 
 
