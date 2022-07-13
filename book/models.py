@@ -150,15 +150,16 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
 
     def save(self, *args, **kwargs):
         # If ImageField is filled
-        if '/' not in self.image.name:
-            slug = slugify(self.name)
-            # Change name of new image
-            name_split = self.image.name.split('.')
-            path, extension = '.'.join(name_split)[:-1], name_split[-1]
-            path = path.split('/')[:-1]
-            extension = self.image.name.split('.')[-1]
-            path.append('.'.join((slug, extension)))
-            self.image.name = '/'.join(path)
+        if self.image.name:
+            if '/' not in self.image.name:
+                slug = slugify(self.name)
+                # Change name of new image
+                name_split = self.image.name.split('.')
+                path, extension = '.'.join(name_split)[:-1], name_split[-1]
+                path = path.split('/')[:-1]
+                extension = self.image.name.split('.')[-1]
+                path.append('.'.join((slug, extension)))
+                self.image.name = '/'.join(path)
 
         if not self.subcategory:
             super(ProductCard, self).save(*args, **kwargs)
@@ -183,15 +184,16 @@ class ProductPhoto(PublishedBaseModel):
 
     def save(self, *args, **kwargs):
         # If ImageField is filled
-        if '/' not in self.upload.name:
-            slug = slugify(self.product.name)
-            # Change name of new image
-            name_split = self.upload.name.split('.')
-            path, extension = '.'.join(name_split)[:-1], name_split[-1]
-            path = path.split('/')[:-1]
-            extension = self.upload.name.split('.')[-1]
-            path.append('.'.join((slug, extension)))
-            self.upload.name = '/'.join(path)
+        if self.upload.name:
+            if '/' not in self.upload.name:
+                slug = slugify(self.product.name)
+                # Change name of new image
+                name_split = self.upload.name.split('.')
+                path, extension = '.'.join(name_split)[:-1], name_split[-1]
+                path = path.split('/')[:-1]
+                extension = self.upload.name.split('.')[-1]
+                path.append('.'.join((slug, extension)))
+                self.upload.name = '/'.join(path)
         super(ProductPhoto, self).save()
 
     def image(self):

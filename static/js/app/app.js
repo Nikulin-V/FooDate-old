@@ -116,7 +116,7 @@ class ProductRowRight extends React.Component {
                         <div className='vertical-line-left col pb-5'>
                             <div className='row'>
                                 <div className='col-1'>
-                                    <img src={productCard['image']}
+                                    <img src={productCard['image'] ? productCard['image'] : '/static/images/icons/no_food_image_small.png'}
                                          id={`image-${this.state.id}`}
                                          className='product-image product-image-right'
                                          alt="Нет продуктов"></img>
@@ -190,7 +190,7 @@ class ProductRowLeft extends React.Component {
                                     <br/>
                                 </div>
                                 <div className='col-1'>
-                                    <img src={productCard['image']}
+                                    <img src={productCard['image'] ? productCard['image'] : '/static/images/icons/no_food_image_small.png'}
                                          id={`image-${this.state.id}`}
                                          className='product-image product-image-left'
                                          alt="Нет продуктов"></img>
