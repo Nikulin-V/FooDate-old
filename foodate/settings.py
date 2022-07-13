@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'tinymce',
     'hcaptcha',
     'rest_framework',
+    'datetimewidget',
 ]
 
 MIDDLEWARE = [
@@ -43,6 +44,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -113,6 +115,8 @@ LANGUAGE_CODE = 'ru'
 TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = True
 

@@ -1,6 +1,10 @@
 #products-timeline {
 }
 
+.add-more-products-btn {
+    max-width: 300px;
+}
+
 .product-production-date, .product-shelf-life {
     font-family: 'Rajdhani', sans-serif;
     font-size: medium;
@@ -9,6 +13,7 @@
 .product-title {
     font-family: 'Caveat', cursive;
     font-size: x-large;
+    white-space: pre-line;
 }
 
 .vertical-line-left {
@@ -20,7 +25,9 @@
 }
 
 .product-image {
-    height: 70px;
+    height: 100px;
+    width: 100px;
+    object-fit: contain;
     border: 1px solid #008500;
     border-radius: 100%;
     background-color: white;
@@ -33,15 +40,20 @@
 
 .product-image-right {
     position: relative;
-    left: -49px;
+    left: -63px;
 }
 
 .product-image-left {
     position: relative;
-    left: -9px;
+    left: -5px;
 }
 
 @media screen and (max-width: 1600px) {
+    .product-image {
+        height: 70px;
+        width: 70px;
+    }
+
     .product-image-right {
         position: relative;
         left: -49px;
@@ -49,6 +61,6 @@
 
     .product-image-left {
         position: relative;
-        left: -17px;
+        left: -7px;
     }
 }

@@ -1,4 +1,5 @@
 const domContainer = document.querySelector('#productsTimeLine');
+const addMoreProductsDiv = document.querySelector('#add-more-products-div');
 
 class NoProducts extends React.Component {
     render() {
@@ -7,7 +8,8 @@ class NoProducts extends React.Component {
                 <img src={`${staticUrl}images/icons/empty_fridge.png`}
                      style={{width: 200}}
                      alt="Нет продуктов"></img>
-                <h4 className="text-apple text-center mt-5">В холодильнике пусто</h4>
+                <h4 className="text-apple text-center mt-5 mb-3">В холодильнике пусто</h4>
+                <AddMoreProductsButton/>
             </div>
         );
     }
@@ -30,6 +32,54 @@ function parseDuration(duration) {
     let hours = duration[1].split(':')[0];
     return `${days} дн. ${hours} ч.`
 
+}
+
+class ProductionDate extends React.Component {
+    render() {
+        return (
+            this.props.date
+                ?
+                <div className='col-auto'>
+                    <span className='badge bg-success product-production-date'
+                          data-bs-toggle='tooltip' data-bs-placement='top'
+                          title='Дата изготовления'>
+                        {parseDateTime(this.props.date )}
+                    </span>
+                </div>
+            :
+                <div></div>
+        )
+    }
+}
+
+class ShelfLife extends React.Component {
+    render() {
+        return (
+            this.props.shelfLife
+                ?
+                <div className='col-auto'>
+                    <span className='badge bg-warning product-shelf-life'
+                          data-bs-toggle='tooltip' data-bs-placement='top'
+                          title='Срок годности'>
+                        {parseDuration(this.props.shelfLife)}
+                    </span>
+                </div>
+                :
+                <div></div>
+        )
+    }
+
+}
+
+class ProductWeight extends React.Component {
+    render() {
+        return (
+            (this.props.amount && this.props.unit) ?
+                <span>{this.props.amount} {this.props.unit}</span>
+                :
+                <span></span>
+        )
+    }
 }
 
 class ProductRowRight extends React.Component {
@@ -75,24 +125,12 @@ class ProductRowRight extends React.Component {
                                     <a>
                                         <div className='row'>
                                             <span className='product-title'>
-                                                {productCard['name']} {product['amount']} {product['amount_unit']}
+                                                {productCard['name']} <ProductWeight amount={product['amount']} unit={product['amount_unit']}/>
                                             </span>
                                         </div>
-                                        <div className='row'>
-                                            <div className='col'>
-                                                <span className='badge bg-success product-production-date'
-                                                      data-bs-toggle='tooltip' data-bs-placement='top'
-                                                      title='Дата изготовления'>
-                                                    {parseDateTime(product['production_date'])}
-                                                </span>
-                                            </div>
-                                            <div className='col'>
-                                                <span className='badge bg-warning product-shelf-life'
-                                                      data-bs-toggle='tooltip' data-bs-placement='top'
-                                                      title='Срок годности'>
-                                                    {parseDuration(productCard['shelf_life'])}
-                                                </span>
-                                            </div>
+                                        <div className='row justify-content-start'>
+                                            <ProductionDate date={product['production_date']}/>
+                                            <ShelfLife shelfLife={productCard['shelf_life']}/>
                                         </div>
                                         <br/>
                                     </a>
@@ -142,24 +180,12 @@ class ProductRowLeft extends React.Component {
                                 <div className='col-11 text-end mr-3'>
                                     <div className='row'>
                                         <span className='product-title'>
-                                            {productCard['name']} {product['amount']} {product['amount_unit']}
+                                            {productCard['name']} <ProductWeight amount={product['amount']} unit={product['amount_unit']}/>
                                         </span>
                                     </div>
-                                    <div className='row'>
-                                        <div className='col'>
-                                            <span className='badge bg-success product-production-date'
-                                                  data-bs-toggle='tooltip' data-bs-placement='top'
-                                                  title='Дата изготовления'>
-                                                {parseDateTime(product['production_date'])}
-                                            </span>
-                                        </div>
-                                        <div className='col'>
-                                            <span className='badge bg-warning product-shelf-life'
-                                                  data-bs-toggle='tooltip' data-bs-placement='top'
-                                                  title='Срок годности'>
-                                                {parseDuration(productCard['shelf_life'])}
-                                            </span>
-                                        </div>
+                                    <div className='row justify-content-end'>
+                                        <ProductionDate date={product['production_date']}/>
+                                        <ShelfLife shelfLife={productCard['shelf_life']}/>
                                     </div>
                                     <br/>
                                 </div>
@@ -195,18 +221,34 @@ class ProductsTimeline extends React.Component {
         }
         return (
             <div id='products-timeline'>
-                <div className='mt-5'></div>
                 {rows}
                 <div className='mb-3 d-flex justify-content-center'>
                     <img src='/static/images/fav/android-chrome-512x512.png'
                      style={{'height': '70px'}}
                      alt="Добавьте ещё продукты..."></img>
                 </div>
-                <h5 className='text-apple text-center'>Продолжение следует...</h5>
+                <div className='row justify-content-center text-center'>
+                    <h5 className='text-apple mb-3'>Продолжение следует...</h5>
+                    <AddMoreProductsButton/>
+                </div>
             </div>
         )
     }
 }
+
+class AddMoreProductsButton extends React.Component {
+    render() {
+        return (
+            <button className='btn btn-outline-apple add-more-products-btn'
+                    data-bs-toggle="modal"
+                    data-bs-target="#newProductModal">
+                Добавьте продукты
+            </button>
+        )
+    }
+}
+
+ReactDOM.render(<AddMoreProductsButton/>, addMoreProductsDiv);
 
 products.getProducts().then(() => {
     if (products.getProductsJson['count'] === 0)

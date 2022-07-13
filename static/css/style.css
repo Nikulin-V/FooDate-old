@@ -121,3 +121,70 @@ ul.errorlist li {
     color: #dc3545;
     white-space: nowrap;
 }
+
+.modal-form > div > div.row {
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed #70c670;
+    margin-bottom: 1rem;
+}
+
+.modal-form div {
+    align-self: center;
+}
+
+.modal-form input, .modal-form textarea {
+    display: block;
+    width: 100%;
+    min-height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    outline-color: #269926;
+}
+
+.modal-form input[type=number] {
+    width: 100px;
+}
+
+.modal-form span {
+    align-self: center;
+    margin-left: .3rem;
+}
+
+.modal-form select {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem 1.75rem .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    vertical-align: middle;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline-color: #269926;
+}
+
+
+.form label {
+    margin-bottom: .5rem;
+}
