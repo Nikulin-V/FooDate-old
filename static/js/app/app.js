@@ -82,70 +82,30 @@ class ProductWeight extends React.Component {
     }
 }
 
-class ProductRowRight extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            product: null,
-            display: 'none'
-        }
-    }
-
-    componentDidMount() {
-        const productUrl = this.props.product['product_card'];
-        productCards.getProductCard(productUrl)
-            .then((r) => {
-            this.setState({
-                product: this.props.product,
-                productCard: r,
-                display: 'block'
-            })
-        })
-    }
-
+class MenuItem extends React.Component {
     render() {
-        const product = this.state.product;
-        const productCard = this.state.productCard;
         return (
-            <div style={{'display': this.state.display}}>
-                {this.state.product === null ?
-                    <div></div>
-                :
-                    <div className='row'>
-                        <div className='col'></div>
-                        <div className='vertical-line-left col pb-5'>
-                            <div className='row'>
-                                <div className='col-1'>
-                                    <img src={productCard['image'] ? productCard['image'] : '/static/images/icons/no_food_image_small.png'}
-                                         id={`image-${this.state.id}`}
-                                         className='product-image product-image-right'
-                                         alt="Нет продуктов"></img>
-                                </div>
-                                <div className='col-11'>
-                                    <a>
-                                        <div className='row'>
-                                            <span className='product-title'>
-                                                {productCard['name']} <ProductWeight amount={product['amount']} unit={product['amount_unit']}/>
-                                            </span>
-                                        </div>
-                                        <div className='row justify-content-start'>
-                                            <ProductionDate date={product['production_date']}/>
-                                            <ShelfLife shelfLife={productCard['shelf_life']}/>
-                                        </div>
-                                        <br/>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        )
+            <li onClick={this.props.onClick}
+                className='list-group-item list-group-item-action'>
+                <a href={this.props.href}>
+                    {this.props.children}
+                </a>
+            </li>
+        );
     }
 }
 
+class ContextMenu extends React.Component {
+    render() {
+        return (
+            <ul id={this.props.id} className={this.props.className}>
+                {this.props.children}
+            </ul>
+        );
+    }
+}
 
-class ProductRowLeft extends React.Component {
+class ProductRow extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -154,56 +114,127 @@ class ProductRowLeft extends React.Component {
         }
     }
 
+    edit() {
+
+    }
+
+    eaten() {
+
+    }
+
+    goneBad() {
+
+    }
+
     componentDidMount() {
         const productUrl = this.props.product['product_card'];
         productCards.getProductCard(productUrl)
             .then((r) => {
-            this.setState({
-                product: this.props.product,
-                productCard: r,
-                display: 'block'
+                const product = this.props.product;
+                const productCard = r;
+                function getInfo() {
+                    location.href = `${protocol}//book.${host}/products/${productCard['slug']}`
+                }
+                this.setState({
+                    product: this.props.product,
+                    productCard: r,
+                    contextMenuId: 'context-menu-' + product['slug'],
+                    display: 'block',
+                    contextMenu:
+                        <ContextMenu id={'context-menu-' + product['slug']} className='context-menu'>
+                            <MenuItem onClick={getInfo}>📗 Информация о продукте</MenuItem>
+                            <MenuItem onClick={this.edit}>✏ Изменить</MenuItem>
+                            <MenuItem onClick={this.eaten}>😋 Съедено</MenuItem>
+                            <MenuItem onClick={this.goneBad}>🗑 Испортилось</MenuItem>
+                        </ContextMenu>
+                });
             })
-        })
     }
 
     render() {
         const product = this.state.product;
         const productCard = this.state.productCard;
+        let contextMenuId = this.state.contextMenuId;
+        function showContextMenu(event) {
+            $('.context-show').toggleClass('context-show');
+            let contextMenu = $('#' + contextMenuId);
+            let x = event.clientX;
+            let y = event.clientY;
+            contextMenu.css('left', x.toString() + 'px');
+            contextMenu.css('top', y.toString() + 'px');
+            contextMenu.toggleClass('context-show');
+        }
         return (
             <div style={{'display': this.state.display}}>
-                {this.state.product === null ?
-                    <div></div>
-                :
-                    <div className='row'>
-                        <div className='vertical-line-right col pb-5'>
-                            <div className='row'>
-                                <div className='col-11 text-end mr-3'>
+                {
+                    this.props.side === 'right' ?
+                        this.state.product === null ?
+                            <div></div>
+                        :
+                            <div className='row' onContextMenu={showContextMenu}>
+                                {this.state.contextMenu}
+                                <div className='col'></div>
+                                <div className='vertical-line-left col pb-5'>                                    
                                     <div className='row'>
-                                        <span className='product-title'>
-                                            {productCard['name']} <ProductWeight amount={product['amount']} unit={product['amount_unit']}/>
-                                        </span>
+                                        <div className='col-1'>
+                                            <img src={productCard['image'] ? productCard['image'] : '/static/images/icons/no_food_image_small.png'}
+                                                 id={`image-${this.state.id}`}
+                                                 className='product-image product-image-right'
+                                                 alt="Нет продуктов"></img>
+                                        </div>
+                                        <div className='col-11'>
+                                            <a>
+                                                <div className='row'>
+                                                    <span className='product-title'>
+                                                        {productCard['name']} <ProductWeight amount={product['amount']} unit={product['amount_unit']}/>
+                                                    </span>
+                                                </div>
+                                                <div className='row justify-content-start'>
+                                                    <ProductionDate date={product['production_date']}/>
+                                                    <ShelfLife shelfLife={productCard['shelf_life']}/>
+                                                </div>
+                                                <br/>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div className='row justify-content-end'>
-                                        <ProductionDate date={product['production_date']}/>
-                                        <ShelfLife shelfLife={productCard['shelf_life']}/>
-                                    </div>
-                                    <br/>
-                                </div>
-                                <div className='col-1'>
-                                    <img src={productCard['image'] ? productCard['image'] : '/static/images/icons/no_food_image_small.png'}
-                                         id={`image-${this.state.id}`}
-                                         className='product-image product-image-left'
-                                         alt="Нет продуктов"></img>
                                 </div>
                             </div>
-                        </div>
-                        <div className='col'></div>
-                    </div>
+                    :
+                        this.state.product === null ?
+                            <div></div>
+                        :
+                            <div className='row' onContextMenu={showContextMenu}>
+                                {this.state.contextMenu}
+                                <div className='vertical-line-right col pb-5'>
+                                    <div className='row'>
+                                        <div className='col-11 text-end mr-3'>
+                                            <div className='row'>
+                                                <span className='product-title'>
+                                                    {productCard['name']} <ProductWeight amount={product['amount']} unit={product['amount_unit']}/>
+                                                </span>
+                                            </div>
+                                            <div className='row justify-content-end'>
+                                                <ProductionDate date={product['production_date']}/>
+                                                <ShelfLife shelfLife={productCard['shelf_life']}/>
+                                            </div>
+                                            <br/>
+                                        </div>
+                                        <div className='col-1'>
+                                            <img src={productCard['image'] ? productCard['image'] : '/static/images/icons/no_food_image_small.png'}
+                                                 id={`image-${this.state.id}`}
+                                                 className='product-image product-image-left'
+                                                 alt="Нет продуктов"></img>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='col'></div>
+                            </div>
                 }
             </div>
         )
     }
 }
+
 
 class ProductsTimeline extends React.Component {
     render() {
@@ -212,11 +243,11 @@ class ProductsTimeline extends React.Component {
             const product = products.getProductsJson['results'][productId];
             if (productId % 2 === 0)
                 rows.push(
-                    <ProductRowRight id={productId} product={product} />
+                    <ProductRow id={productId} product={product} side='right'/>
                 );
             else
                 rows.push(
-                    <ProductRowLeft id={productId} product={product} />
+                    <ProductRow id={productId} product={product} side='left'/>
                 );
         }
         return (
@@ -257,5 +288,12 @@ products.getProducts().then(() => {
         ReactDOM.render(<ProductsTimeline/>, domContainer)
 });
 
+$(document).on('click', function () {
+    $('.context-show').toggleClass('context-show')
+});
 
-
+$(domContainer).contextmenu(
+    function (e) {
+        e.preventDefault()
+    }
+);

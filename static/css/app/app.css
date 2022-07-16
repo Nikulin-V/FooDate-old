@@ -64,3 +64,22 @@
         left: -7px;
     }
 }
+
+.context-menu {
+    position: absolute;
+    z-index: 99;
+    width: 300px;
+    padding: 0;
+    display: none;
+    transform-origin: 0 0;
+}
+
+@keyframes context-animation {
+    0% {transform: scale(0)}
+    100% {transform: scale(1)}
+}
+
+.context-show {
+    display: block;
+    animation: context-animation .5s;
+}

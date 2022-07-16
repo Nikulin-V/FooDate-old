@@ -1,3 +1,7 @@
+body {
+    scroll-behavior: smooth;
+}
+
 main {
     width: 75%;
     margin-left: auto;
