@@ -40,7 +40,7 @@
                     </div>
                     <form method="post" id="newProductCardForm" class="modal-form" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="modal-body mx-auto text-center w-50">
+                        <div class="modal-body mx-auto text-center w-75">
                             <div class="row">
                                 <div class="col">
                                     Продукт
@@ -54,7 +54,7 @@
                                 <div class="col">
                                     {{ form.amount.label_tag }}
                                 </div>
-                                <div class="col-7 d-flex align-center justify-content-center">
+                                <div class="col d-flex align-center justify-content-center">
                                     {{ form.amount }}
                                     <span class="mx-2"></span>{{ form.amount_unit }}
                                 </div>
@@ -65,7 +65,7 @@
                                 <div class="col">
                                     {{ form.production_date.label_tag }}
                                 </div>
-                                <div class="col-7 d-flex">
+                                <div class="col d-flex justify-content-center">
                                     {{ form.production_date }}
                                 </div>
                                 {{ form.production_date.errors }}
@@ -74,7 +74,7 @@
                                 <div class="col">
                                     {{ form.purchase_date.label_tag }}
                                 </div>
-                                <div class="col-7 d-flex">
+                                <div class="col d-flex justify-content-center">
                                     {{ form.purchase_date }}
                                 </div>
                                 {{ form.purchase_date.errors }}

@@ -160,11 +160,6 @@ ul.errorlist li {
     width: 100px;
 }
 
-.modal-form span {
-    align-self: center;
-    margin-left: .3rem;
-}
-
 .modal-form select {
     display: block;
     width: 100%;
