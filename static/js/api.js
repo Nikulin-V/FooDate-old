@@ -25,6 +25,7 @@ products.getProducts = async function getProducts() {
 };
 
 products.getProduct = async function getProducts(productUrl) {
+    productUrl = productUrl.replace('http://', 'https://');
     let response = await fetch(productUrl);
     if (response.ok) {
         let json = await response.json();
@@ -35,6 +36,7 @@ products.getProduct = async function getProducts(productUrl) {
 };
 
 products.deleteProduct = async function deleteProduct(productUrl) {
+    productUrl = productUrl.replace('http://', 'https://');
     let response = await fetch(productUrl, {
         method: 'DELETE'
     });
@@ -62,6 +64,7 @@ productCards.getProductCards = async function getProductCards() {
 };
 
 productCards.getProductCard = async function getProductCard(productCardUrl) {
+    productCardUrl = productCardUrl.replace('http://', 'https://');
     let response = await fetch(productCardUrl);
     if (response.ok) {
         let json = await response.json();
