@@ -21,7 +21,7 @@ products.getProducts = async function getProducts() {
         products.getProductsJson = json;
         return json
     } else
-        console.warn(`Ошибка API: ${response.status} ${products.url}` )
+        console.warn(`Ошибка API: ${response.status} ${products.url}`)
 };
 
 products.getProduct = async function getProducts(productUrl) {
@@ -31,7 +31,19 @@ products.getProduct = async function getProducts(productUrl) {
         products.getProductJson = json;
         return json
     } else
-        console.warn(`Ошибка API: ${response.status} ${productUrl}` )
+        console.warn(`Ошибка API: ${response.status} ${productUrl}`)
+};
+
+products.deleteProduct = async function deleteProduct(productUrl) {
+    let response = await fetch(productUrl, {
+        method: 'DELETE'
+    });
+    if (response.ok) {
+        return 'Success'
+    } else {
+        console.warn(`Ошибка API (DELETE): ${response.status} ${productUrl}`);
+        return 'Error'
+    }
 };
 
 
@@ -46,7 +58,7 @@ productCards.getProductCards = async function getProductCards() {
         productCards.getProductCardsJson = json;
         return json
     } else
-        console.warn(`Ошибка API: ${response.status} ${productCards.url}` )
+        console.warn(`Ошибка API: ${response.status} ${productCards.url}`)
 };
 
 productCards.getProductCard = async function getProductCard(productCardUrl) {
@@ -56,5 +68,5 @@ productCards.getProductCard = async function getProductCard(productCardUrl) {
         productCards.getProductCardJson = json;
         return json
     } else
-        console.warn(`Ошибка API: ${response.status} ${productCardUrl}` )
+        console.warn(`Ошибка API: ${response.status} ${productCardUrl}`)
 };

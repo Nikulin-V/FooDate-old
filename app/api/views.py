@@ -1,11 +1,12 @@
 from django.db.models import F
 from rest_framework import viewsets, permissions
+from rest_framework.authentication import SessionAuthentication
 
+from app.api.serializers import ProductSerializer, UserSerializer, ProductCardSerializer, \
+    ProductCategorySerializer, ProductSubcategorySerializer
 from app.models import Product
 from book.models import ProductCard, ProductCategory, ProductSubcategory
 from core.middleware import get_user
-from app.api.serializers import ProductSerializer, UserSerializer, ProductCardSerializer, \
-    ProductCategorySerializer, ProductSubcategorySerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -14,6 +15,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
 
     def get_queryset(self):
         return [get_user()]

@@ -13,7 +13,10 @@
                 <h3>Ваши продукты</h3>
             </div>
             <div class="col text-end" id="add-more-products-div"></div>
-            <hr>
+            <hr class="mb-0">
+            <span class="text-secondary small">
+                Для управления продуктом нажмите правую кнопку мыши
+            </span>
         </div>
         <div class="row justify-content-center">
             <div class="col">
@@ -91,35 +94,8 @@
                 </div>
             </div>
         </div>
-        <!-- New product saving notification -->
-        {% if saved == True %}
-            <div class="modal fade" id="notificationModal" tabindex="-1"
-                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Продукт добавлен</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            Для изменения или удаления продукта нажмите на него в списке продуктов
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-apple"
-                                    data-bs-dismiss="modal">Хорошо</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <script>
-                let notificationModal = new bootstrap.Modal(
-                    document.getElementById('notificationModal'), {
-                    keyboard: false
-                });
-                notificationModal.show()
-            </script>
-        {% elif saved == False %}
+        <!-- New product bad saving notification -->
+        {% if saved == False %}
             <script>
                 let newProductModal = new bootstrap.Modal(
                     document.getElementById('newProductModal'), {

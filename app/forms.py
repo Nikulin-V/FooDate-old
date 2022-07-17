@@ -1,3 +1,4 @@
+# noinspection PyPackageRequirements
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
 

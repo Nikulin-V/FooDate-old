@@ -1,3 +1,5 @@
+// noinspection JSXNamespaceValidation
+
 const domContainer = document.querySelector('#productsTimeLine');
 const addMoreProductsDiv = document.querySelector('#add-more-products-div');
 
@@ -114,47 +116,23 @@ class ProductRow extends React.Component {
         }
     }
 
-    edit() {
-
-    }
-
-    eaten() {
-
-    }
-
-    goneBad() {
-
-    }
-
     componentDidMount() {
-        const productUrl = this.props.product['product_card'];
-        productCards.getProductCard(productUrl)
+        const productCardUrl = this.props.product['product_card'];
+        productCards.getProductCard(productCardUrl)
             .then((r) => {
                 const product = this.props.product;
-                const productCard = r;
-                function getInfo() {
-                    location.href = `${protocol}//book.${host}/products/${productCard['slug']}`
-                }
                 this.setState({
                     product: this.props.product,
                     productCard: r,
                     contextMenuId: 'context-menu-' + product['slug'],
                     display: 'block',
-                    contextMenu:
-                        <ContextMenu id={'context-menu-' + product['slug']} className='context-menu'>
-                            <MenuItem onClick={getInfo}>📗 Информация о продукте</MenuItem>
-                            <MenuItem onClick={this.edit}>✏ Изменить</MenuItem>
-                            <MenuItem onClick={this.eaten}>😋 Съедено</MenuItem>
-                            <MenuItem onClick={this.goneBad}>🗑 Испортилось</MenuItem>
-                        </ContextMenu>
                 });
             })
     }
 
     render() {
-        const product = this.state.product;
-        const productCard = this.state.productCard;
         let contextMenuId = this.state.contextMenuId;
+
         function showContextMenu(event) {
             $('.context-show').toggleClass('context-show');
             let contextMenu = $('#' + contextMenuId);
@@ -164,36 +142,60 @@ class ProductRow extends React.Component {
             contextMenu.css('top', y.toString() + 'px');
             contextMenu.toggleClass('context-show');
         }
-        return (
-            <div style={{'display': this.state.display}}>
-                {
-                    this.props.side === 'right' ?
-                        this.state.product === null ?
-                            <div></div>
-                        :
-                            <div className='row' onContextMenu={showContextMenu}>
-                                {this.state.contextMenu}
+
+        if (this.state.product !== null) {
+            const product = this.state.product;
+            const productCard = this.state.productCard;
+            function getInfo() {
+                location.href = `${protocol}//book.${host}/products/${productCard['slug']}`
+            }
+
+            function deleteProduct() {
+                // noinspection JSIgnoredPromiseFromCall
+                products.deleteProduct(product['url']);
+                $(`#row-${product['slug']}`).remove();
+            }
+
+            return (
+                <div style={{'display': this.state.display}}>
+                    {
+                        this.props.side === 'right' ?
+                            <div className='row'
+                                 id={`row-${product['slug']}`}
+                                 onContextMenu={showContextMenu}>
+                                <ContextMenu id={'context-menu-' + product['slug']}
+                                             className='context-menu'>
+                                    <MenuItem onClick={getInfo}>📗 Информация о продукте</MenuItem>
+                                    <MenuItem onClick={deleteProduct}>😋 Съедено</MenuItem>
+                                    <MenuItem onClick={deleteProduct}>🗑 Испортилось</MenuItem>
+                                </ContextMenu>
                                 <div className='col'></div>
-                                <div className='vertical-line-left col pb-5'>                                    
+                                <div className='vertical-line-left col pb-5'>
                                     <div className='row'>
                                         <div className='col-1'>
-                                            <a href={`${protocol}//book.${host}/products/${productCard['slug']}`}>
-                                                <img src={productCard['image'] ? productCard['image'] : '/static/images/icons/no_food_image_small.png'}
-                                                 id={`image-${this.state.id}`}
-                                                 className='product-image product-image-right'
-                                                 alt="Нет продуктов"></img>
+                                            <a href={`${protocol}//book.${host}/products/${productCard['slug']}`}
+                                               id={`image-div-${product['slug']}`}>
+                                                <img
+                                                    src={productCard['image'] ? productCard['image'] : '/static/images/icons/no_food_image_small.png'}
+                                                    id={`image-${product['slug']}`}
+                                                    className='product-image product-image-right'
+                                                    alt="Нет продуктов"></img>
                                             </a>
                                         </div>
                                         <div className='col-11'>
                                             <a>
                                                 <div className='row'>
-                                                    <span className='product-title'>
-                                                        {productCard['name']} <ProductWeight amount={product['amount']} unit={product['amount_unit']}/>
-                                                    </span>
+                                                        <span className='product-title'>
+                                                            {productCard['name']} <ProductWeight
+                                                            amount={product['amount']}
+                                                            unit={product['amount_unit']}/>
+                                                        </span>
                                                 </div>
                                                 <div className='row justify-content-start'>
-                                                    <ProductionDate date={product['production_date']}/>
-                                                    <ShelfLife shelfLife={productCard['shelf_life']}/>
+                                                    <ProductionDate
+                                                        date={product['production_date']}/>
+                                                    <ShelfLife
+                                                        shelfLife={productCard['shelf_life']}/>
                                                 </div>
                                                 <br/>
                                             </a>
@@ -201,19 +203,25 @@ class ProductRow extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                    :
-                        this.state.product === null ?
-                            <div></div>
-                        :
-                            <div className='row' onContextMenu={showContextMenu}>
-                                {this.state.contextMenu}
+                            :
+                            <div className='row'
+                                 id={`row-${product['slug']}`}
+                                 onContextMenu={showContextMenu}>
+                                <ContextMenu id={'context-menu-' + product['slug']}
+                                             className='context-menu'>
+                                    <MenuItem onClick={getInfo}>📗 Информация о продукте</MenuItem>
+                                    <MenuItem onClick={deleteProduct}>😋 Съедено</MenuItem>
+                                    <MenuItem onClick={deleteProduct}>🗑 Испортилось</MenuItem>
+                                </ContextMenu>
                                 <div className='vertical-line-right col pb-5'>
                                     <div className='row'>
                                         <div className='col-11 text-end mr-3'>
                                             <div className='row'>
-                                                <span className='product-title'>
-                                                    {productCard['name']} <ProductWeight amount={product['amount']} unit={product['amount_unit']}/>
-                                                </span>
+                                                    <span className='product-title'>
+                                                        {productCard['name']} <ProductWeight
+                                                        amount={product['amount']}
+                                                        unit={product['amount_unit']}/>
+                                                    </span>
                                             </div>
                                             <div className='row justify-content-end'>
                                                 <ProductionDate date={product['production_date']}/>
@@ -222,19 +230,25 @@ class ProductRow extends React.Component {
                                             <br/>
                                         </div>
                                         <div className='col-1'>
-                                            <a href={`${protocol}//book.${host}/products/${productCard['slug']}`}>
-                                                <img src={productCard['image'] ? productCard['image'] : '/static/images/icons/no_food_image_small.png'}
-                                                     id={`image-${this.state.id}`}
-                                                     className='product-image product-image-left'
-                                                     alt="Нет продуктов"></img>
+                                            <a href={`${protocol}//book.${host}/products/${productCard['slug']}`}
+                                               id={`image-div-${product['slug']}`}>
+                                                <img
+                                                    src={productCard['image'] ? productCard['image'] : '/static/images/icons/no_food_image_small.png'}
+                                                    id={`image-${product['slug']}`}
+                                                    className='product-image product-image-left'
+                                                    alt="Нет продуктов"></img>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div className='col'></div>
                             </div>
-                }
-            </div>
+                    }
+                </div>
+            );
+        }
+        return (
+            <div></div>
         )
     }
 }
