@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'hcaptcha',
     'rest_framework',
     'datetimewidget',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -170,10 +171,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     )
 }
-
 
 if DEBUG:
     ALLOWED_HOSTS += ['127.0.0.1']

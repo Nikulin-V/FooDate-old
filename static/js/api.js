@@ -9,13 +9,16 @@ if (location.host.split('.').length === 2) {
 origin = `${protocol}//${host}`;
 api_origin = `${origin}/api`;
 
-
+const csrftoken = Cookies.get('csrftoken');
 
 products = Object();
 products.url = `${api_origin}/products`;
 
 products.getProducts = async function getProducts() {
-    let response = await fetch(products.url);
+    let response = await fetch(products.url, {
+        method: 'GET',
+        headers: {'X-CSRFToken': csrftoken},
+    });
     if (response.ok) {
         let json = await response.json();
         products.getProductsJson = json;
@@ -26,7 +29,10 @@ products.getProducts = async function getProducts() {
 
 products.getProduct = async function getProducts(productUrl) {
     productUrl = productUrl.replace('http://', 'https://');
-    let response = await fetch(productUrl);
+    let response = await fetch(productUrl, {
+        method: 'GET',
+        headers: {'X-CSRFToken': csrftoken},
+    });
     if (response.ok) {
         let json = await response.json();
         products.getProductJson = json;
@@ -38,7 +44,8 @@ products.getProduct = async function getProducts(productUrl) {
 products.deleteProduct = async function deleteProduct(productUrl) {
     productUrl = productUrl.replace('http://', 'https://');
     let response = await fetch(productUrl, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {'X-CSRFToken': csrftoken},
     });
     if (response.ok) {
         return 'Success'
