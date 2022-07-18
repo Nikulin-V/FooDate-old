@@ -11,6 +11,10 @@ api_origin = `${origin}/api`;
 
 const csrftoken = Cookies.get('csrftoken');
 
+function checkHTTPS(url) {
+    return url.replace('http://', 'https://')
+}
+
 products = Object();
 products.url = `${api_origin}/products`;
 
@@ -28,7 +32,7 @@ products.getProducts = async function getProducts() {
 };
 
 products.getProduct = async function getProducts(productUrl) {
-    productUrl = productUrl.replace('http://', 'https://');
+    productUrl = checkHTTPS(productUrl);
     let response = await fetch(productUrl, {
         method: 'GET',
         headers: {'X-CSRFToken': csrftoken},
@@ -42,7 +46,7 @@ products.getProduct = async function getProducts(productUrl) {
 };
 
 products.deleteProduct = async function deleteProduct(productUrl) {
-    productUrl = productUrl.replace('http://', 'https://');
+    productUrl = checkHTTPS(productUrl);
     let response = await fetch(productUrl, {
         method: 'DELETE',
         headers: {'X-CSRFToken': csrftoken},
@@ -71,7 +75,7 @@ productCards.getProductCards = async function getProductCards() {
 };
 
 productCards.getProductCard = async function getProductCard(productCardUrl) {
-    productCardUrl = productCardUrl.replace('http://', 'https://');
+    productCardUrl = checkHTTPS(productCardUrl);
     let response = await fetch(productCardUrl);
     if (response.ok) {
         let json = await response.json();
