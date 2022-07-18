@@ -1,11 +1,12 @@
 from django.db.models import F
 from rest_framework import viewsets, permissions
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
+from app.api.serializers import ProductSerializer, UserSerializer, ProductCardSerializer, \
+    ProductCategorySerializer, ProductSubcategorySerializer
 from app.models import Product
 from book.models import ProductCard, ProductCategory, ProductSubcategory
 from core.middleware import get_user
-from app.api.serializers import ProductSerializer, UserSerializer, ProductCardSerializer, \
-    ProductCategorySerializer, ProductSubcategorySerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -14,6 +15,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
 
     def get_queryset(self):
         return [get_user()]
@@ -28,7 +30,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Product.products.filter(user=get_user()).order_by(
-            (F('production_date') - F('product_card__shelf_life')).desc()
+            (F('production_date') - F('product_card__shelf_life'))
         )
 
 

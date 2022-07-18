@@ -21,7 +21,7 @@ class Product(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_user)
     slug = models.CharField(max_length=255, validators=[validators.validate_slug],
-                            default=f'product-{uuid4()}')
+                            null=True, blank=True)
     product_card = models.ForeignKey(
         ProductCard, on_delete=models.DO_NOTHING, related_name='products'
     )
@@ -34,6 +34,10 @@ class Product(models.Model):
                                            validators=[core.validators.date_in_past])
     purchase_date = models.DateTimeField('Дата покупки', null=True, blank=True,
                                          validators=[core.validators.date_in_past])
+
+    def save(self, *args, **kwargs):
+        self.slug = f'product-{uuid4()}'
+        super(Product, self).save()
 
     def __str__(self):
         return self.slug

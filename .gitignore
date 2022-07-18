@@ -3,4 +3,3 @@
 /uploads/
 *.env
 *.sqlite3
-/Local.patch

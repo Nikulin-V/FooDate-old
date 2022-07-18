@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'tinymce',
     'hcaptcha',
     'rest_framework',
+    'datetimewidget',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -43,6 +45,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -114,6 +117,8 @@ TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -164,9 +169,12 @@ HCAPTCHA_SECRET = '0xF77ec604cD33Bc25C866A82ca8402A74ea10D75e'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
 }
-
 
 if DEBUG:
     ALLOWED_HOSTS += ['127.0.0.1']
