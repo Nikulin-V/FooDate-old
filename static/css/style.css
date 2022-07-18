@@ -187,3 +187,11 @@ ul.errorlist li {
 .form label {
     margin-bottom: .5rem;
 }
+
+.montserrat-alternates {
+    font-family: 'Montserrat Alternates', sans-serif;
+}
+
+.balsamiq {
+    font-family: 'Balsamiq Sans', cursive;;
+}

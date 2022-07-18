@@ -1,0 +1,19 @@
+.card {
+    height: 100%;
+    margin: 0 5px 15px 5px;
+}
+
+@media screen and (max-width: 1600px) {
+    .main {
+        width: 100%
+    }
+}
+
+.card:hover {
+    border: 1px solid #008500;
+}
+
+.card-body {
+    display: flex;
+    align-items: center;
+}

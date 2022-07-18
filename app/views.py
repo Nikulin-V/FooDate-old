@@ -6,7 +6,7 @@ from app.models import Product
 
 
 class HomeView(View):
-    template = 'error_pages/development.html'
+    template = 'app/homepage.html'
     template_mobile = 'error_pages/development.html'
 
     def get(self, request):
