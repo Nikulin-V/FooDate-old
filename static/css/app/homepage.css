@@ -1,3 +1,8 @@
+#company-title {
+    border: 1px solid #70c670;
+    border-radius: 100px;
+}
+
 .card {
     height: 100%;
     margin: 0 5px 15px 5px;
