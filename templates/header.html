@@ -3,9 +3,10 @@
 
 <header style="margin-top: 10px">
     <nav class="nav justify-content-center">
-        <a class="navbar-brand" href="/">
-          <img id="logo" src="{% static 'images/fav/android-chrome-512x512.png' %}"
+        <a class="navbar-brand d-flex" href="/">
+            <img id="logo" src="{% static 'images/fav/android-chrome-512x512.png' %}"
                alt="Logo" loading="lazy">
+            <span class="h4 mb-0 mt-2 ms-1 text-apple">FooDate</span>
         </a>
         <a class="nav-link" href="{% url 'home' host 'app' %}">
             Главная

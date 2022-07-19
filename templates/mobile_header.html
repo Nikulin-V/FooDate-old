@@ -10,8 +10,12 @@
     </span>
     <ul class="list-group list-group-flush" id="header">
         <li class="list-group-item mobile-header-item text-center">
-            <a href="{% url 'home' host 'app_mobile' %}">
-                {% include 'include/logo100x100.html' %}
+            <a href="{% url 'home' host 'app_mobile' %}"
+               class="d-flex flex-column justify-content-center">
+                <div class="m-0 mb-3">
+                    {% include 'include/logo100x100.html' %}
+                </div>
+                <h4>FooDate</h4>
             </a>
         </li>
         <li class="list-group-item mobile-header-item">

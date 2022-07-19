@@ -8,6 +8,9 @@ header {
 .navbar-brand {
     float: left;
     margin-left: 30px;
+    padding: 0 10px 0 0;
+    border: 1px solid #219C21;
+    border-radius: 100px;
 }
 
 #logo {
