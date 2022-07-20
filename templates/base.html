@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}FooDate{% endblock %}</title>
 
+        {% include 'include/yandex_metrica.html' %}
+
         {% load static %}
         <script>
             const staticUrl = "{% get_static_prefix %}";
