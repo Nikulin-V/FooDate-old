@@ -38,6 +38,11 @@ a.text-apple:focus {
     border-color: #269926;
 }
 
+.bg-apple {
+  color: #fff;
+  background-color: #269926;
+}
+
 .btn-apple {
     color: #fff;
     background-color: #269926;
@@ -186,4 +191,16 @@ ul.errorlist li {
 
 .form label {
     margin-bottom: .5rem;
+}
+
+.montserrat-alternates {
+    font-family: 'Montserrat Alternates', sans-serif;
+}
+
+.balsamiq {
+    font-family: 'Balsamiq Sans', cursive;;
+}
+
+h5 {
+    font-size: calc(0.5rem + 1vw)
 }

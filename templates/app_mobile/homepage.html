@@ -1,9 +1,99 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
     Главная
 {% endblock %}
 
 {% block content %}
-    Домашняя страница
+    <link rel="stylesheet" href="{% static 'css/app/homepage.css' %}">
+    <div class="container-fluid">
+        <a href="{% url 'home' host 'app_mobile' %}" class="row d-flex justify-content-center mt-4">
+            <h1 id="company-title" class="text-apple w-auto py-3 px-5">FooDate</h1>
+        </a>
+        <div class="row mt-3">
+            <h1 class="montserrat-alternates text-center text-apple">
+                Чем мы занимаемся?
+            </h1>
+            <h3 class="balsamiq text-apple text-center mt-2">
+                Мы даём Вам возможность удобно управлять всем, <br>
+                что связано с хранением и приготовлением пищи.
+            </h3>
+        </div>
+        <div class="row justify-content-center">
+            <hr class="text-apple text-center w-75">
+        </div>
+        <div class="row justify-content-center">
+            <div class="row">
+                <h1 class="montserrat-alternates text-center text-apple">
+                    Вы можете
+                </h1>
+            </div>
+            <div class="row row-cols-2 row-cols-md-2 g-4 m-0">
+                <div class="col">
+                    <a href="{% url 'app' host 'app_mobile' %}">
+                        <div class="card">
+                            <img src="{% static 'images/icons/fridge.png' %}"
+                                 class="card-img-top p-2 mt-2"
+                                 alt="Холодильник">
+                            <div class="card-body">
+                                <h5 class="card-text text-apple text-center balsamiq">
+                                    Отслеживать содержимое холодильника
+                                    и следить за сроком годности продуктов
+                                </h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <img src="{% static 'images/icons/products_list.png' %}"
+                             class="card-img-top p-4 mt-2"
+                             alt="Список продуктов">
+                        <div class="card-body">
+                            <h5 class="card-text text-apple text-center balsamiq">
+                                Составить постоянный список необходимых продуктов
+                                и всегда знать, что нужно купить
+                            </h5>
+                        </div>
+                        <div class="card-footer p-0 d-grid border-0">
+                            <span class="badge bg-apple in-dev">В разработке</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <a href="{% url 'products' host 'book' %}">
+                        <div class="card">
+                            <img src="{% static 'images/icons/calorie_calculator.png' %}"
+                                 class="card-img-top p-2 mt-2"
+                                 alt="Калькулятор калорийности">
+                            <div class="card-body">
+                                <h5 class="card-text text-apple text-center balsamiq">
+                                    Следить за калорийностью и питательностью продуктов
+                                </h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="{% url 'recipes' host 'book' %}">
+                        <div class="card">
+                            <img src="{% static 'images/icons/recipe_book.png' %}"
+                                 class="card-img-top p-4 mt-2"
+                                 alt="Книга рецептов">
+                            <div class="card-body">
+                                <h5 class="card-text text-apple text-center balsamiq">
+                                    Готовить по рецептам, предложенным
+                                    на основании содержимого холодильника
+                                </h5>
+                            </div>
+                            <div class="card-footer p-0 d-grid border-0">
+                                <span class="badge bg-apple in-dev">В разработке</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
