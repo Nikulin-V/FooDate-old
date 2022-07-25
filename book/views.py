@@ -24,7 +24,7 @@ class HomeView(View):
 
 class ProductsView(View):
     template = 'book/products.html'
-    template_mobile = 'error_pages/development.html'
+    template_mobile = 'book/mobile/products.html'
     form = NewProductCardForm
 
     def get(self, request, saved=None):
