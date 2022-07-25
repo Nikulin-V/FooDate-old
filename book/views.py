@@ -144,7 +144,7 @@ class ProductsView(View):
 
 class ProductView(View):
     template = 'book/product.html'
-    template_mobile = 'error_pages/development.html'
+    template_mobile = 'book/mobile/product.html'
 
     def get(self, request, product_slug):
         product: ProductCard = ProductCard.cards.filter(slug=product_slug).first()

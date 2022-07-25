@@ -5,3 +5,11 @@
 #storage-temperature {
     white-space: nowrap;
 }
+
+#temperature-select {
+    width: fit-content;
+}
+
+#energy-value-select {
+    width: fit-content;
+}
