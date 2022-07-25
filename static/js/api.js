@@ -1,3 +1,5 @@
+// noinspection HttpUrlsUsage
+
 protocol = location.protocol;
 if (location.host.split('.').length === 2) {
     subdomain = null;
