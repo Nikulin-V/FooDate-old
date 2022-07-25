@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'datetimewidget',
     'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -179,6 +181,8 @@ REST_FRAMEWORK = {
 if DEBUG:
     ALLOWED_HOSTS += ['127.0.0.1']
     INTERNAL_IPS = ['192.168.0.77', '127.0.0.1']
+    CORS_ALLOWED_ORIGINS += [f'{SCHEME}://foodate.tk', f'{SCHEME}://m.foodate.tk',
+                             f'{SCHEME}://book.foodate.tk']
     INSTALLED_APPS += ['debug_toolbar']
     MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
     mimetypes.add_type('application/javascript', '.js')

@@ -3,13 +3,14 @@ if (location.host.split('.').length === 2) {
     subdomain = null;
     host = location.host
 } else {
-    subdomain = location.host.split('.', 1)[0];
-    host = location.host.split('.', 1)[1]
+    let location_data = location.host.split('.');
+    subdomain = location_data[0];
+    host = location_data[1] + '.' + location_data[2];
 }
-origin = `${protocol}//${host}`;
-api_origin = `${origin}/api`;
+origin_ = `${protocol}//${host}`;
+api_origin = `${origin_}/api`;
 
-const csrftoken = Cookies.get('csrftoken');
+let csrftoken = Cookies.get('csrftoken');
 
 function checkHTTPS(url) {
     return url.replace('http://', 'https://')
@@ -21,7 +22,10 @@ products.url = `${api_origin}/products`;
 products.getProducts = async function getProducts() {
     let response = await fetch(products.url, {
         method: 'GET',
-        headers: {'X-CSRFToken': csrftoken},
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Authorization': `Token ${token}`
+        },
     });
     if (response.ok) {
         let json = await response.json();
@@ -35,7 +39,10 @@ products.getProduct = async function getProducts(productUrl) {
     productUrl = checkHTTPS(productUrl);
     let response = await fetch(productUrl, {
         method: 'GET',
-        headers: {'X-CSRFToken': csrftoken},
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Authorization': `Token ${token}`
+        },
     });
     if (response.ok) {
         let json = await response.json();
@@ -49,7 +56,10 @@ products.deleteProduct = async function deleteProduct(productUrl) {
     productUrl = checkHTTPS(productUrl);
     let response = await fetch(productUrl, {
         method: 'DELETE',
-        headers: {'X-CSRFToken': csrftoken},
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Authorization': `Token ${token}`
+        },
     });
     if (response.ok) {
         return 'Success'

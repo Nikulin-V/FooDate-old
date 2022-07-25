@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
+from rest_framework.authtoken.models import Token
 
 from users.forms import UserRegistrationForm, UserChangeForm
 
@@ -70,6 +71,7 @@ class SignupView(View):
 
             user.set_password(form.cleaned_data['password'])
             user.save()
+            Token.objects.create(user=User).save()
             login(request, user)
             return HttpResponseRedirect(reverse('home'))
         context = {'form': form}

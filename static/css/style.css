@@ -1,5 +1,6 @@
 body {
     scroll-behavior: smooth;
+    max-width: 100vw;
 }
 
 main {
@@ -125,10 +126,15 @@ a.text-apple:focus {
     color: #008500;
 }
 
+.errorlist {
+    margin: 0;
+    padding: 0;
+}
+
 ul.errorlist li {
     list-style-type: none;
     color: #dc3545;
-    white-space: nowrap;
+    text-align: center;
 }
 
 .modal-form > div > div.row {
@@ -201,6 +207,8 @@ ul.errorlist li {
     font-family: 'Balsamiq Sans', cursive;;
 }
 
-h5 {
-    font-size: calc(0.5rem + 1vw)
+@media screen and (max-width: 900px) {
+    .modal-form select, .modal-form input, .modal-form textarea {
+        font-size: medium;
+    }
 }
