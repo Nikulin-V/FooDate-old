@@ -64,6 +64,10 @@ HOST_SCHEME = f'{SCHEME}://'
 SESSION_COOKIE_DOMAIN = '.foodate.ru'
 CSRF_TRUSTED_ORIGINS = [f'{SCHEME}://*.foodate.ru']
 
+CORS_ALLOWED_ORIGINS = [
+    f'{SCHEME}://foodate.ru', f'{SCHEME}://m.foodate.ru', f'{SCHEME}://book.foodate.ru'
+]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
