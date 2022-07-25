@@ -1,8 +1,13 @@
 from threading import current_thread
 
 from django.utils.deprecation import MiddlewareMixin
+from rest_framework.authtoken.models import Token
 
 _requests = {}
+
+
+def get_token():
+    return Token.objects.get(user=get_user())
 
 
 def get_user():

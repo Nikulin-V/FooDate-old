@@ -5,6 +5,7 @@ from django_hosts import reverse_lazy
 from app.forms import NewProductForm
 from app.models import Product
 from core.decorators import mobile_redirect
+from core.middleware import get_token
 
 
 class HomeView(View):
@@ -25,6 +26,7 @@ class AppView(View):
     def get(self, request, saved=None):
         context = {
             'form': self.form() if saved is None else self.form(request.POST),
+            'token': get_token(),
             'saved': saved
         }
 

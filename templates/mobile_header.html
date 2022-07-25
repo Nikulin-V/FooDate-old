@@ -1,18 +1,16 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/mobile_header.css' %}">
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
 <label>
     <input type="checkbox">
-    <span class="menu">
+    <span id="header-menu-button" class="menu">
         <span class="hamburger"></span>
     </span>
     <ul class="list-group list-group-flush" id="header">
         <li class="list-group-item mobile-header-item text-center">
             <a href="{% url 'home' host 'app_mobile' %}"
                class="d-flex flex-column justify-content-center">
-                <div class="m-0 mb-3">
+                <div class="mt-3 mb-3">
                     {% include 'include/logo100x100.html' %}
                 </div>
                 <h4>FooDate</h4>
@@ -35,6 +33,11 @@
             <li class="list-group-item mobile-header-item">
                 <a class="nav-link" href="{% url 'app' host 'app_mobile' %}">
                     Холодильник
+                </a>
+            </li>
+            <li class="list-group-item mobile-header-item">
+                <a class="nav-link" href="{% url 'products' host 'book' %}">
+                    Продукты
                 </a>
             </li>
             <li class="list-group-item mobile-header-item">

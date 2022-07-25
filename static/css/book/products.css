@@ -87,6 +87,10 @@ main {
 
 @media (max-device-width: 520px) {
     .products-categories {
-        font-size: small;
+        font-size: medium;
+    }
+
+    .form-control {
+        font-size: medium;
     }
 }

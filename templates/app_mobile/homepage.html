@@ -7,10 +7,15 @@
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/app/homepage.css' %}">
-    <div class="container-fluid">
-        <a href="{% url 'home' host 'app_mobile' %}" class="row d-flex justify-content-center mt-4">
-            <h1 id="company-title" class="text-apple w-auto py-3 px-5">FooDate</h1>
+    <div class="d-flex flex-column justify-content-between"
+         style="position: sticky; top: 0; height: 45px; max-height: 45px; background-color:
+         white; z-index: 99;">
+        <a href="{% url 'home' host 'app_mobile' %}" class="d-flex justify-content-center h-100">
+            <h1 class="text-apple pt-1 m-0">FooDate</h1>
         </a>
+        <hr class="text-apple m-0 w-100">
+    </div>
+    <div class="container-fluid">
         <div class="row mt-3">
             <h1 class="montserrat-alternates text-center text-apple">
                 Чем мы занимаемся?

@@ -1,12 +1,11 @@
 // noinspection JSXNamespaceValidation
 
 const domContainer = document.querySelector('#productsTimeLine');
-const addMoreProductsDiv = document.querySelector('#add-more-products-div');
 
 class NoProducts extends React.Component {
     render() {
         return (
-            <div className="row justify-content-center">
+            <div className="row justify-content-center pt-5">
                 <img src={`${staticUrl}images/icons/empty_fridge.png`}
                      style={{width: 200}}
                      alt="Нет продуктов"></img>
@@ -136,8 +135,20 @@ class ProductRow extends React.Component {
         function showContextMenu(event) {
             $('.context-show').toggleClass('context-show');
             let contextMenu = $('#' + contextMenuId);
-            let x = event.clientX;
-            let y = event.clientY;
+            let menuWidth = 205;
+            let menuHeight = 116.5;
+            let x, y;
+            if (event.clientX + menuWidth < window.screen.width) {
+                x = event.clientX;
+            } else {
+                x = window.screen.width - menuWidth;
+            }
+
+            if (event.clientY + menuHeight < window.screen.height) {
+                y = event.clientY;
+            } else {
+                y = window.screen.height - menuHeight;
+            }
             contextMenu.css('left', x.toString() + 'px');
             contextMenu.css('top', y.toString() + 'px');
             contextMenu.toggleClass('context-show');
@@ -160,26 +171,25 @@ class ProductRow extends React.Component {
             function CheckFridgeEmpty() {
                 let productsTimeline = $('#products-timeline');
                 if (productsTimeline.children().length <= 2) {
-                    productsTimeline.html(`<div class="row justify-content-center"><img src="/static/images/icons/empty_fridge.png" alt="Нет продуктов" style="width: 200px;"><h4 class="text-apple text-center mt-5 mb-3">В холодильнике пусто</h4><button class="btn btn-outline-apple add-more-products-btn" data-bs-toggle="modal" data-bs-target="#newProductModal">Добавьте продукты</button></div>`);
+                    productsTimeline.html(`<div class="row justify-content-center pt-5"><img src="/static/images/icons/empty_fridge.png" alt="Нет продуктов" style="width: 200px;"><h4 class="text-apple text-center mt-5 mb-3">В холодильнике пусто</h4><button class="btn btn-outline-apple add-more-products-btn" data-bs-toggle="modal" data-bs-target="#newProductModal">Добавьте продукты</button></div>`);
                 }
             }
 
             return (
-                <div id={`row-div-${product['slug']}`} style={{'display': this.state.display}}>
+                <div id={`row-div-${product['slug']}`} onContextMenu={showContextMenu} style={{'display': this.state.display}}>
                     {
                         this.props.side === 'right' ?
                             <div className='row'
-                                 id={`row-${product['slug']}`}
-                                 onContextMenu={showContextMenu}>
+                                 id={`row-${product['slug']}`}>
                                 <ContextMenu id={'context-menu-' + product['slug']}
                                              className='context-menu'>
                                     <MenuItem onClick={getInfo}>📗 Информация о продукте</MenuItem>
                                     <MenuItem onClick={deleteProduct}>😋 Съедено</MenuItem>
                                     <MenuItem onClick={deleteProduct}>🗑 Испортилось</MenuItem>
                                 </ContextMenu>
-                                <div className='col'></div>
-                                <div className='vertical-line-left col pb-5'>
-                                    <div className='row'>
+                                <div className='col px-0'></div>
+                                <div className='vertical-line-left col pb-2 px-0'>
+                                    <div className='row mx-0'>
                                         <div className='col-1'>
                                             <a href={`${protocol}//book.${host}/products/${productCard['slug']}`}
                                                id={`image-div-${product['slug']}`}>
@@ -190,9 +200,9 @@ class ProductRow extends React.Component {
                                                     alt="Нет продуктов"></img>
                                             </a>
                                         </div>
-                                        <div className='col-11'>
+                                        <div className='col-10'>
                                             <a>
-                                                <div className='row'>
+                                                <div className='row mx-0'>
                                                         <span className='product-title'>
                                                             {productCard['name']} <ProductWeight
                                                             amount={product['amount']}
@@ -213,8 +223,7 @@ class ProductRow extends React.Component {
                             </div>
                             :
                             <div className='row'
-                                 id={`row-${product['slug']}`}
-                                 onContextMenu={showContextMenu}>
+                                 id={`row-${product['slug']}`}>
                                 <ContextMenu id={'context-menu-' + product['slug']}
                                              className='context-menu'>
                                     <MenuItem onClick={getInfo}>📗 Информация о продукте</MenuItem>
@@ -223,7 +232,7 @@ class ProductRow extends React.Component {
                                 </ContextMenu>
                                 <div className='vertical-line-right col pb-5'>
                                     <div className='row justify-content-end'>
-                                        <div className='col-11 text-end mr-3'>
+                                        <div className='col-10 text-end mr-3'>
                                             <div className='row'>
                                                     <span className='product-title'>
                                                         {productCard['name']} <ProductWeight
@@ -269,15 +278,15 @@ class ProductsTimeline extends React.Component {
             const product = products.getProductsJson['results'][productId];
             if (productId % 2 === 0)
                 rows.push(
-                    <ProductRow id={productId} product={product} side='right'/>
+                    <ProductRow product={product} side='right'/>
                 );
             else
                 rows.push(
-                    <ProductRow id={productId} product={product} side='left'/>
+                    <ProductRow product={product} side='left'/>
                 );
         }
         return (
-            <div id='products-timeline'>
+            <div id='products-timeline' className='pt-3'>
                 {rows}
                 <div className='mb-3 d-flex justify-content-center'>
                     <img src='/static/images/fav/android-chrome-512x512.png'
@@ -304,8 +313,6 @@ class AddMoreProductsButton extends React.Component {
         )
     }
 }
-
-ReactDOM.render(<AddMoreProductsButton/>, addMoreProductsDiv);
 
 products.getProducts().then(() => {
     if (products.getProductsJson['count'] === 0)

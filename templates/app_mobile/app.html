@@ -1,9 +1,105 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
-    Хранилище
+    Холодильник
 {% endblock %}
 
 {% block content %}
-    Интерактивный список продуктов пользователя
+    <link rel="stylesheet" href="{% static 'css/app/app.css' %}">
+    <div style="position: sticky; top: 0; height: 45px; max-height: 45px; background-color: white;
+        z-index: 99;">
+        <h4 class="text-apple text-center h-100 m-0 pt-1">Холодильник</h4>
+        <hr class="m-0 text-apple">
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col">
+                <div id="productsTimeLine" class="row justify-content-center">
+                    <div class="spinner-border text-apple mt-5" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- New product card modal -->
+    {% if user.is_authenticated %}
+        <div class="modal fade" id="newProductModal"
+             data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="newProductCardModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center mx-auto" id="newProductCardModalLabel">
+                            Добавить продукт
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                style="margin-left: 0"
+                                aria-label="Close"></button>
+                    </div>
+                    <form method="post" id="newProductCardForm" class="modal-form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-body mx-auto text-center">
+                            <div class="row">
+                                <div class="col">
+                                    Продукт
+                                </div>
+                                <div class="col">
+                                    {{ form.product_card }}
+                                </div>
+                                {{ form.product_card.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.amount.label_tag }}
+                                </div>
+                                <div class="col d-flex align-center justify-content-center">
+                                    {{ form.amount }}
+                                    <span class="mx-2"></span>{{ form.amount_unit }}
+                                </div>
+                                {{ form.amount.errors}}
+                                {{ form.amount_unit.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.production_date.label_tag }}
+                                </div>
+                                <div class="col d-flex justify-content-center">
+                                    {{ form.production_date }}
+                                </div>
+                                {{ form.production_date.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.purchase_date.label_tag }}
+                                </div>
+                                <div class="col d-flex justify-content-center">
+                                    {{ form.purchase_date }}
+                                </div>
+                                {{ form.purchase_date.errors }}
+                            </div>
+                            <div>
+                                {{ form.captcha }}
+                                {{ form.captcha.errors }}
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="submit" class="btn btn-apple">Сохранить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- New product bad saving notification -->
+        {% if saved == False %}
+            <script>
+                let newProductModal = new bootstrap.Modal(
+                    document.getElementById('newProductModal'), {
+                    keyboard: false
+                });
+                newProductModal.show()
+            </script>
+        {% endif %}
+    {% endif %}
+    <script type="text/babel" src="{% static 'js/app_mobile/app.js' %}"></script>
 {% endblock %}

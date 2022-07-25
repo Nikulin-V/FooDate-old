@@ -1,6 +1,6 @@
 from django.db.models import F
 from rest_framework import viewsets, permissions
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import TokenAuthentication
 
 from app.api.serializers import ProductSerializer, UserSerializer, ProductCardSerializer, \
     ProductCategorySerializer, ProductSubcategorySerializer
@@ -14,8 +14,7 @@ class UserViewSet(viewsets.ModelViewSet):
     API endpoint that allows user to be viewed or edited.
     """
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
         return [get_user()]
@@ -27,6 +26,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
         return Product.products.filter(user=get_user()).order_by(

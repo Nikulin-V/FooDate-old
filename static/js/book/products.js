@@ -1,2 +1,2 @@
-let cardsPerPage = getCardsPerPage()
-let cardsPerPageQuery = cardsPerPage ? 'cardsPerPage=' + cardsPerPage : ''
+let cardsPerPage = getCardsPerPage();
+let cardsPerPageQuery = cardsPerPage ? 'cardsPerPage=' + cardsPerPage : '';
