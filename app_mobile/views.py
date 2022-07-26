@@ -54,3 +54,12 @@ class AppView(View):
             saved = True
 
         return self.get(request, saved)
+
+
+class PrivacyPolicyView(View):
+    template = 'app_mobile/privacy-policy.html'
+    pc_reverse = reverse_lazy('privacy-policy', host='app')
+
+    @pc_redirect(pc_reverse)
+    def get(self, request):
+        return render(request, self.template)
