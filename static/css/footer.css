@@ -1,0 +1,18 @@
+.icon {
+    width: 50px;
+}
+
+@media screen and (max-width: 900px){
+    .icon {
+        width: 25px;
+    }
+
+    span {
+        font-size: small;
+    }
+}
+
+.icon:hover {
+    transition: .5s;
+    transform: scale(1.2);
+}
