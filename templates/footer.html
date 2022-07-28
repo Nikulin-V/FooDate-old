@@ -1,9 +1,36 @@
+{% load hosts %}
+{% load static %}
 <footer class="text-center mt-auto py-3">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     <hr>
     <div class="container">
-        <div class="row">
-            <a class="btn btn-apple mx-auto" style="width: 30%">
-                FooDate project
+        <div class="row my-3">
+            <div class="col-auto"></div>
+            <div class="col">
+                <a href="mailto:foodate@yandex.ru" class="d-flex flex-column align-items-center">
+                    <img src="{% static 'images/icons/email.png' %}" class="icon" alt="E-mail">
+                    <span class="mt-2">foodate@yandex.ru</span>
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://vk.com/foodate" class="d-flex flex-column align-items-center">
+                    <img src="{% static 'images/icons/vk.png' %}" class="icon" alt="Группа ВК">
+                    <span class="mt-2">vk.com/foodate</span>
+                </a>
+            </div>
+            <div class="col">
+                <a href="{% host_url 'privacy-policy' host 'app' %}"
+                   class="d-flex flex-column align-items-center">
+                    <img src="{% static 'images/icons/privacy_policy.png' %}" class="icon"
+                         alt="Группа ВК">
+                    <span class="mt-2">Политика конфиденциальности</span>
+                </a>
+            </div>
+            <div class="col-auto"></div>
+        </div>
+        <div class="row mt-3">
+            <a class="text-secondary small">
+                © FooDate, 2022. Все права защищены.
             </a>
         </div>
         <div class="row">

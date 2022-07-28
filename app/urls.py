@@ -2,12 +2,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from app.views import HomeView, AppView
+from app.views import HomeView, AppView, PrivacyPolicyView
 from foodate import settings
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('app/', AppView.as_view(), name='app'),
+    path('privacy-policy/', PrivacyPolicyView.as_view(), name='privacy-policy'),
     path('tinymce/', include('tinymce.urls')),
     path('admin/', admin.site.urls, name='admin'),
     path('auth/', include('users.urls'), name='auth'),
