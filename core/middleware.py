@@ -7,7 +7,7 @@ _requests = {}
 
 
 def get_token():
-    return Token.objects.get(user=get_user())
+    return Token.objects.get_or_create(user=get_user())[0]
 
 
 def get_user():

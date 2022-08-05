@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
-from rest_framework.authtoken.models import Token
 
 from users.forms import UserRegistrationForm, UserChangeForm
 
@@ -45,7 +44,6 @@ class ProfileView(LoginRequiredMixin, View):
             user.email = form.cleaned_data['email'] if form.cleaned_data['email'] else user.email
             user.save()
             return HttpResponseRedirect(reverse('profile'))
-
         context = {'form': form}
         return render(request, self.template, context)
 
@@ -68,10 +66,8 @@ class SignupView(View):
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
             )
-
             user.set_password(form.cleaned_data['password'])
             user.save()
-            Token.objects.create(user=User).save()
             login(request, user)
             return HttpResponseRedirect(reverse('home'))
         context = {'form': form}
