@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
+from django_email_verification import send_email
 
 from users.forms import UserRegistrationForm, UserChangeForm
 
@@ -33,15 +34,8 @@ class ProfileView(LoginRequiredMixin, View):
         user = request.user
         form = ProfileView.form(request.POST)
         if form.is_valid():
-            user.first_name = (
-                form.cleaned_data['first_name']
-                if form.cleaned_data['first_name']
-                else user.first_name
-            )
-            user.last_name = (
-                form.cleaned_data['last_name'] if form.cleaned_data['last_name'] else user.last_name
-            )
-            user.email = form.cleaned_data['email'] if form.cleaned_data['email'] else user.email
+            user.first_name = form.cleaned_data['first_name'] or user.first_name
+            user.last_name = form.cleaned_data['last_name'] or user.last_name
             user.save()
             return HttpResponseRedirect(reverse('profile'))
         context = {'form': form}
@@ -55,7 +49,7 @@ class SignupView(View):
 
     def get(self, request):
         form = UserRegistrationForm()
-        context = {'form': form}
+        context = {'form': form, 'registered': False}
         return render(request, self.template, context)
 
     def post(self, request):
@@ -63,12 +57,15 @@ class SignupView(View):
         if form.is_valid():
             user = User.objects.create(
                 username=form.cleaned_data['username'],
+                email=form.cleaned_data['email'],
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
             )
             user.set_password(form.cleaned_data['password'])
+            user.is_active = False
             user.save()
-            login(request, user)
-            return HttpResponseRedirect(reverse('home'))
-        context = {'form': form}
+            send_email(user)
+            context = {'registered': True}
+            return render(request, self.template, context)
+        context = {'form': form, 'registered': False}
         return render(request, self.template, context)

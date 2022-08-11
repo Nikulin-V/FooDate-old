@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Подтверждение email
+{% endblock %}
+
+{% block content %}
+    {% if success %}
+        <h4 class="text-apple text-center">{{ user.username }}, ваш аккаунт активирован!</h4>
+    {% else %}
+        <h4 class="text-apple text-center">Время действия токена истекло. Попробуйте ещё раз</h4>
+    {% endif %}
+{% endblock %}

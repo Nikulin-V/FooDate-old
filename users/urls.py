@@ -7,7 +7,8 @@ from django.contrib.auth.views import (
     PasswordResetDoneView,
     PasswordResetView,
 )
-from django.urls import path
+from django.urls import path, include
+from django_email_verification import urls as email_urls
 
 from users import views
 
@@ -62,4 +63,5 @@ urlpatterns = [
         name='password_reset_complete',
     ),
     path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('email/', include(email_urls)),
 ]

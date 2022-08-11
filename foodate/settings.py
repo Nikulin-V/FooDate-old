@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'hcaptcha',
     'rest_framework',
     'datetimewidget',
+    'django_email_verification',
     'rest_framework.authtoken',
     'corsheaders',
 ]
@@ -157,6 +158,23 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
+
+# Email verification
+
+def verified_callback(user):
+    user.is_active = True
+
+
+EMAIL_VERIFIED_CALLBACK = verified_callback
+EMAIL_FROM_ADDRESS = EMAIL_HOST_USER
+EMAIL_MAIL_SUBJECT = 'Подтверждение email'
+EMAIL_MAIL_HTML = 'users/email_verification.html'
+EMAIL_MAIL_PLAIN = 'users/email_verification.txt'
+EMAIL_TOKEN_LIFE = 60 * 60
+EMAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
+EMAIL_PAGE_DOMAIN = f'{SCHEME}://foodate.ru'
+EMAIL_MULTI_USER = False
+
 # User Agents
 
 CACHES = {
@@ -183,10 +201,6 @@ REST_FRAMEWORK = {
 }
 
 if DEBUG:
-    ALLOWED_HOSTS += ['127.0.0.1']
-    INTERNAL_IPS = ['192.168.0.77', '127.0.0.1']
-    CORS_ALLOWED_ORIGINS += [f'{SCHEME}://foodate.tk', f'{SCHEME}://m.foodate.tk',
-                             f'{SCHEME}://book.foodate.tk']
     INSTALLED_APPS += ['debug_toolbar']
     MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
     mimetypes.add_type('application/javascript', '.js')
