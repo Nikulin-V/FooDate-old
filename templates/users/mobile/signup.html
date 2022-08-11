@@ -8,6 +8,10 @@
             {{ form.username }}
         </div>
         <div class="row mb-3">
+            Email:
+            {{ form.email }}
+        </div>
+        <div class="row mb-3">
             {{ form.first_name.label_tag }}
             {{ form.first_name }}
         </div>
@@ -23,8 +27,11 @@
             {{ form.password2.label_tag }}
             {{ form.password2 }}
         </div>
-        <div class="text-danger">
+        <div class="text-danger mb-3">
             {% for error in form.errors.values %}
+                {{ error }}
+            {% endfor %}
+            {% for error in errors %}
                 {{ error }}
             {% endfor %}
         </div>

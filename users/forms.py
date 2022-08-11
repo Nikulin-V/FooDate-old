@@ -12,7 +12,7 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = 'username', 'first_name', 'last_name'
+        fields = 'username', 'email', 'first_name', 'last_name'
 
     def clean_password2(self):
         if self.cleaned_data['password'] != self.cleaned_data['password2']:
@@ -22,6 +22,10 @@ class UserRegistrationForm(forms.ModelForm):
 
 class UserChangeForm(forms.ModelForm):
     """Form of changing user information"""
+
+    def __init__(self, *args, **kwargs):
+        super(UserChangeForm, self).__init__(*args, **kwargs)
+        self.fields['email'].disabled = True
 
     class Meta:
         model = User
