@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -54,18 +54,26 @@ class SignupView(View):
 
     def post(self, request):
         form = UserRegistrationForm(request.POST)
+        context = {'form': form, 'registered': False, 'errors': []}
         if form.is_valid():
-            user = User.objects.create(
-                username=form.cleaned_data['username'],
-                email=form.cleaned_data['email'],
-                first_name=form.cleaned_data['first_name'],
-                last_name=form.cleaned_data['last_name'],
-            )
-            user.set_password(form.cleaned_data['password'])
-            user.is_active = False
-            user.save()
-            send_email(user)
-            context = {'registered': True}
-            return render(request, self.template, context)
-        context = {'form': form, 'registered': False}
+            email = form.cleaned_data['email']
+            if not self.email_used(email):
+                user = User.objects.create(
+                    username=form.cleaned_data['username'],
+                    email=email,
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name'],
+                )
+                user.set_password(form.cleaned_data['password'])
+                user.is_active = False
+                user.save()
+                send_email(user)
+                context['registered'] = True
+            else:
+                context['errors'].append('Пользователь с таким email уже существует.')
+
         return render(request, self.template, context)
+
+    @staticmethod
+    def email_used(email):
+        return len(get_user_model().objects.filter(email=email)) != 0

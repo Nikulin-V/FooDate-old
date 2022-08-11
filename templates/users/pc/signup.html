@@ -61,6 +61,9 @@
             {% for error in form.errors.values %}
                 {{ error }}
             {% endfor %}
+            {% for error in errors %}
+                {{ error }}
+            {% endfor %}
         </div>
         <input class="btn btn-apple mx-auto" type="submit" value="Зарегистрироваться"/>
     </form>
