@@ -3,5 +3,5 @@ from django.db import models
 
 
 class User(AbstractUser):
-    is_email_verified = models.BooleanField(default=False)
+    is_email_verified = models.BooleanField('Почта подтверждена', default=False)
 
