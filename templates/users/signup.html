@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load hosts %}
 {% load static %}
 {% load user_agents %}
 
@@ -7,18 +8,14 @@
 {% endblock %}
 
 {% block content %}
-    {% if not registered %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/users/signup.css' %}">
-        {% if request|is_mobile or request|is_tablet %}
-            {% include 'users/mobile/signup.html' %}
-        {% else %}
-            {% include 'users/pc/signup.html' %}
-        {% endif %}
-        <p class="mx-auto text-center small text-secondary w-75">
-            Мы не хотим мучить Вас требованиями к паролю. Просто постарайтесь сделать его сложным,
-            от этого зависит безопасность Вашего аккаунта.
-        </p>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/users/signup.css' %}">
+    {% if request|is_mobile or request|is_tablet %}
+        {% include 'users/mobile/signup.html' %}
     {% else %}
-        <h4 class="text-apple text-center">Мы отправили письмо с подтверждением Вам на почту!</h4>
+        {% include 'users/pc/signup.html' %}
     {% endif %}
+    <p class="mx-auto text-center small text-secondary w-75">
+        Мы не хотим мучить Вас требованиями к паролю. Просто постарайтесь сделать его сложным,
+        от этого зависит безопасность Вашего аккаунта.
+    </p>
 {% endblock %}

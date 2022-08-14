@@ -1,3 +1,4 @@
+{% load static %}
 
 
 <div>
@@ -7,22 +8,50 @@
         <hr class="m-0 text-apple">
     </div>
 
-    <div class="mx-auto my-4 text-center d-flex flex-column align-items-center">
-
-        <form method="post" class="mb-4 d-flex flex-column align-items-center w-75">
+    <div class="col mx-auto my-4 d-flex flex-column align-items-center">
+        <form method="post" class="mb-4 d-flex flex-column align-items-center">
             {% csrf_token %}
-            <div class="mb-3">
-                <div>Email:</div>
-                {{ form.email }}
-            </div>
-            <div class="mb-3">
-                <div>{{ form.first_name.label_tag }}</div>
-                {{ form.first_name }}
-            </div>
-            <div class="mb-3">
-                <div>{{ form.last_name.label_tag }}</div>
-                {{ form.last_name }}
-            </div>
+            <table class="table table-borderless">
+                <tr>
+                    <td>
+                        Email:
+                    </td>
+                    <td class="d-flex">
+                        {{ form.email }}
+                        {% if request.user.is_email_verified %}
+                            <span data-toggle="tooltip" data-placement="top" title=""
+                                  data-bs-original-title="Email подтверждён">
+                                <img src="{% static 'images/icons/tick.png' %}" class="email-icon"
+                                 alt="Email verified">
+                            </span>
+                        {% else %}
+                            <a href="{% url 'email_verify' %}">
+                                <span data-toggle="tooltip" data-placement="top" title=""
+                                      data-bs-original-title="Подтвердить email">
+                                    <img src="{% static 'images/icons/cross.png' %}" class="email-icon"
+                                         alt="Email unverified">
+                                </span>
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ form.first_name.label_tag }}
+                    </td>
+                    <td>
+                        {{ form.first_name }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ form.last_name.label_tag }}
+                    </td>
+                    <td>
+                        {{ form.last_name }}
+                    </td>
+                </tr>
+            </table>
             <div class="text-danger">
                 {% for error in form.errors.values %}
                     {{ error }}
@@ -47,6 +76,10 @@
                 </div>
             </div>
         </form>
-
     </div>
 </div>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>

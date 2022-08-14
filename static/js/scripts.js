@@ -11,3 +11,18 @@ function getUrlParameter(sParam) {
     }
     return false;
 }
+
+function setRedirectTimer(elementId, link, seconds) {
+    $(document).ready(
+        function () {
+            element = $('#' + elementId);
+            element.html(seconds);
+            setInterval(function () {
+                element.html(--seconds);
+            }, 1000);
+            setTimeout(function () {
+                document.location.href = link
+            }, seconds * 1000)
+        }
+    )
+}

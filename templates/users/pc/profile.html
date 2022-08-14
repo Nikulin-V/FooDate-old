@@ -1,3 +1,5 @@
+{% load hosts %}
+{% load static %}
 <div class="container-fluid">
     <h2>Профиль</h2>
     <hr>
@@ -12,8 +14,23 @@
                 <div class="col-3">
                     Email:
                 </div>
-                <div class="col-7">
+                <div class="col-7 d-flex">
                     {{ form.email }}
+                    {% if request.user.is_email_verified %}
+                        <span data-toggle="tooltip" data-placement="top" title=""
+                              data-bs-original-title="Email подтверждён">
+                            <img src="{% static 'images/icons/tick.png' %}" class="email-icon"
+                             alt="Email verified">
+                        </span>
+                    {% else %}
+                        <a href="{% url 'email_verify' %}">
+                            <span data-toggle="tooltip" data-placement="top" title=""
+                                  data-bs-original-title="Подтвердить email">
+                                <img src="{% static 'images/icons/cross.png' %}" class="email-icon"
+                                     alt="Email unverified">
+                            </span>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
             <div class="row mb-3">
@@ -47,3 +64,8 @@
         </div>
     </div>
 </div>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
