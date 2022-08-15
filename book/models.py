@@ -18,7 +18,7 @@ class ProductCategoryManager(models.Manager):
         """
         active_categories = (
             self.get_queryset()
-                .filter(subcategories__product_cards__is_published=True)
+            .filter(subcategories__product_cards__is_published=True)
         )
         return {
             category: set(ProductSubcategory.subcategories.get_active(category))
@@ -149,17 +149,9 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     )
 
     def save(self, *args, **kwargs):
-        # If ImageField is filled
         if self.image.name:
             if '/' not in self.image.name:
-                slug = slugify(self.name)
-                # Change name of new image
-                name_split = self.image.name.split('.')
-                path, extension = '.'.join(name_split)[:-1], name_split[-1]
-                path = path.split('/')[:-1]
-                extension = self.image.name.split('.')[-1]
-                path.append('.'.join((slug, extension)))
-                self.image.name = '/'.join(path)
+                change_image_name(self.name, self.image)
 
         if not self.subcategory:
             super(ProductCard, self).save(*args, **kwargs)
@@ -183,17 +175,9 @@ class ProductPhoto(PublishedBaseModel):
     product = models.ForeignKey(ProductCard, verbose_name='Продукт', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        # If ImageField is filled
         if self.upload.name:
             if '/' not in self.upload.name:
-                slug = slugify(self.product.name)
-                # Change name of new image
-                name_split = self.upload.name.split('.')
-                path, extension = '.'.join(name_split)[:-1], name_split[-1]
-                path = path.split('/')[:-1]
-                extension = self.upload.name.split('.')[-1]
-                path.append('.'.join((slug, extension)))
-                self.upload.name = '/'.join(path)
+                change_image_name(self.product.name, self.upload)
         super(ProductPhoto, self).save()
 
     def image(self):
@@ -287,3 +271,15 @@ class RecipePhoto(PublishedBaseModel):
     class Meta:
         verbose_name = 'Изображение блюда'
         verbose_name_plural = 'Изображения блюда'
+
+
+def change_image_name(name, image):
+    """Changes image name to its slug"""
+
+    slug = slugify(name)
+    name_split = image.name.split('.')
+    path, extension = '.'.join(name_split)[:-1], name_split[-1]
+    path = path.split('/')[:-1]
+    extension = image.name.split('.')[-1]
+    path.append('.'.join((slug, extension)))
+    image.name = '/'.join(path)

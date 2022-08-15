@@ -186,14 +186,16 @@ EMAIL_MULTI_USER = True
 
 # User Agents
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
-
-USER_AGENTS_CACHE = 'default'
+# Uncomment when Django 4.1 supports MemcachedCache
+#
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
+#
+# USER_AGENTS_CACHE = 'default'
 
 # hCaptcha
 

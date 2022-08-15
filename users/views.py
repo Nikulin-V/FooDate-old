@@ -106,5 +106,5 @@ class TokenVerifyView(View):
 
     @verify_view
     def get(self, request, token):
-        success, user = verify_view(token)
+        verify_view(token)
         return reverse('email_verify')

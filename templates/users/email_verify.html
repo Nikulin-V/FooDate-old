@@ -7,7 +7,7 @@
 {% block content %}
     {% if not email_verified %}
         <h4 class="text-apple text-center">
-            Мы отправили письмо с подтверждением на Вашу почту: {{ request.user.email }}
+            Мы отправили письмо с подтверждением на Вашу почту {{ request.user.email }}
         </h4>
         <p class="text-secondary text-center">
             Пожалуйста, подтвердите адрес своей электронной почты.
