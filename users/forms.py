@@ -23,10 +23,6 @@ class UserRegistrationForm(forms.ModelForm):
 class UserChangeForm(forms.ModelForm):
     """Form of changing user information"""
 
-    def __init__(self, *args, **kwargs):
-        super(UserChangeForm, self).__init__(*args, **kwargs)
-        self.fields['email'].disabled = True
-
     class Meta:
         model = User
         fields = 'first_name', 'last_name', 'email'

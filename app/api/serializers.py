@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from app.models import Product
 from book.models import ProductCard, ProductSubcategory, ProductCategory
+from users.models import User
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
