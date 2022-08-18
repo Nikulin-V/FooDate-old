@@ -143,9 +143,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Auth
 
 AUTH_USER_MODEL = 'users.User'
-LOGIN_URL = '/auth/login/'
+LOGIN_URL = f'{SCHEME}://{PARENT_HOST}/auth/login'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/auth/login/'
+LOGOUT_REDIRECT_URL = f'{SCHEME}://{PARENT_HOST}/auth/login'
 AUTHENTICATION_BACKENDS = ['core.backends.EmailAuthBackend']
 
 # Email
