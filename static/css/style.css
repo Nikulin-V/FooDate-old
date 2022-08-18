@@ -1,6 +1,11 @@
 body {
     scroll-behavior: smooth;
     max-width: 100vw;
+    overflow: auto;
+}
+
+:not(:root):fullscreen::backdrop {
+    background-color: white;
 }
 
 main {

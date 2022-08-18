@@ -151,10 +151,13 @@ label a:hover {
 
 .list-group-flush>.list-group-item {
     padding: .2rem 1rem .2rem 1rem;
+    margin: 0 20%;
 }
 
 .fullscreen-btn {
     position: fixed;
-    top: 5px;
-    left: -38px;
+    top: 10px;
+    left: 10px;
+    width: 25px;
+    height: 25px;
 }
