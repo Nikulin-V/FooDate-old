@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views import View
 from django_hosts import reverse_lazy
@@ -17,7 +18,7 @@ class HomeView(View):
         return render(request, self.template)
 
 
-class AppView(View):
+class AppView(LoginRequiredMixin, View):
     template = 'app_mobile/app.html'
     form = NewProductForm
     pc_reverse = reverse_lazy('app', host='app')
