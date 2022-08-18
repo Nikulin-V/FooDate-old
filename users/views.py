@@ -102,7 +102,7 @@ class EmailVerifyView(View):
         return render(request, self.template, context)
 
 
-class TokenVerifyView(View):
+class TokenVerifyView(LoginRequiredMixin, View):
 
     @verify_view
     def get(self, request, token):
