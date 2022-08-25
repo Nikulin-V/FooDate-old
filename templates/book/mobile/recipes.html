@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load range_ %}
+
+{% block title %}
+    Книга рецептов
+{% endblock %}
+
+{% load static %}
+{% load uploads %}
+{% block content %}
+    <link href="{% static 'css/book/recipes.css' %}" rel="stylesheet">
+    <div style="position: sticky; top: 0; height: 45px; max-height: 45px; background-color: white;
+        z-index: 99;">
+        <a href="/recipes">
+            <h4 class="text-apple text-center h-100 m-0 pt-1">Книга рецептов</h4>
+        </a>
+        <hr class="m-0 text-apple">
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- All recipes accordion -->
+            <div class="accordion my-1" id="recipesAccordion">
+                <div class="card border-apple">
+                    <!-- All recipes heading -->
+                    <div class="card-header p-0" id="all-heading">
+                        <a class="btn btn-link btn-block text-left text-apple recipes-categories"
+                           type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#all-collapse"
+                                aria-expanded="true"
+                                aria-controls="all-collapse"
+                        ondblclick="location.href = '/recipes'">
+                            Все рецепты
+                        </a>
+                    </div>
+                    <!-- Products subcategories accordion -->
+                    <div id="all-collapse" class="collapse"
+                         aria-labelledby="all-heading"
+                         data-bs-parent="#recipesAccordion">
+                        <div class="card-body p-0" id="categoriesAccordion">
+                            <ul class="list-group">
+                                {% for category in categories %}
+                                    <li class="list-group-item p-0">
+                                        <div class="category-card">
+                                            <!-- Recipe category -->
+                                            <div class="p-0" id="{{ category.slug }}-heading"
+                                            onclick="location.href = '/recipes?category={{ category.slug }}&' + cardsPerPageQuery">
+                                                <a class="btn btn-link btn-block text-left
+                                                text-apple w-100"
+                                                   type="button" data-bs-toggle="collapse"
+                                                   data-bs-target="#{{ category.slug }}-collapse"
+                                                   aria-expanded="true"
+                                                   aria-controls="{{ category.slug }}-collapse">
+                                                    {{ category.name }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Search bar row -->
+        {% if user.is_authenticated %}
+            <div class="row ms-0 mr-0 mb-1 w-100 align-items-center">
+                <div class="col-10 px-0">
+                    <input class="form-control" id="searchbar" type="text"
+                           placeholder="Введите название рецепта..." aria-label="Строка поиска">
+                </div>
+                <div class="col-1">
+                    <button type="submit" class="btn btn-apple px-2" onclick="search()">
+                        🔍
+                    </button>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-9">
+                <input class="form-control w-100" id="searchbar" type="text"
+                   placeholder="Введите название рецепта..." aria-label="Строка поиска">
+            </div>
+            <div class="col-3">
+                <button type="submit" class="btn btn-apple w-100" onclick="search()">
+                    Найти рецепт
+                </button>
+            </div>
+        {% endif %}
+        <!-- recipe cards grid -->
+        <div class="row row-cols-2 row-cols-md-4 g-2">
+            {% for recipe in recipes %}
+                <div class="col">
+                    <!-- recipe card -->
+                    <a class="card h-100 recipe-card" href="/recipes/{{ recipe.slug }}">
+                        <div class="h-100 d-flex align-items-center">
+                            {% if recipe.image %}
+                                <img src="{% uploads recipe.image %}"
+                                 class="card-img-top recipe-card-image img-fluid"
+                                     alt="{{ recipe.name }}">
+                            {% else %}
+                                <img src="{% static 'images/icons/no_food_image.png' %}"
+                                 class="card-img-top recipe-card-image img-fluid p-3"
+                                     alt="{{ recipe.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title text-center">{{ recipe.name }}</h6>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="col small d-flex flex-column align-items-center mt-5">
+                    По Вашему запросу ничего не нашлось :(
+                    <a class="btn btn-outline-apple mt-2" href="/recipes">
+                        Попробуйте сбросить фильтры
+                    </a>
+                </div>
+
+            {% endfor %}
+        </div>
+        <div class="row mt-5">
+            <!-- Pages navigation -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if current_page != 1 and pages != 0%}
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous"
+                               onclick="let page = parseInt(getUrlParameter('page'));
+                               openPage(page ? page - 1 : 1)">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for _ in pages|range_ %}
+                        <li class="page-item">
+                            <a class="page-link" href="#"
+                               {% if current_page == forloop.counter %}
+                                    style="background-color: rgba(112, 198, 112, 0.2)"
+                               {% else %}
+                                    onclick="openPage({{ forloop.counter }})"
+                               {% endif %}
+                            >{{ forloop.counter }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if current_page != pages and pages != 0 %}
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next"
+                               onclick="let page = parseInt(getUrlParameter('page'));
+                               openPage(page ? page + 1 : 1)">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <!-- recipes per page number -->
+        <div class="text-center small">
+            <div class="row justify-content-center mb-1">
+                На странице:
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-20" value="20"
+                        {% if cards_per_page == 20 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-20">20</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-40" value="40"
+                        {% if cards_per_page == 40 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-40">40</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-60" value="60"
+                        {% if cards_per_page == 20 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-60">60</label>
+            </div>
+        </div>
+    </div>
+    <script>
+        const categorySlug = getUrlParameter('category');
+        const categoryCollapse = document.getElementById(categorySlug + '-collapse');
+        // noinspection JSUnusedGlobalSymbols
+        const bsCollapse = new bootstrap.Collapse(categoryCollapse, {
+            toggle: true
+        });
+    </script>
+    <script type="text/javascript" src="{% static 'js/searchbar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+{% endblock %}
