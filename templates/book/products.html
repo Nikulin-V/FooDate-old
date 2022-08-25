@@ -249,28 +249,29 @@
                                 {{ form.designation.errors }}
                             </div>
                             <div class="row">
-                                <div>
+                                <div class="mb-2">
                                     {{ form.shelf_life.label_tag }}
                                 </div>
-                                <div class="d-flex justify-content-center">
+                                <div class="d-flex justify-content-center align-items-center">
                                     {{ form.shelf_life }}
                                 </div>
                                 {{ form.shelf_life.errors }}
                             </div>
                             <div class="row">
-                                <div>
+                                <div class="mb-2">
                                     {{ form.shelf_life_after_opening.label_tag }}
                                 </div>
-                                <div class="d-flex justify-content-center">
+                                <div class="d-flex justify-content-center align-items-center">
                                     {{ form.shelf_life_after_opening }}
                                 </div>
                                 {{ form.shelf_life_after_opening.errors }}
                             </div>
                             <div class="row">
-                                <div class="col">
+                                <div class="mb-2">
                                     <label>Температура хранения:</label>
                                 </div>
-                                <div class="col d-flex align-center justify-content-center">
+                                <div class="col d-flex align-center
+                                justify-content-center align-items-center">
                                     <span class="mx-2">от </span>{{ form.min_storage_temperature }}
                                     <span class="mx-2">до </span>{{ form.max_storage_temperature }}
                                     <span class="mx-2"></span>{{ form.storage_temperature_unit }}
@@ -280,7 +281,9 @@
                                 {{ form.storage_temperature_unit.errors }}
                             </div>
                             <div class="row">
-                                {{ form.composition.label_tag }}
+                                <div class="mb-2">
+                                    {{ form.composition.label_tag }}
+                                </div>
                                 {{ form.composition }}
                                 {{ form.composition.errors }}
                             </div>
