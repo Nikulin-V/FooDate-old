@@ -5,8 +5,8 @@ from django.views import View
 from slugify import slugify
 
 from app.models import ProductCard
-from book.forms import NewProductCardForm
-from book.models import ProductCategory, ProductPhoto
+from book.forms import NewProductCardForm, NewRecipeForm
+from book.models import ProductCategory, ProductPhoto, RecipeCategory, Recipe, RecipePhoto
 from core.constants import CARDS_PER_PAGE
 from foodate.settings import MEDIA_ROOT
 
@@ -161,11 +161,109 @@ class ProductView(View):
 
 
 class RecipesView(View):
-    template = 'error_pages/development.html'
-    template_mobile = 'error_pages/development.html'
+    template = 'book/recipes.html'
+    template_mobile = 'book/mobile/recipes.html'
+    form = NewRecipeForm
 
-    def get(self, request):
+    def get(self, request, saved=None):
+        args = request.GET
+        category_slug = args.get('category') or ''
+        search = args.get('search') or ''
+        cards_per_page = args.get('cardsPerPage')
+        page = args.get('page')
+
+        recipes = Recipe.recipes.get_recipes(search).only('name', 'slug', 'image')
+        if category_slug:
+            recipes = recipes.filter(category__slug__regex=category_slug)
+
+        try:
+            cards_per_page = int(cards_per_page)
+        except TypeError:
+            cards_per_page = CARDS_PER_PAGE
+        except ValueError:
+            cards_per_page = CARDS_PER_PAGE
+
+        recipes_count = len(recipes)
+        max_page_number = recipes_count // cards_per_page
+        max_page_number += 1 if recipes_count % cards_per_page != 0 else 0
+
+        try:
+            page = int(page)
+            if 1 <= int(page) <= max_page_number:
+                page = int(page) - 1
+            else:
+                page = 0
+        except TypeError:
+            page = 0
+        except ValueError:
+            page = 0
+
+        recipes = recipes.values(
+            'name', 'slug', 'image'
+        )[cards_per_page * page:cards_per_page * (page + 1)]
+
+        context = {
+            'categories': RecipeCategory.categories.all(),
+            'recipes': recipes,
+            'cards_per_page': cards_per_page,
+            'current_page': page + 1,
+            'pages': max_page_number,
+            'saved': saved,
+            'form': self.form() if saved is None else self.form(request.POST),
+        }
+
         return render(
             request,
-            self.template if request.user_agent.is_pc else self.template_mobile
+            self.template if request.user_agent.is_pc else self.template_mobile,
+            context
+        )
+
+    def post(self, request):
+        form = self.form(request.POST)
+        saved = False
+        if form.is_valid():
+            category = form.cleaned_data['category']
+            name = form.cleaned_data['name']
+            recipe = form.cleaned_data['recipe']
+            energy_value = form.cleaned_data['energy_value']
+            energy_value_unit = form.cleaned_data['energy_value_unit']
+            people_count = form.cleaned_data['people_count']
+            filepath = ''
+            if request.FILES:
+                file = request.FILES['image']
+                fs = FileSystemStorage()
+                extension = file.name.split('.')[-1]
+                filepath = f'products/images/{slugify(name)}.{extension}'
+                fs.save(f'{MEDIA_ROOT}/{filepath}', file)
+
+            new_recipe = Recipe.recipes.create(
+                category=category,
+                name=name,
+                recipe=recipe,
+                energy_value=energy_value,
+                energy_value_unit=energy_value_unit,
+                people_count=people_count,
+                image=filepath
+            )
+            new_recipe.save()
+            saved = True
+
+        return self.get(request, saved)
+
+
+class RecipeView(View):
+    template = 'book/recipe.html'
+    template_mobile = 'book/mobile/recipe.html'
+
+    def get(self, request, recipe_slug):
+        recipe: Recipe = Recipe.recipes.filter(slug=recipe_slug).first()
+        photos = RecipePhoto.objects.filter(recipe=recipe, is_published=True).all()
+        context = {
+            'recipe': recipe,
+            'photos': photos
+        }
+        return render(
+            request,
+            self.template if request.user_agent.is_pc else self.template_mobile,
+            context
         )
