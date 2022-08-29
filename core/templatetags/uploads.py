@@ -7,4 +7,5 @@ register = template.Library()
 
 @register.simple_tag
 def uploads(file_path):
+    """Returns uploads link"""
     return f'{HOST_SCHEME}{PARENT_HOST}/{MEDIA_URL}{file_path}'

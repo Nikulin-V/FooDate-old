@@ -103,6 +103,7 @@ class EmailVerifyView(View):
 
 
 class TokenVerifyView(LoginRequiredMixin, View):
+    """Page of verifying email confirmation token"""
 
     @verify_view
     def get(self, request, token):
