@@ -7,6 +7,8 @@ from sorl.thumbnail import get_thumbnail
 
 
 class NameSlugBaseModel(models.Model):
+    """Abstract model which saves its slug from its name"""
+
     name = models.CharField('Название', max_length=255, unique=True)
     slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug],
                             blank=True, null=True)
@@ -23,6 +25,8 @@ class NameSlugBaseModel(models.Model):
 
 
 class PublishedBaseModel(models.Model):
+    """Abstract model which allows to publish/not to publish itself"""
+
     is_published = models.BooleanField('Опубликовано', default=False)
 
     class Meta:
@@ -30,6 +34,8 @@ class PublishedBaseModel(models.Model):
 
 
 class PhotoBaseModel(models.Model):
+    """Abstract model of photo"""
+
     image = models.ImageField(
         upload_to='static/uploads/', null=True, blank=True, verbose_name='Изображение'
     )

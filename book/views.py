@@ -12,6 +12,8 @@ from foodate.settings import MEDIA_ROOT
 
 
 class HomeView(View):
+    """Book home page"""
+
     template = 'error_pages/development.html'
     template_mobile = 'error_pages/development.html'
 
@@ -23,6 +25,8 @@ class HomeView(View):
 
 
 class ProductsView(View):
+    """Product cards catalog page"""
+
     template = 'book/products.html'
     template_mobile = 'book/mobile/products.html'
     form = NewProductCardForm
@@ -143,6 +147,8 @@ class ProductsView(View):
 
 
 class ProductView(View):
+    """Specified product card page"""
+
     template = 'book/product.html'
     template_mobile = 'book/mobile/product.html'
 
@@ -161,6 +167,8 @@ class ProductView(View):
 
 
 class RecipesView(View):
+    """Recipes catalog page"""
+
     template = 'error_pages/development.html'
     template_mobile = 'error_pages/development.html'
 

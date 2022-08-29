@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 
 
 def pc_redirect(redirect_url):
+    """Redirects to pc version of page"""
     def pc_redirect_decorator(func):
         def _wrapper(*args, **kwargs):
             request = args[1]
@@ -13,6 +14,7 @@ def pc_redirect(redirect_url):
 
 
 def mobile_redirect(redirect_url):
+    """Redirects to mobile version of page"""
     def mobile_redirect_decorator(func):
         def _wrapper(*args, **kwargs):
             request = args[1]
