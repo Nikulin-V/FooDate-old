@@ -57,3 +57,6 @@ function changeCardsPerPage() {
     else
         location.search = '?cardsPerPage=' + cardsPerPage
 }
+
+let cardsPerPage = getCardsPerPage();
+let cardsPerPageQuery = cardsPerPage ? 'cardsPerPage=' + cardsPerPage : '';

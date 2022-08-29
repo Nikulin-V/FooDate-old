@@ -2,73 +2,57 @@
 {% load range_ %}
 
 {% block title %}
-    Книга продуктов
+    Книга рецептов
 {% endblock %}
 
 {% load static %}
 {% load uploads %}
 {% block content %}
-    <link href="{% static 'css/book/products.css' %}" rel="stylesheet">
+    <link href="{% static 'css/book/recipes.css' %}" rel="stylesheet">
     <div style="position: sticky; top: 0; height: 45px; max-height: 45px; background-color: white;
         z-index: 99;">
-        <a href="/products">
-            <h4 class="text-apple text-center h-100 m-0 pt-1">Книга продуктов</h4>
+        <a href="/recipes">
+            <h4 class="text-apple text-center h-100 m-0 pt-1">Книга рецептов</h4>
         </a>
         <hr class="m-0 text-apple">
     </div>
     <div class="container">
         <div class="row justify-content-center">
-            <!-- All products accordion -->
-            <div class="accordion my-1" id="productsAccordion">
+            <!-- All recipes accordion -->
+            <div class="accordion my-1" id="recipesAccordion">
                 <div class="card border-apple">
+                    <!-- All recipes heading -->
                     <div class="card-header p-0" id="all-heading">
-                        <a class="btn btn-link btn-block text-left text-apple products-categories"
+                        <a class="btn btn-link btn-block text-left text-apple recipes-categories"
                            type="button"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#all-collapse"
                                 aria-expanded="true"
                                 aria-controls="all-collapse"
-                        ondblclick="location.href = '/products'">
-                            Все продукты
+                        ondblclick="location.href = '/recipes'">
+                            Все рецепты
                         </a>
                     </div>
-
+                    <!-- Products subcategories accordion -->
                     <div id="all-collapse" class="collapse"
                          aria-labelledby="all-heading"
-                         data-bs-parent="#productsAccordion">
+                         data-bs-parent="#recipesAccordion">
                         <div class="card-body p-0" id="categoriesAccordion">
                             <ul class="list-group">
-                                {% for category, subcategories in categories.items %}
+                                {% for category in categories %}
                                     <li class="list-group-item p-0">
-                                        <div class="subcategory-card">
-                                            <div class="p-0" id="{{ category.slug }}-heading">
+                                        <div class="category-card">
+                                            <!-- Recipe category -->
+                                            <div class="p-0" id="{{ category.slug }}-heading"
+                                            onclick="location.href = '/recipes?category={{ category.slug }}&' + cardsPerPageQuery">
                                                 <a class="btn btn-link btn-block text-left
-                                                text-apple products-categories"
+                                                text-apple w-100"
                                                    type="button" data-bs-toggle="collapse"
                                                    data-bs-target="#{{ category.slug }}-collapse"
                                                    aria-expanded="true"
-                                                   aria-controls="{{ category.slug }}-collapse"
-                                                   ondblclick="location.href = '/products?category={{ category.slug }}'">
+                                                   aria-controls="{{ category.slug }}-collapse">
                                                     {{ category.name }}
                                                 </a>
-                                            </div>
-
-                                            <div id="{{ category.slug }}-collapse"
-                                                 class="pb-1 collapse"
-                                                 aria-labelledby="{{ category.slug }}-heading"
-                                                 data-bs-parent="#categoriesAccordion">
-                                                <div>
-                                                    <ul class="text-apple">
-                                                        {% for subcategory in subcategories %}
-                                                            <li>
-                                                                <a href="?subcategory={{ subcategory.slug }}"
-                                                                class="text-apple products-categories">
-                                                                    {{ subcategory.name }}
-                                                                </a>
-                                                            </li>
-                                                        {% endfor %}
-                                                    </ul>
-                                                </div>
                                             </div>
                                         </div>
                                     </li>
@@ -84,7 +68,7 @@
             <div class="row ms-0 mr-0 mb-1 w-100 align-items-center">
                 <div class="col-10 px-0">
                     <input class="form-control" id="searchbar" type="text"
-                           placeholder="Введите название продукта..." aria-label="Строка поиска">
+                           placeholder="Введите название рецепта..." aria-label="Строка поиска">
                 </div>
                 <div class="col-1">
                     <button type="submit" class="btn btn-apple px-2" onclick="search()">
@@ -95,40 +79,40 @@
         {% else %}
             <div class="col-9">
                 <input class="form-control w-100" id="searchbar" type="text"
-                   placeholder="Введите название продукта..." aria-label="Строка поиска">
+                   placeholder="Введите название рецепта..." aria-label="Строка поиска">
             </div>
             <div class="col-3">
                 <button type="submit" class="btn btn-apple w-100" onclick="search()">
-                    Найти продукт
+                    Найти рецепт
                 </button>
             </div>
         {% endif %}
-        <!-- Product cards grid -->
+        <!-- recipe cards grid -->
         <div class="row row-cols-2 row-cols-md-4 g-2">
-            {% for product in products %}
+            {% for recipe in recipes %}
                 <div class="col">
-                    <!-- Product card -->
-                    <a class="card h-100 product-card" href="/products/{{ product.slug }}">
+                    <!-- recipe card -->
+                    <a class="card h-100 recipe-card" href="/recipes/{{ recipe.slug }}">
                         <div class="h-100 d-flex align-items-center">
-                            {% if product.image %}
-                                <img src="{% uploads product.image %}"
-                                 class="card-img-top product-card-image img-fluid"
-                                     alt="{{ product.name }}">
+                            {% if recipe.image %}
+                                <img src="{% uploads recipe.image %}"
+                                 class="card-img-top recipe-card-image img-fluid"
+                                     alt="{{ recipe.name }}">
                             {% else %}
                                 <img src="{% static 'images/icons/no_food_image.png' %}"
-                                 class="card-img-top product-card-image img-fluid p-3"
-                                     alt="{{ product.name }}">
+                                 class="card-img-top recipe-card-image img-fluid p-3"
+                                     alt="{{ recipe.name }}">
                             {% endif %}
                         </div>
                         <div class="card-body">
-                            <h6 class="card-title text-center">{{ product.name }}</h6>
+                            <h6 class="card-title text-center">{{ recipe.name }}</h6>
                         </div>
                     </a>
                 </div>
             {% empty %}
                 <div class="col small d-flex flex-column align-items-center mt-5">
                     По Вашему запросу ничего не нашлось :(
-                    <a class="btn btn-outline-apple mt-2" href="/products">
+                    <a class="btn btn-outline-apple mt-2" href="/recipes">
                         Попробуйте сбросить фильтры
                     </a>
                 </div>
@@ -171,7 +155,7 @@
                 </ul>
             </nav>
         </div>
-        <!-- Products per page number -->
+        <!-- recipes per page number -->
         <div class="text-center small">
             <div class="row justify-content-center mb-1">
                 На странице:

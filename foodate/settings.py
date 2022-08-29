@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'django_hosts',
     'django_user_agents',
     'durationwidget',
-    'tinymce',
+    'django_quill',
     'hcaptcha',
     'rest_framework',
     'datetimewidget',
@@ -186,16 +186,14 @@ EMAIL_MULTI_USER = True
 
 # User Agents
 
-# Uncomment when Django 4.1 supports MemcachedCache
-#
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-#         'LOCATION': '127.0.0.1:11211',
-#     }
-# }
-#
-# USER_AGENTS_CACHE = 'default'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '0.0.0.0:11211',
+    }
+}
+
+USER_AGENTS_CACHE = 'default'
 
 # hCaptcha
 
