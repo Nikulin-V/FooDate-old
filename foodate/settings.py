@@ -2,6 +2,7 @@ import mimetypes
 import os
 from pathlib import Path
 
+from django.contrib.auth import get_user_model
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -141,9 +142,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Auth
 
-LOGIN_URL = '/auth/login/'
+AUTH_USER_MODEL = 'users.User'
+LOGIN_URL = f'{SCHEME}://{PARENT_HOST}/auth/login'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/auth/login/'
+LOGOUT_REDIRECT_URL = f'{SCHEME}://{PARENT_HOST}/auth/login'
 AUTHENTICATION_BACKENDS = ['core.backends.EmailAuthBackend']
 
 # Email
@@ -162,7 +164,14 @@ EMAIL_USE_SSL = False
 # Email verification
 
 def verified_callback(user):
-    user.is_active = True
+    other_users_with_email = get_user_model().objects.filter(
+        email=user.email,
+        is_email_verified=True
+    ).all()
+    for user_ in other_users_with_email:
+        user_.is_email_verified = False
+        user_.save()
+    user.is_email_verified = True
 
 
 EMAIL_VERIFIED_CALLBACK = verified_callback
@@ -173,18 +182,20 @@ EMAIL_MAIL_PLAIN = 'users/email_verification.txt'
 EMAIL_TOKEN_LIFE = 60 * 60
 EMAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
 EMAIL_PAGE_DOMAIN = f'{SCHEME}://foodate.ru'
-EMAIL_MULTI_USER = False
+EMAIL_MULTI_USER = True
 
 # User Agents
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
-
-USER_AGENTS_CACHE = 'default'
+# Uncomment when Django 4.1 supports MemcachedCache
+#
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
+#
+# USER_AGENTS_CACHE = 'default'
 
 # hCaptcha
 

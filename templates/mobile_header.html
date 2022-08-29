@@ -6,12 +6,12 @@
     <span id="header-menu-button" class="menu">
         <span class="hamburger"></span>
     </span>
-    <ul class="list-group list-group-flush" id="header">
-        <a>
-            <img src="{% static 'images/icons/fullscreen.png' %}" class="icon fullscreen-btn"
-                 alt="Fullscreen">
-        </a>
-        <li class="list-group-item mobile-header-item text-center">
+    <ul class="list-group list-group-flush w-100 h-100" id="header">
+        <img src="{% static 'images/icons/fullscreen_open.png' %}"
+             onclick="fullscreenToggle()"
+             class="fullscreen-btn"
+             alt="Fullscreen on">
+        <li class="list-group-item mobile-header-item text-center pt-4">
             <a href="{% url 'home' host 'app_mobile' %}"
                class="d-flex flex-column justify-content-center">
                 <div class="mb-2">

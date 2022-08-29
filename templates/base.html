@@ -7,6 +7,14 @@
 
         {% include 'include/yandex_metrica.html' %}
 
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="FooDate">
+        <meta property="og:description" content="😋 Держите еду под контролем!">
+        <meta property="og:url" content="https://foodate.ru">
+        <meta property="og:image" content="https://foodate.ru/static/images/logo/Preview.png">
+        <meta property="og:site_name" content="FooDate">
+        <meta property="og:locale" content="ru_RU">
+
         {% load static %}
         <script>
             const staticUrl = "{% get_static_prefix %}";
@@ -21,7 +29,7 @@
         <link rel="icon" type="image/png" sizes="16x16"
               href={% static "images/fav/favicon-16x16.png" %}>
         <link rel="manifest" href={% static "images/fav/site.webmanifest" %}>
-        <link rel="mask-icon" href={% static "images/fav/safari-pinned-tab.svg" %} color="#269926">
+        <link rel="mask-icon" href="{% static "images/fav/safari-pinned-tab.svg" %}" color=#269926">
         <meta name="msapplication-TileColor" content="#269926">
         <meta name="theme-color" content="#ffffff">
 
@@ -58,6 +66,9 @@
 
         <!-- js-cookie -->
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+        <!-- Fullscreen API -->
+        <script src="https://cdn.jsdelivr.net/npm/fullscreen.js@0.2.5/dist/fullscreen.min.js"></script>
 
         <!-- API -->
         {% if token %}
