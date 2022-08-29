@@ -1,43 +1,44 @@
 {% extends 'base.html' %}
+{% load hosts %}
 
 {% block title %}
-    Книга продуктов
+    Книга рецептов
 {% endblock %}
 
 {% load static %}
 {% load uploads %}
 {% load range_ %}
 {% block content %}
-    <link href="{% static 'css/book/products.css' %}" rel="stylesheet">
+    <link href="{% static 'css/book/recipes.css' %}" rel="stylesheet">
 
     <div class="container">
         <div class="row justify-content-center">
-            <!-- All products accordion -->
-            <div class="col-3 accordion" id="productsAccordion">
+            <!-- All recipes accordion -->
+            <div class="col-3 accordion" id="recipesAccordion">
                 <div class="card border-apple">
-                    <!-- All products heading -->
+                    <!-- All recipes heading -->
                     <div class="card-header p-0" id="all-heading"
-                         ondblclick="location.href = '/products?' + cardsPerPageQuery">
+                         onclick="location.href = '/recipes?' + cardsPerPageQuery">
                         <a class="btn btn-link btn-block text-left text-apple w-100" type="button"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#all-collapse"
                                 aria-expanded="true"
                                 aria-controls="all-collapse">
-                            Все продукты
+                            Все рецепты
                         </a>
                     </div>
                     <!-- Products subcategories accordion -->
                     <div id="all-collapse" class="collapse show"
                          aria-labelledby="all-heading"
-                         data-bs-parent="#productsAccordion">
+                         data-bs-parent="#recipesAccordion">
                         <div class="card-body p-0" id="categoriesAccordion">
                             <ul class="list-group">
-                                {% for category, subcategories in categories.items %}
+                                {% for category in categories %}
                                     <li class="list-group-item p-0">
                                         <div class="category-card">
-                                            <!-- Product category -->
+                                            <!-- Recipe category -->
                                             <div class="p-0" id="{{ category.slug }}-heading"
-                                            ondblclick="location.href = '/products?category={{ category.slug }}&' + cardsPerPageQuery">
+                                            onclick="location.href = '/recipes?category={{ category.slug }}&' + cardsPerPageQuery">
                                                 <a class="btn btn-link btn-block text-left
                                                 text-apple w-100"
                                                    type="button" data-bs-toggle="collapse"
@@ -46,25 +47,6 @@
                                                    aria-controls="{{ category.slug }}-collapse">
                                                     {{ category.name }}
                                                 </a>
-                                            </div>
-                                            <!-- Product subcategories -->
-                                            <div id="{{ category.slug }}-collapse"
-                                                 class="p-1 collapse"
-                                                 aria-labelledby="{{ category.slug }}-heading"
-                                                 data-bs-parent="#categoriesAccordion">
-                                                <div>
-                                                    <ul class="text-apple">
-                                                        {% for subcategory in subcategories %}
-                                                            <li>
-                                                                <a href="?category={{ category.slug }}&subcategory={{ subcategory.slug }}&cardsPerPage={{ cards_per_page }}">
-                                                                    <div class="text-apple">
-                                                                        {{ subcategory.name }}
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                        {% endfor %}
-                                                    </ul>
-                                                </div>
                                             </div>
                                         </div>
                                     </li>
@@ -80,51 +62,51 @@
                     {% if user.is_authenticated %}
                         <div class="col-7">
                             <input class="form-control w-100" id="searchbar" type="text"
-                               placeholder="Введите название продукта..." aria-label="Строка поиска">
+                               placeholder="Введите название рецепта..." aria-label="Строка поиска">
                         </div>
                         <div class="col">
                             <button type="submit" class="btn btn-apple w-100" onclick="search()">
-                                Найти продукт
+                                Найти рецепт
                             </button>
                         </div>
                         <div class="col">
                             <button type="button" class="btn btn-outline-apple w-100"
-                                    data-bs-toggle="modal" data-bs-target="#newProductCardModal"
-                                    style="white-space: nowrap">
-                                Добавить продукт
+                                    style="white-space: nowrap"
+                                    data-bs-toggle="modal" data-bs-target="#newRecipeModal">
+                                Добавить рецепт
                             </button>
                         </div>
                     {% else %}
                         <div class="col-9">
                             <input class="form-control w-100" id="searchbar" type="text"
-                               placeholder="Введите название продукта..." aria-label="Строка поиска">
+                               placeholder="Введите название рецепта..." aria-label="Строка поиска">
                         </div>
                         <div class="col-3">
                             <button type="submit" class="btn btn-apple w-100" onclick="search()">
-                                Найти продукт
+                                Найти рецепт
                             </button>
                         </div>
                     {% endif %}
                 </div>
                 <!-- Product cards grid -->
                 <div class="row row-cols-1 row-cols-md-4 g-4">
-                    {% for product in products %}
+                    {% for recipe in recipes %}
                         <div class="col">
                             <!-- Product card -->
-                            <a class="card h-100 product-card" href="/products/{{ product.slug }}">
+                            <a class="card h-100 recipe-card" href="/recipes/{{ recipe.slug }}">
                                 <div class="h-100 d-flex align-items-center">
-                                    {% if product.image %}
-                                        <img src="{% uploads product.image %}"
-                                         class="card-img-top product-card-image img-fluid"
-                                             alt="{{ product.name }}">
+                                    {% if recipe.image %}
+                                        <img src="{% uploads recipe.image %}"
+                                         class="card-img-top recipe-card-image img-fluid"
+                                             alt="{{ recipe.name }}">
                                     {% else %}
                                         <img src="{% static 'images/icons/no_food_image.png' %}"
-                                         class="card-img-top product-card-image img-fluid p-3"
-                                             alt="{{ product.name }}">
+                                         class="card-img-top recipe-card-image img-fluid p-3"
+                                             alt="{{ recipe.name }}">
                                     {% endif %}
                                 </div>
                                 <div class="card-body">
-                                    <h6 class="card-title text-center">{{ product.name }}</h6>
+                                    <h6 class="card-title text-center">{{ recipe.name }}</h6>
                                 </div>
                             </a>
                         </div>
@@ -203,16 +185,16 @@
             </div>
         </div>
     </div>
-    <!-- New product card modal -->
+    <!-- New recipe card modal -->
     {% if user.is_authenticated %}
-        <div class="modal fade" id="newProductCardModal"
+        <div class="modal fade" id="newRecipeModal"
              data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
              aria-labelledby="newProductCardModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title text-center mx-auto" id="newProductCardModalLabel">
-                            Добавить продукт
+                            Добавить рецепт
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 style="margin-left: 0"
@@ -220,15 +202,15 @@
                     </div>
                     <form method="post" id="newProductCardForm" class="modal-form" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="modal-body mx-auto text-center w-50">
+                        <div class="modal-body mx-auto text-center w-75">
                             <div class="row">
                                 <div class="col">
-                                    {{ form.subcategory.label_tag }}
+                                    {{ form.category.label_tag }}
                                 </div>
                                 <div class="col">
-                                    {{ form.subcategory }}
+                                    {{ form.category }}
                                 </div>
-                                {{ form.subcategory.errors }}
+                                {{ form.category.errors }}
                             </div>
                             <div class="row">
                                 <div class="col">
@@ -240,58 +222,19 @@
                                 {{ form.name.errors }}
                             </div>
                             <div class="row">
-                                <div class="col">
-                                    {{ form.designation.label_tag }}
+                                <div class="row mb-3">
+                                    {{ form.recipe.label_tag }}
                                 </div>
-                                <div class="col">
-                                    {{ form.designation }}
+                                <div class="row" id="recipe_editor">
+                                    {{ form.recipe }}
                                 </div>
-                                {{ form.designation.errors }}
-                            </div>
-                            <div class="row">
-                                <div class="mb-2">
-                                    {{ form.shelf_life.label_tag }}
-                                </div>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    {{ form.shelf_life }}
-                                </div>
-                                {{ form.shelf_life.errors }}
-                            </div>
-                            <div class="row">
-                                <div class="mb-2">
-                                    {{ form.shelf_life_after_opening.label_tag }}
-                                </div>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    {{ form.shelf_life_after_opening }}
-                                </div>
-                                {{ form.shelf_life_after_opening.errors }}
-                            </div>
-                            <div class="row">
-                                <div class="mb-2">
-                                    <label>Температура хранения:</label>
-                                </div>
-                                <div class="col d-flex align-center
-                                justify-content-center align-items-center">
-                                    <span class="mx-2">от </span>{{ form.min_storage_temperature }}
-                                    <span class="mx-2">до </span>{{ form.max_storage_temperature }}
-                                    <span class="mx-2"></span>{{ form.storage_temperature_unit }}
-                                </div>
-                                {{ form.min_storage_temperature.errors }}
-                                {{ form.max_storage_temperature.errors }}
-                                {{ form.storage_temperature_unit.errors }}
-                            </div>
-                            <div class="row">
-                                <div class="mb-2">
-                                    {{ form.composition.label_tag }}
-                                </div>
-                                {{ form.composition }}
-                                {{ form.composition.errors }}
+                                {{ form.recipe.errors }}
                             </div>
                             <div class="row">
                                 <div class="col">
                                     {{ form.energy_value.label_tag }}
                                 </div>
-                                <div class="col-7 d-flex align-center justify-content-center">
+                                <div class="col-6 d-flex align-center justify-content-center">
                                     {{ form.energy_value }}
                                     <span class="mx-2"></span>{{ form.energy_value_unit }}
                                 </div>
@@ -300,37 +243,19 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    Белки
+                                    {{ form.people_count.label }}
                                 </div>
-                                <div class="col-7 d-flex">
-                                    {{ form.proteins }}<span>г.</span>
-                                </div>
-                                {{ form.proteins.errors }}
-                            </div>
-                            <div class="row">
                                 <div class="col">
-                                    Жиры
+                                    {{ form.people_count }}
                                 </div>
-                                <div class="col-7 d-flex">
-                                    {{ form.fats }}<span>г.</span>
-                                </div>
-                                {{ form.fats.errors }}
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    Углеводы
-                                </div>
-                                <div class="col-7 d-flex">
-                                    {{ form.carbohydrates }}<span>г.</span>
-                                </div>
-                                {{ form.carbohydrates.errors }}
+                                {{ form.people_count.errors }}
                             </div>
                             <div class="row align-center justify-content-center">
                                 <div class="form-file">
                                     {{ form.image }}
                                     <label class="form-file-label"
                                            for="id_image">
-                                        <span class="form-file-text">Изображение продукта</span>
+                                        <span class="form-file-text">Изображение рецепта</span>
                                         <span class="form-file-button">Загрузить</span>
                                     </label>
                                 </div>
@@ -348,20 +273,20 @@
                 </div>
             </div>
         </div>
-        <!-- New product card saving notification -->
+        <!-- New recipe card saving notification -->
         {% if saved == True %}
             <div class="modal fade" id="notificationModal" tabindex="-1"
                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Карточка создана</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Рецепт создан</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Созданная Вами карточка продукта отправлена на проверку модераторам.
-                            Скоро она появится в списке продуктов.
+                            Созданный Вами рецепт отправлен на проверку модераторам.
+                            Скоро он появится в списке рецептов.
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-apple"
@@ -379,11 +304,11 @@
             </script>
         {% elif saved == False %}
             <script>
-                let newProductCardModal = new bootstrap.Modal(
-                    document.getElementById('newProductCardModal'), {
+                let newRecipeModal = new bootstrap.Modal(
+                    document.getElementById('newRecipeModal'), {
                     keyboard: false
                 });
-                newProductCardModal.show()
+                newRecipeModal.show()
             </script>
         {% endif %}
         <script>

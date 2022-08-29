@@ -3,8 +3,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils.safestring import mark_safe
 # noinspection PyPackageRequirements
+from django_quill.fields import QuillField
 from slugify import slugify
-from tinymce.models import HTMLField
 
 import core.validators
 from core.choices import TEMPERATURE_UNITS, ENERGY_UNITS
@@ -17,8 +17,7 @@ class ProductCategoryManager(models.Manager):
         Returns dictionary with category if it has active subcategories as key and its subcategories
         """
         active_categories = (
-            self.get_queryset()
-            .filter(subcategories__product_cards__is_published=True)
+            self.get_queryset().filter(subcategories__product_cards__is_published=True)
         )
         return {
             category: set(ProductSubcategory.subcategories.get_active(category))
@@ -192,12 +191,15 @@ class RecipeCategoryManager(models.Manager):
     pass
 
 
-class RecipeCategory(models.Model):
+class RecipeCategory(NameSlugBaseModel):
     categories = RecipeCategoryManager()
 
     name = models.CharField('Название', max_length=255, unique=True)
     slug = models.CharField(max_length=255, unique=True, validators=[validators.validate_slug],
                             null=True, blank=True)
+
+    def __str__(self):
+        return self.name[:50]
 
     class Meta:
         verbose_name = 'Категорию рецептов'
@@ -206,10 +208,21 @@ class RecipeCategory(models.Model):
 
 class RecipeManager(models.Manager):
     def get_published(self):
-        self.get_queryset().filter(is_published=True)
+        return self.get_queryset().filter(is_published=True)
+
+    def get_recipes(self, search=None):
+        if search:
+            return self.search(search)
+        return self.get_published()
+
+    def search(self, search):
+        return self.get_published().filter(
+            Q(name__iregex=search) or Q(slug__iregex=search) or
+            Q(designation__iregex=search) or Q(category__name__iregex=search)
+        )
 
 
-class Recipe(PublishedBaseModel, PhotoBaseModel):
+class Recipe(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
     recipes = RecipeManager()
 
     name = models.CharField('Название', max_length=255, unique=True)
@@ -224,12 +237,14 @@ class Recipe(PublishedBaseModel, PhotoBaseModel):
         verbose_name='Категория рецептов',
     )
     people_count = models.IntegerField(
-        'Кол-во человек', default=1, help_text='Количество человек, на которое рассчитано блюдо',
+        'Кол-во человек, на которое рассчитано блюдо', default=1,
+        help_text='Количество человек, на которое рассчитано блюдо',
         validators=[validators.MinValueValidator(1)]
     )
-    recipe = HTMLField('Рецепт', help_text='Подробно опишите процесс приготовления по шагам')
+    recipe = QuillField('Рецепт', help_text='Подробно опишите процесс приготовления по шагам')
     products = models.ManyToManyField(
-        ProductCard, verbose_name='Продукты, необходимые для приготовления', related_name='recipes'
+        ProductCard, verbose_name='Продукты, необходимые для приготовления',
+        related_name='recipes', blank=True
     )
     energy_value = models.FloatField(
         'Энергетическая ценность',
@@ -264,6 +279,12 @@ class Recipe(PublishedBaseModel, PhotoBaseModel):
 class RecipePhoto(PublishedBaseModel):
     upload = models.ImageField(upload_to='recipes/gallery', null=True, blank=True)
     recipe = models.ForeignKey(Recipe, verbose_name='Рецепт', on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        if self.upload.name:
+            if '/' not in self.upload.name:
+                change_image_name(self.upload.name, self.upload)
+        super(RecipePhoto, self).save()
 
     def image(self):
         return mark_safe(f'<img src="{self.upload.url}" width="200"')

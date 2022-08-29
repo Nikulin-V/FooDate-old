@@ -1,6 +1,6 @@
 from django import forms
 
-from book.models import ProductCard
+from book.models import ProductCard, Recipe
 from core.fields import CustomCaptchaField
 from core.widgets import CustomTimeDurationWidget
 
@@ -24,3 +24,12 @@ class NewProductCardForm(forms.ModelForm):
                   'min_storage_temperature', 'max_storage_temperature',
                   'storage_temperature_unit', 'composition', 'energy_value', 'energy_value_unit',
                   'proteins', 'fats', 'carbohydrates', 'image')
+
+
+class NewRecipeForm(forms.ModelForm):
+    captcha = CustomCaptchaField()
+
+    class Meta:
+        model = Recipe
+        fields = ('category', 'name', 'people_count', 'recipe', 'energy_value',
+                  'energy_value_unit', 'image')
