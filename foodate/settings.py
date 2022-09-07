@@ -12,9 +12,9 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', False) in ('1', 'True', 'true', 'T', 't')
-SCHEME = 'https'
+SCHEME = 'http'
 
-ALLOWED_HOSTS = ['foodate.ru', 'm.foodate.ru', 'book.foodate.ru']
+ALLOWED_HOSTS = ['foodate.tk', 'm.foodate.tk', 'book.foodate.tk']
 
 # Application definition
 
@@ -61,13 +61,13 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'app.urls'
 ROOT_HOSTCONF = 'foodate.hosts'
 DEFAULT_HOST = 'app'
-PARENT_HOST = 'foodate.ru'
+PARENT_HOST = 'foodate.tk'
 HOST_SCHEME = f'{SCHEME}://'
-SESSION_COOKIE_DOMAIN = '.foodate.ru'
-CSRF_TRUSTED_ORIGINS = [f'{SCHEME}://*.foodate.ru']
+SESSION_COOKIE_DOMAIN = '.foodate.tk'
+CSRF_TRUSTED_ORIGINS = [f'{SCHEME}://*.foodate.tk']
 
 CORS_ALLOWED_ORIGINS = [
-    f'{SCHEME}://foodate.ru', f'{SCHEME}://m.foodate.ru', f'{SCHEME}://book.foodate.ru'
+    f'{SCHEME}://foodate.tk', f'{SCHEME}://m.foodate.tk', f'{SCHEME}://book.foodate.tk'
 ]
 
 TEMPLATES = [
@@ -181,19 +181,20 @@ EMAIL_MAIL_HTML = 'users/email_verification.html'
 EMAIL_MAIL_PLAIN = 'users/email_verification.txt'
 EMAIL_TOKEN_LIFE = 60 * 60
 EMAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
-EMAIL_PAGE_DOMAIN = f'{SCHEME}://foodate.ru'
+EMAIL_PAGE_DOMAIN = f'{SCHEME}://foodate.tk'
 EMAIL_MULTI_USER = True
 
 # User Agents
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '0.0.0.0:11211',
-    }
-}
-
-USER_AGENTS_CACHE = 'default'
+#
+#
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '0.0.0.0:11211',
+#     }
+# }
+#
+# USER_AGENTS_CACHE = 'default'
 
 # hCaptcha
 
