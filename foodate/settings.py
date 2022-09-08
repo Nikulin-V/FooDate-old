@@ -10,11 +10,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
-
 DEBUG = os.getenv('DEBUG', False) in ('1', 'True', 'true', 'T', 't')
-SCHEME = 'https'
-
-ALLOWED_HOSTS = ['foodate.ru', 'm.foodate.ru', 'book.foodate.ru']
+SCHEME = os.getenv('SCHEME', 'https')
+HOST = os.getenv('HOST', 'foodate.ru')
+PARENT_HOST = HOST
+ALLOWED_HOSTS = [HOST, f'm.{HOST}', f'book.{HOST}']
 
 # Application definition
 
@@ -61,13 +61,12 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'app.urls'
 ROOT_HOSTCONF = 'foodate.hosts'
 DEFAULT_HOST = 'app'
-PARENT_HOST = 'foodate.ru'
 HOST_SCHEME = f'{SCHEME}://'
-SESSION_COOKIE_DOMAIN = '.foodate.ru'
-CSRF_TRUSTED_ORIGINS = [f'{SCHEME}://*.foodate.ru']
+SESSION_COOKIE_DOMAIN = f'.{HOST}'
+CSRF_TRUSTED_ORIGINS = [f'{SCHEME}://*.{HOST}']
 
 CORS_ALLOWED_ORIGINS = [
-    f'{SCHEME}://foodate.ru', f'{SCHEME}://m.foodate.ru', f'{SCHEME}://book.foodate.ru'
+    f'{SCHEME}://{HOST}', f'{SCHEME}://m.{HOST}', f'{SCHEME}://book.{HOST}'
 ]
 
 TEMPLATES = [
@@ -143,9 +142,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Auth
 
 AUTH_USER_MODEL = 'users.User'
-LOGIN_URL = f'{SCHEME}://{PARENT_HOST}/auth/login'
+LOGIN_URL = f'{SCHEME}://{HOST}/auth/login'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = f'{SCHEME}://{PARENT_HOST}/auth/login'
+LOGOUT_REDIRECT_URL = f'{SCHEME}://{HOST}/auth/login'
 AUTHENTICATION_BACKENDS = ['core.backends.EmailAuthBackend']
 
 # Email
@@ -181,7 +180,7 @@ EMAIL_MAIL_HTML = 'users/email_verification.html'
 EMAIL_MAIL_PLAIN = 'users/email_verification.txt'
 EMAIL_TOKEN_LIFE = 60 * 60
 EMAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
-EMAIL_PAGE_DOMAIN = f'{SCHEME}://foodate.ru'
+EMAIL_PAGE_DOMAIN = f'{SCHEME}://{HOST}'
 EMAIL_MULTI_USER = True
 
 

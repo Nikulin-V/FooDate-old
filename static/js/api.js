@@ -1,14 +1,26 @@
 // noinspection HttpUrlsUsage
 
 protocol = location.protocol;
-if (location.host.split('.').length === 2) {
-    subdomain = null;
-    host = location.host
+if (location.host.endsWith('dev.foodate.ru')) {
+    host = 'dev.foodate.ru'
+    if (location.host.split('.').length === 3) {
+        subdomain = null;
+    } else {
+        let location_data = location.host.split('.');
+        subdomain = location_data[0];
+    }
 } else {
-    let location_data = location.host.split('.');
-    subdomain = location_data[0];
-    host = location_data[1] + '.' + location_data[2];
+    if (location.host.split('.').length === 2) {
+        subdomain = null;
+        host = location.host
+    } else {
+        let location_data = location.host.split('.');
+        subdomain = location_data[0];
+        host = location_data[1] + '.' + location_data[2];
+    }
 }
+
+
 origin_ = `${protocol}//${host}`;
 api_origin = `${origin_}/api`;
 

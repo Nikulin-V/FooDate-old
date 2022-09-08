@@ -1,6 +1,6 @@
 from django import template
 
-from foodate.settings import HOST_SCHEME, PARENT_HOST, MEDIA_URL
+from foodate.settings import HOST_SCHEME, HOST, MEDIA_URL
 
 register = template.Library()
 
@@ -8,4 +8,4 @@ register = template.Library()
 @register.simple_tag
 def uploads(file_path):
     """Returns uploads link"""
-    return f'{HOST_SCHEME}{PARENT_HOST}/{MEDIA_URL}{file_path}'
+    return f'{HOST_SCHEME}{HOST}/{MEDIA_URL}{file_path}'
