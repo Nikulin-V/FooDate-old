@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load uploads %}
+{% load duration %}
+
+{% block title %}
+    {{ product.name }}
+{% endblock %}
+
+{% block content %}
+    <link href="{% static 'css/book/product.css' %}" rel="stylesheet">
+
+    <div class="container-fluid text-center">
+        <h3>{{ product.name }}</h3>
+        <hr>
+        <div class="row">
+            {% if product.image %}
+                <div class="col-6">
+                    <div class="row d-flex align-items-center h-50">
+                        <img src="{% uploads product.image %}" alt="{{ product.name }}"
+                         class="img-fluid product-img w-auto">
+                    </div>
+                    <div class="row"></div>
+                </div>
+            {% endif %}
+            <div class="col-6 mx-auto">
+                <table class="table table-hover">
+                    <tr>
+                        <td>Название</td>
+                        <td>{{ product.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Наименование</td>
+                        <td>{{ product.designation }}</td>
+                    </tr>
+                    {% if product.shelf_life %}
+                        <tr>
+                            <td>Срок годности</td>
+                            <td>{{ product.shelf_life|duration }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if product.shelf_life_after %}
+                        <tr>
+                            <td>Срок годности после вскрытия упаковки</td>
+                            <td>{{ product.shelf_life_opening }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if product.storage_temperature_unit %}
+                        {% if product.min_storage_temperature or product.max_storage_temperature %}
+                            <tr>
+                                <td>Температура хранения</td>
+                                <td>
+                                    <div class="row justify-content-center">
+                                        <div class="col"></div>
+                                        <div class="col text-end">
+                                            <span id="storage-temperature">
+                                                от {{ product.min_storage_temperature|floatformat }}
+                                                до {{ product.max_storage_temperature|floatformat }}
+                                            </span>
+                                        </div>
+                                        <div class="col-5 text-start" style="max-width: 85px">
+                                            {% include 'include/temperature_select.html' %}
+                                        </div>
+                                        <div class="col"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                    {% if product.energy_value %}
+                        <tr>
+                            <td>Энергетическая ценность</td>
+                            <td>
+                                <div class="row justify-content-center">
+                                    <div class="col"></div>
+                                    <div class="col text-end">
+                                        <span id="energy-value">
+                                            {{ product.energy_value|floatformat }}
+                                        </span>
+                                    </div>
+                                    <div class="col-5 text-start" style="max-width: 100px">
+                                        {% include 'include/energy_select.html' %}
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% if product.proteins %}
+                        <tr>
+                            <td>Белки</td>
+                            <td>{{ product.proteins|floatformat }} г.</td>
+                        </tr>
+                    {% endif %}
+                    {% if product.fats %}
+                        <tr>
+                            <td>Жиры</td>
+                            <td>{{ product.fats|floatformat }} г.</td>
+                        </tr>
+                    {% endif %}
+                    {% if product.carbohydrates %}
+                        <tr>
+                            <td>Углеводы</td>
+                            <td>{{ product.carbohydrates|floatformat }} г.</td>
+                        </tr>
+                    {% endif %}
+                    {% if product.composition %}
+                        <tr class="accordion" id="composition-example">
+                            <td class="align-top">
+                                Cостав
+                            </td>
+                            <td class="text-start">
+                                <p>{{ product.composition|capfirst }}</p>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            {% if photos %}
+                <h3>Фотографии</h3>
+                <div id="photosCarousel" class="carousel carousel-dark slide w-75 mt-3 mx-auto"
+                     data-ride="carousel" data-bs-keyboard="true" data-bs-interval="false">
+                    <ol class="carousel-indicators">
+                        <li data-bs-target="#photosCarousel"
+                            data-bs-slide-to="0"
+                            class="active"></li>
+                        {% for photo in photos %}
+                            <li data-bs-target="#photosCarousel"
+                                data-bs-slide-to="{{ forloop.counter }}"></li>
+                        {% endfor %}
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item w-100 h-75 active">
+                            <img src="{% uploads product.image %}"
+                                 class="img-fluid img-thumbnail w-100"
+                                 alt="{{ product.name }} №0">
+                        </div>
+                        {% for photo in photos %}
+                            <div class="carousel-item w-100 h-75">
+                                <img src="{% uploads photo.upload %}"
+                                     class="img-fluid img-thumbnail w-100"
+                                     alt="{{ product.name }} №{{ forloop.counter }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#photosCarousel" role="button"
+                       data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#photosCarousel" role="button"
+                       data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        let minStorageTemperature = '{{ product.min_storage_temperature }}';
+        let maxStorageTemperature = '{{ product.max_storage_temperature }}';
+        let storageTemperatureUnit = '{{ product.storage_temperature_unit }}';
+        let energyValue = '{{ product.energy_value }}';
+        let energyValueUnit = '{{ product.energy_value_unit }}'
+    </script>
+    <script type="text/javascript" src="{% static 'js/constants.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/book/product.js' %}"></script>
+{% endblock %}

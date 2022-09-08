@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Подтверждение email
+{% endblock %}
+
+{% block content %}
+    {% if success %}
+        <h4 class="text-apple text-center">
+            {{ user.username }}, ваша почта {{ user.email }} подтверждена!
+        </h4>
+        <p class="text-secondary small text-center">
+            Через <span id="timer"></span> секунд Вы будете перенаправлены на главную страницу.
+        </p>
+        <script>
+            setRedirectTimer('timer', '{% url 'home' %}', 5)
+        </script>
+    {% else %}
+        <h4 class="text-apple text-center">Время действия токена истекло. Попробуйте ещё раз</h4>
+    {% endif %}
+{% endblock %}

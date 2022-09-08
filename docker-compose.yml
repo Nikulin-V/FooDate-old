@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:445
+    ports:
+      - "445:445"
+    depends_on:
+      - db
+
+  db_and_uploads:
+    image: nouchka/sqlite3:latest
+    volumes:
+      - ./db.sqlite3:/code/db.sqlite3
+      - ./static/uploads:/code/uploads
+    environment:
+      - SQLITE3_DB=/code/db.sqlite3

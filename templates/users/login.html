@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% load user_agents %}
+
+{% block title %}
+    Вход
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/users/login.css' %}">
+    {% if request|is_mobile or request|is_tablet %}
+        {% include 'users/mobile/login.html' %}
+    {% else %}
+        {% include 'users/pc/login.html' %}
+    {% endif %}
+{% endblock %}

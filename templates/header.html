@@ -1,0 +1,49 @@
+{% load hosts %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+
+<header style="margin-top: 10px">
+    <nav class="nav justify-content-center">
+        <a class="navbar-brand d-flex" href="{% host_url 'home' host 'app' %}">
+            <img class="logo" src="{% static 'images/fav/android-chrome-512x512.png' %}"
+               alt="Logo" loading="lazy">
+            <span class="h4 mb-0 mt-2 ms-1 text-apple">FooDate</span>
+        </a>
+        <a class="nav-link" href="{% url 'home' host 'app' %}">
+            Главная
+        </a>
+        {% if user.is_authenticated %}
+            <a class="nav-link" href="{% url 'app' host 'app' %}">
+                Холодильник
+            </a>
+        {% endif %}
+        <a class="nav-link" href="{% url 'products' host 'book' %}">
+            Продукты
+        </a>
+        <a class="nav-link" href="{% url 'recipes' host 'book' %}">
+            Рецепты
+        </a>
+        {% if user.is_authenticated %}
+            {% if user.is_staff %}
+                <a class="nav-link" href="{% url 'admin:index' host 'app' %}">
+                    Панель администрирования
+                </a>
+            {% endif %}
+
+            <a class="nav-link" href="{% url 'profile' host 'app' %}">
+                Профиль
+            </a>
+            <a class="btn btn-outline-apple nav-btn" href="{% url 'logout' host 'app' %}">
+                Выйти
+            </a>
+        {% else %}
+            <a class="btn btn-outline-apple nav-btn" href="{% url 'login' host 'app' %}">
+                Вход
+            </a>
+            <a class="btn btn-outline-apple nav-btn" href="{% url 'signup' host 'app' %}">
+                Регистрация
+            </a>
+        {% endif %}
+    </nav>
+    <hr>
+</header>

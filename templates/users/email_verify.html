@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    {% if not email_verified %}
+        <h4 class="text-apple text-center">
+            Мы отправили письмо с подтверждением на Вашу почту {{ request.user.email }}
+        </h4>
+        <p class="text-secondary text-center">
+            Пожалуйста, подтвердите адрес своей электронной почты.
+            Это позволит Вам использовать её в качестве логина или
+            вернуть аккаунт, в случае утери пароля.
+        </p>
+
+        {% if email_link %}
+            <p class="text-secondary small text-center">
+                Через <span id="timer"></span> секунд Вы будете перенаправлены на {{ email_service }}.
+            </p>
+            <script>
+                setRedirectTimer('timer', '{{ email_link }}', 10)
+            </script>
+            <div class="text-center">
+                <a class="btn btn-outline-apple" href="{{ email_link }}">
+                    Перейти на {{ email_service }}
+                </a>
+            </div>
+        {% endif %}
+    {% else %}
+        <h4 class="text-apple text-center">
+            Ваша почта {{ request.user }} уже подтверждена!
+        </h4>
+    {% endif %}
+{% endblock %}

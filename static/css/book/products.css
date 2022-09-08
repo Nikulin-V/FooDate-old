@@ -1,0 +1,96 @@
+main {
+    width: 100%;
+}
+
+.form-file {
+    --bs-form-file-height: calc(1.5em + 0.75rem + 2px);
+    position: relative;
+}
+
+/*noinspection CssUnusedSymbol*/
+#id_image {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: var(--bs-form-file-height);
+    margin: 0;
+    opacity: 0;
+    overflow: visible;
+}
+
+.form-file-label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    height: var(--bs-form-file-height);
+    border-color: #ced4da;
+    border-radius: .25rem;
+}
+
+.form-file-text {
+    display: block;
+    flex-grow: 1;
+    padding: .375rem .75rem;
+    overflow: hidden;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: #fff;
+    border-color: inherit;
+    border-style: solid;
+    border-width: 1px;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+}
+
+.form-file-button {
+    display: block;
+    flex-shrink: 0;
+    padding: .375rem .75rem;
+    margin-left: -1px !important;
+    line-height: 1.5;
+    color: white;
+    background-color: #269926;
+    border-color: inherit;
+    border-style: solid;
+    border-width: 1px;
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+
+#productsAccordion > div {
+    position: sticky;
+    top: 10px;
+}
+
+#all-heading {
+    background-color: rgba(112, 198, 112, 0.2);
+}
+
+.product-card:hover {
+    border-color: #269926;
+    color: black;
+}
+
+.page-link {
+    color: #269926;
+}
+
+.page-link:hover {
+    color: #008500;
+}
+
+@media (max-device-width: 520px) {
+    .products-categories {
+        font-size: medium;
+    }
+
+    .form-control {
+        font-size: medium;
+    }
+}

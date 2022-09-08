@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% load range_ %}
+
+{% block title %}
+    Книга продуктов
+{% endblock %}
+
+{% load static %}
+{% load uploads %}
+{% block content %}
+    <link href="{% static 'css/book/products.css' %}" rel="stylesheet">
+    <div style="position: sticky; top: 0; height: 45px; max-height: 45px; background-color: white;
+        z-index: 99;">
+        <a href="/products">
+            <h4 class="text-apple text-center h-100 m-0 pt-1">Книга продуктов</h4>
+        </a>
+        <hr class="m-0 text-apple">
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- All products accordion -->
+            <div class="accordion my-1" id="productsAccordion">
+                <div class="card border-apple">
+                    <div class="card-header p-0" id="all-heading">
+                        <a class="btn btn-link btn-block text-left text-apple products-categories"
+                           type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#all-collapse"
+                                aria-expanded="true"
+                                aria-controls="all-collapse"
+                        ondblclick="location.href = '/products'">
+                            Все продукты
+                        </a>
+                    </div>
+
+                    <div id="all-collapse" class="collapse"
+                         aria-labelledby="all-heading"
+                         data-bs-parent="#productsAccordion">
+                        <div class="card-body p-0" id="categoriesAccordion">
+                            <ul class="list-group">
+                                {% for category, subcategories in categories.items %}
+                                    <li class="list-group-item p-0">
+                                        <div class="subcategory-card">
+                                            <div class="p-0" id="{{ category.slug }}-heading">
+                                                <a class="btn btn-link btn-block text-left
+                                                text-apple products-categories"
+                                                   type="button" data-bs-toggle="collapse"
+                                                   data-bs-target="#{{ category.slug }}-collapse"
+                                                   aria-expanded="true"
+                                                   aria-controls="{{ category.slug }}-collapse"
+                                                   ondblclick="location.href = '/products?category={{ category.slug }}'">
+                                                    {{ category.name }}
+                                                </a>
+                                            </div>
+
+                                            <div id="{{ category.slug }}-collapse"
+                                                 class="pb-1 collapse"
+                                                 aria-labelledby="{{ category.slug }}-heading"
+                                                 data-bs-parent="#categoriesAccordion">
+                                                <div>
+                                                    <ul class="text-apple">
+                                                        {% for subcategory in subcategories %}
+                                                            <li>
+                                                                <a href="?subcategory={{ subcategory.slug }}"
+                                                                class="text-apple products-categories">
+                                                                    {{ subcategory.name }}
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Search bar row -->
+        {% if user.is_authenticated %}
+            <div class="row ms-0 mr-0 mb-1 w-100 align-items-center">
+                <div class="col-10 px-0">
+                    <input class="form-control" id="searchbar" type="text"
+                           placeholder="Введите название продукта..." aria-label="Строка поиска">
+                </div>
+                <div class="col-1">
+                    <button type="submit" class="btn btn-apple px-2" onclick="search()">
+                        🔍
+                    </button>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-9">
+                <input class="form-control w-100" id="searchbar" type="text"
+                   placeholder="Введите название продукта..." aria-label="Строка поиска">
+            </div>
+            <div class="col-3">
+                <button type="submit" class="btn btn-apple w-100" onclick="search()">
+                    Найти продукт
+                </button>
+            </div>
+        {% endif %}
+        <!-- Product cards grid -->
+        <div class="row row-cols-2 row-cols-md-4 g-2">
+            {% for product in products %}
+                <div class="col">
+                    <!-- Product card -->
+                    <a class="card h-100 product-card" href="/products/{{ product.slug }}">
+                        <div class="h-100 d-flex align-items-center">
+                            {% if product.image %}
+                                <img src="{% uploads product.image %}"
+                                 class="card-img-top product-card-image img-fluid"
+                                     alt="{{ product.name }}">
+                            {% else %}
+                                <img src="{% static 'images/icons/no_food_image.png' %}"
+                                 class="card-img-top product-card-image img-fluid p-3"
+                                     alt="{{ product.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title text-center">{{ product.name }}</h6>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="col small d-flex flex-column align-items-center mt-5">
+                    По Вашему запросу ничего не нашлось :(
+                    <a class="btn btn-outline-apple mt-2" href="/products">
+                        Попробуйте сбросить фильтры
+                    </a>
+                </div>
+
+            {% endfor %}
+        </div>
+        <div class="row mt-5">
+            <!-- Pages navigation -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if current_page != 1 and pages != 0%}
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous"
+                               onclick="let page = parseInt(getUrlParameter('page'));
+                               openPage(page ? page - 1 : 1)">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for _ in pages|range_ %}
+                        <li class="page-item">
+                            <a class="page-link" href="#"
+                               {% if current_page == forloop.counter %}
+                                    style="background-color: rgba(112, 198, 112, 0.2)"
+                               {% else %}
+                                    onclick="openPage({{ forloop.counter }})"
+                               {% endif %}
+                            >{{ forloop.counter }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if current_page != pages and pages != 0 %}
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next"
+                               onclick="let page = parseInt(getUrlParameter('page'));
+                               openPage(page ? page + 1 : 1)">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <!-- Products per page number -->
+        <div class="text-center small">
+            <div class="row justify-content-center mb-1">
+                На странице:
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-20" value="20"
+                        {% if cards_per_page == 20 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-20">20</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-40" value="40"
+                        {% if cards_per_page == 40 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-40">40</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-60" value="60"
+                        {% if cards_per_page == 20 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-60">60</label>
+            </div>
+        </div>
+    </div>
+    <script>
+        const categorySlug = getUrlParameter('category');
+        const categoryCollapse = document.getElementById(categorySlug + '-collapse');
+        // noinspection JSUnusedGlobalSymbols
+        const bsCollapse = new bootstrap.Collapse(categoryCollapse, {
+            toggle: true
+        });
+    </script>
+    <script type="text/javascript" src="{% static 'js/searchbar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+{% endblock %}

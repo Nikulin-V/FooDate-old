@@ -1,0 +1,42 @@
+{% load hosts %}
+{% load static %}
+<footer class="text-center mt-auto py-3">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <hr>
+    <div class="container">
+        <div class="row my-3">
+            <div class="col mb-1">
+                <a href="mailto:foodate@yandex.ru" class="d-flex flex-column align-items-center">
+                    <img src="{% static 'images/icons/email.png' %}" class="icon" alt="E-mail">
+                    <span class="mt-2">foodate@yandex.ru</span>
+                </a>
+            </div>
+            <div class="col mb-1">
+                <a href="https://vk.com/foodate" class="d-flex flex-column align-items-center">
+                    <img src="{% static 'images/icons/vk.png' %}" class="icon" alt="Группа ВК">
+                    <span class="mt-2">vk.com/foodate</span>
+                </a>
+            </div>
+            <div class="col mb-1">
+                <a href="{% host_url 'privacy-policy' host 'app' %}"
+                   class="d-flex flex-column align-items-center">
+                    <img src="{% static 'images/icons/privacy_policy.png' %}" class="icon"
+                         alt="Группа ВК">
+                    <span class="mt-2">Политика конфиденциальности</span>
+                </a>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <a class="text-secondary small">
+                <span>© FooDate, 2022. Все права защищены.</span>
+            </a>
+        </div>
+        <div class="row">
+            <a class="text-secondary small"
+               href="https://www.flaticon.com/free-icons/app"
+               title="app icons">
+                <span>Some app icons created by Freepik - Flaticon</span>
+            </a>
+        </div>
+    </div>
+</footer>

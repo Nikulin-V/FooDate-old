@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load uploads %}
+{% load duration %}
+
+{% block title %}
+    {{ recipe.name }}
+{% endblock %}
+
+{% block content %}
+    <link href="{% static 'css/book/recipe.css' %}" rel="stylesheet">
+
+    <div style="position: sticky; top: 0; height: 45px; max-height: 45px;
+         background-color: white; z-index: 99;">
+        <h4 class="text-apple text-center h-100 m-0 pt-1">Рецепт</h4>
+        <hr class="m-0 text-apple">
+    </div>
+    <div class="container-fluid text-center">
+        {% if recipe.image %}
+            <div class="row d-flex align-items-center h-50">
+                <img src="{% uploads recipe.image %}" alt="{{ recipe.name }}"
+                 class="img-fluid recipe-img w-auto">
+            </div>
+        {% endif %}
+        <div class="row">
+            <table class="table table-hover small">
+                <tr>
+                    <td>Название</td>
+                    <td>{{ recipe.name }}</td>
+                </tr>
+                <tr>
+                    <td>Категория</td>
+                    <td>{{ recipe.category }}</td>
+                </tr>
+                {% if recipe.energy_value %}
+                    <tr>
+                        <td>Энергетическая ценность</td>
+                        <td>
+                            <div class="row justify-content-center align-items-center">
+                                <div class="col"></div>
+                                <div class="col text-end">
+                                    <span id="energy-value">
+                                        {{ recipe.energy_value|floatformat }}
+                                    </span>
+                                </div>
+                                <div class="col-5 text-start" style="max-width: 100px">
+                                    {% include 'include/energy_select.html' %}
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td colspan="2">
+                        <div class="text-center">Рецепт</div>
+                        <hr class="my-1 mx-auto">
+                        <div>{{ recipe.recipe.html|safe }}</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="row mt-2">
+            {% if photos %}
+                <h3>Фотографии</h3>
+                <div id="photosCarousel" class="carousel carousel-dark slide w-75 mt-3 mx-auto"
+                     data-ride="carousel" data-bs-keyboard="true" data-bs-interval="false">
+                    <ol class="carousel-indicators">
+                        <li data-bs-target="#photosCarousel"
+                            data-bs-slide-to="0"
+                            class="active"></li>
+                        {% for photo in photos %}
+                            <li data-bs-target="#photosCarousel"
+                                data-bs-slide-to="{{ forloop.counter }}"></li>
+                        {% endfor %}
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item w-100 active">
+                            <img src="{% uploads recipe.image %}"
+                                 class="img-fluid img-thumbnail w-100"
+                                 alt="{{ recipe.name }} №0">
+                        </div>
+                        {% for photo in photos %}
+                            <div class="carousel-item w-100">
+                                <img src="{% uploads photo.upload %}"
+                                     class="img-fluid img-thumbnail w-100"
+                                     alt="{{ recipe.name }} №{{ forloop.counter }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#photosCarousel" role="button"
+                       data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#photosCarousel" role="button"
+                       data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        let minStorageTemperature = '{{ recipe.min_storage_temperature }}';
+        let maxStorageTemperature = '{{ recipe.max_storage_temperature }}';
+        let storageTemperatureUnit = '{{ recipe.storage_temperature_unit }}';
+        let energyValue = '{{ recipe.energy_value }}';
+        let energyValueUnit = '{{ recipe.energy_value_unit }}'
+    </script>
+    <script type="text/javascript" src="{% static 'js/constants.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/book/recipe.js' %}"></script>
+{% endblock %}

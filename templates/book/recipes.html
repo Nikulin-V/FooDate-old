@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{% load hosts %}
+
+{% block title %}
+    Книга рецептов
+{% endblock %}
+
+{% load static %}
+{% load uploads %}
+{% load range_ %}
+{% block content %}
+    <link href="{% static 'css/book/recipes.css' %}" rel="stylesheet">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- All recipes accordion -->
+            <div class="col-3 accordion" id="recipesAccordion">
+                <div class="card border-apple">
+                    <!-- All recipes heading -->
+                    <div class="card-header p-0" id="all-heading"
+                         onclick="location.href = '/recipes?' + cardsPerPageQuery">
+                        <a class="btn btn-link btn-block text-left text-apple w-100" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#all-collapse"
+                                aria-expanded="true"
+                                aria-controls="all-collapse">
+                            Все рецепты
+                        </a>
+                    </div>
+                    <!-- Products subcategories accordion -->
+                    <div id="all-collapse" class="collapse show"
+                         aria-labelledby="all-heading"
+                         data-bs-parent="#recipesAccordion">
+                        <div class="card-body p-0" id="categoriesAccordion">
+                            <ul class="list-group">
+                                {% for category in categories %}
+                                    <li class="list-group-item p-0">
+                                        <div class="category-card">
+                                            <!-- Recipe category -->
+                                            <div class="p-0" id="{{ category.slug }}-heading"
+                                            onclick="location.href = '/recipes?category={{ category.slug }}&' + cardsPerPageQuery">
+                                                <a class="btn btn-link btn-block text-left
+                                                text-apple w-100"
+                                                   type="button" data-bs-toggle="collapse"
+                                                   data-bs-target="#{{ category.slug }}-collapse"
+                                                   aria-expanded="true"
+                                                   aria-controls="{{ category.slug }}-collapse">
+                                                    {{ category.name }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <!-- Search bar row -->
+                <div class="row mb-3">
+                    {% if user.is_authenticated %}
+                        <div class="col-7">
+                            <input class="form-control w-100" id="searchbar" type="text"
+                               placeholder="Введите название рецепта..." aria-label="Строка поиска">
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-apple w-100" onclick="search()">
+                                Найти рецепт
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-outline-apple w-100"
+                                    style="white-space: nowrap"
+                                    data-bs-toggle="modal" data-bs-target="#newRecipeModal">
+                                Добавить рецепт
+                            </button>
+                        </div>
+                    {% else %}
+                        <div class="col-9">
+                            <input class="form-control w-100" id="searchbar" type="text"
+                               placeholder="Введите название рецепта..." aria-label="Строка поиска">
+                        </div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-apple w-100" onclick="search()">
+                                Найти рецепт
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Product cards grid -->
+                <div class="row row-cols-1 row-cols-md-4 g-4">
+                    {% for recipe in recipes %}
+                        <div class="col">
+                            <!-- Product card -->
+                            <a class="card h-100 recipe-card" href="/recipes/{{ recipe.slug }}">
+                                <div class="h-100 d-flex align-items-center">
+                                    {% if recipe.image %}
+                                        <img src="{% uploads recipe.image %}"
+                                         class="card-img-top recipe-card-image img-fluid"
+                                             alt="{{ recipe.name }}">
+                                    {% else %}
+                                        <img src="{% static 'images/icons/no_food_image.png' %}"
+                                         class="card-img-top recipe-card-image img-fluid p-3"
+                                             alt="{{ recipe.name }}">
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center">{{ recipe.name }}</h6>
+                                </div>
+                            </a>
+                        </div>
+                    {% empty %}
+                        <div class="w-100">
+                            По Вашему запросу ничего не нашлось :(
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <!-- Pages navigation -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if current_page != 1 and pages != 0%}
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous"
+                               onclick="let page = parseInt(getUrlParameter('page'));
+                               openPage(page ? page - 1 : 1)">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for _ in pages|range_ %}
+                        <li class="page-item">
+                            <a class="page-link" href="#"
+                               {% if current_page == forloop.counter %}
+                                    style="background-color: rgba(112, 198, 112, 0.2)"
+                               {% else %}
+                                    onclick="openPage({{ forloop.counter }})"
+                               {% endif %}
+                            >{{ forloop.counter }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if current_page != pages and pages != 0 %}
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next"
+                               onclick="let page = parseInt(getUrlParameter('page'));
+                               openPage(page ? page + 1 : 1)">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <!-- Products per page number -->
+        <div class="text-center small">
+            <div class="row justify-content-center mb-1">
+                На странице:
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-20" value="20"
+                        {% if cards_per_page == 20 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-20">20</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-40" value="40"
+                        {% if cards_per_page == 40 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-40">40</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                       id="cardsPerPage-60" value="60"
+                        {% if cards_per_page == 20 %}
+                            checked
+                        {% endif %}>
+                <label class="form-check-label" for="cardsPerPage-60">60</label>
+            </div>
+        </div>
+    </div>
+    <!-- New recipe card modal -->
+    {% if user.is_authenticated %}
+        <div class="modal fade" id="newRecipeModal"
+             data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="newProductCardModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center mx-auto" id="newProductCardModalLabel">
+                            Добавить рецепт
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                style="margin-left: 0"
+                                aria-label="Close"></button>
+                    </div>
+                    <form method="post" id="newProductCardForm" class="modal-form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-body mx-auto text-center w-75">
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.category.label_tag }}
+                                </div>
+                                <div class="col">
+                                    {{ form.category }}
+                                </div>
+                                {{ form.category.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.name.label_tag }}
+                                </div>
+                                <div class="col">
+                                    {{ form.name }}
+                                </div>
+                                {{ form.name.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="row mb-3">
+                                    {{ form.recipe.label_tag }}
+                                </div>
+                                <div class="row" id="recipe_editor">
+                                    {{ form.recipe }}
+                                </div>
+                                {{ form.recipe.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.energy_value.label_tag }}
+                                </div>
+                                <div class="col-6 d-flex align-center justify-content-center">
+                                    {{ form.energy_value }}
+                                    <span class="mx-2"></span>{{ form.energy_value_unit }}
+                                </div>
+                                {{ form.energy_value.errors}}
+                                {{ form.energy_value_unit.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.people_count.label }}
+                                </div>
+                                <div class="col">
+                                    {{ form.people_count }}
+                                </div>
+                                {{ form.people_count.errors }}
+                            </div>
+                            <div class="row align-center justify-content-center">
+                                <div class="form-file">
+                                    {{ form.image }}
+                                    <label class="form-file-label"
+                                           for="id_image">
+                                        <span class="form-file-text">Изображение рецепта</span>
+                                        <span class="form-file-button">Загрузить</span>
+                                    </label>
+                                </div>
+                                {{ form.image.errors }}
+                            </div>
+                            <div>
+                                {{ form.captcha }}
+                                {{ form.captcha.errors }}
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="submit" class="btn btn-apple">Сохранить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- New recipe card saving notification -->
+        {% if saved == True %}
+            <div class="modal fade" id="notificationModal" tabindex="-1"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Рецепт создан</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Созданный Вами рецепт отправлен на проверку модераторам.
+                            Скоро он появится в списке рецептов.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-apple"
+                                    data-bs-dismiss="modal">Хорошо</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                let notificationModal = new bootstrap.Modal(
+                    document.getElementById('notificationModal'), {
+                    keyboard: false
+                });
+                notificationModal.show()
+            </script>
+        {% elif saved == False %}
+            <script>
+                let newRecipeModal = new bootstrap.Modal(
+                    document.getElementById('newRecipeModal'), {
+                    keyboard: false
+                });
+                newRecipeModal.show()
+            </script>
+        {% endif %}
+        <script>
+            $('#id_image').on('change', function(){
+                let filePath = $(this).val().split('\\');
+                $('.form-file-text').html(filePath[filePath.length - 1]);
+            })
+        </script>
+    {% endif %}
+    <script>
+        const categorySlug = getUrlParameter('category');
+        const categoryCollapse = document.getElementById(categorySlug + '-collapse');
+        // noinspection JSUnusedGlobalSymbols
+        const bsCollapse = new bootstrap.Collapse(categoryCollapse, {
+            toggle: true
+        });
+    </script>
+    <script type="text/javascript" src="{% static 'js/searchbar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+{% endblock %}
