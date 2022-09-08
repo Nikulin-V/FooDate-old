@@ -10,6 +10,8 @@ from core.middleware import get_token
 
 
 class HomeView(View):
+    """Home page"""
+
     template = 'app/homepage.html'
     mobile_reverse = reverse_lazy('home', host='app_mobile')
 
@@ -19,6 +21,8 @@ class HomeView(View):
 
 
 class AppView(LoginRequiredMixin, View):
+    """Fridge page"""
+
     template = 'app/app.html'
     form = NewProductForm
     mobile_reverse = reverse_lazy('app', host='app_mobile')
@@ -58,6 +62,8 @@ class AppView(LoginRequiredMixin, View):
 
 
 class PrivacyPolicyView(View):
+    """Privacy policy page"""
+
     template = 'app/privacy-policy.html'
     mobile_reverse = reverse_lazy('privacy-policy', host='app_mobile')
 

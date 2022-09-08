@@ -13,9 +13,7 @@ from core.models import PublishedBaseModel, PhotoBaseModel, NameSlugBaseModel
 
 class ProductCategoryManager(models.Manager):
     def get_active(self):
-        """
-        Returns dictionary with category if it has active subcategories as key and its subcategories
-        """
+        """Returns dictionary with category if it has active subcategories as key and its subcategories"""
         active_categories = (
             self.get_queryset().filter(subcategories__product_cards__is_published=True)
         )
@@ -26,6 +24,8 @@ class ProductCategoryManager(models.Manager):
 
 
 class ProductCategory(NameSlugBaseModel):
+    """Category of products subcategories"""
+
     categories = ProductCategoryManager()
 
     name = models.CharField('Название', max_length=255, unique=True)
@@ -39,13 +39,13 @@ class ProductCategory(NameSlugBaseModel):
 
 class ProductSubcategoryManager(models.Manager):
     def get_active(self, category):
-        """
-        Returns list with subcategories from category with published ProductCards
-        """
+        """Returns list with subcategories from category with published ProductCards"""
         return set(self.get_queryset().filter(category=category, product_cards__is_published=True))
 
 
 class ProductSubcategory(NameSlugBaseModel):
+    """Subcategory of product cards"""
+
     subcategories = ProductSubcategoryManager()
 
     name = models.CharField('Название', max_length=255, unique=True)
@@ -64,9 +64,16 @@ class ProductSubcategory(NameSlugBaseModel):
 
 class ProductCardManager(models.Manager):
     def get_published(self):
+        """Returns published product cards"""
         return self.get_queryset().filter(is_published=True)
 
     def search(self, search):
+        """
+        Returns product cards based on search string
+
+        :param search: search string
+        :return: QuerySet of Product cards
+        """
         return self.get_published().filter(
             Q(name__iregex=search) or Q(slug__iregex=search) or
             Q(designation__iregex=search) or Q(subcategory__category__name__iregex=search)
@@ -75,6 +82,8 @@ class ProductCardManager(models.Manager):
 
 
 class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
+    """Model of product card which contains info about product"""
+
     cards = ProductCardManager()
 
     designation = models.CharField('Наименование', max_length=255)
@@ -170,6 +179,8 @@ class ProductCard(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
 
 
 class ProductPhoto(PublishedBaseModel):
+    """Model of product photo"""
+
     upload = models.ImageField(upload_to='products/gallery', null=True, blank=True)
     product = models.ForeignKey(ProductCard, verbose_name='Продукт', on_delete=models.CASCADE)
 
@@ -192,6 +203,8 @@ class RecipeCategoryManager(models.Manager):
 
 
 class RecipeCategory(NameSlugBaseModel):
+    """Category of recipes"""
+
     categories = RecipeCategoryManager()
 
     name = models.CharField('Название', max_length=255, unique=True)
@@ -208,6 +221,7 @@ class RecipeCategory(NameSlugBaseModel):
 
 class RecipeManager(models.Manager):
     def get_published(self):
+        """Returns published recipes"""
         return self.get_queryset().filter(is_published=True)
 
     def get_recipes(self, search=None):
@@ -223,6 +237,8 @@ class RecipeManager(models.Manager):
 
 
 class Recipe(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
+    """Model of recipe which contains info about recipe"""
+
     recipes = RecipeManager()
 
     name = models.CharField('Название', max_length=255, unique=True)
@@ -277,6 +293,8 @@ class Recipe(NameSlugBaseModel, PublishedBaseModel, PhotoBaseModel):
 
 
 class RecipePhoto(PublishedBaseModel):
+    """Model of recipe photo"""
+
     upload = models.ImageField(upload_to='recipes/gallery', null=True, blank=True)
     recipe = models.ForeignKey(Recipe, verbose_name='Рецепт', on_delete=models.CASCADE)
 

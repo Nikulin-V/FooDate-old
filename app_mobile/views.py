@@ -10,6 +10,8 @@ from core.middleware import get_token
 
 
 class HomeView(View):
+    """Mobile home page"""
+
     template = 'app_mobile/homepage.html'
     pc_reverse = reverse_lazy('home', host='app')
 
@@ -19,6 +21,8 @@ class HomeView(View):
 
 
 class AppView(LoginRequiredMixin, View):
+    """Mobile fridge page"""
+
     template = 'app_mobile/app.html'
     form = NewProductForm
     pc_reverse = reverse_lazy('app', host='app')
@@ -30,7 +34,6 @@ class AppView(LoginRequiredMixin, View):
             'token': get_token(),
             'saved': saved
         }
-
         return render(request, self.template, context)
 
     @pc_redirect(pc_reverse)
@@ -58,6 +61,8 @@ class AppView(LoginRequiredMixin, View):
 
 
 class PrivacyPolicyView(View):
+    """Mobile privacy policy page"""
+
     template = 'app_mobile/privacy-policy.html'
     pc_reverse = reverse_lazy('privacy-policy', host='app')
 

@@ -8,6 +8,8 @@ from foodate.settings import TIME_ZONE
 
 
 class BiggerThanValidator(BaseValidator):
+    """Validates that field value is bigger than limit_value"""
+
     def __init__(self, limit_value):
         self.limit_value = limit_value
         self.message = f'Убедитесь, что это значение больше {self.limit_value}'
@@ -18,6 +20,7 @@ class BiggerThanValidator(BaseValidator):
 
 
 def date_in_past(value: datetime.datetime):
+    """Validates that field date value is in past"""
     time_zone = pytz.timezone(TIME_ZONE)
     message = 'Убедитесь, что эти дата и время раньше или равны текущим'
     if value.astimezone(time_zone) > datetime.datetime.now().astimezone(time_zone):

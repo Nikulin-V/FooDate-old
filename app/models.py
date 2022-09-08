@@ -17,6 +17,8 @@ class ProductManager(models.Manager):
 
 
 class Product(models.Model):
+    """User's product model"""
+
     products = ProductManager()
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_user)

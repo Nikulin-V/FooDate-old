@@ -9,6 +9,7 @@ morph = pymorphy2.MorphAnalyzer()
 
 @register.filter
 def duration(duration_date_time: datetime.timedelta):
+    """Converts datetime.timedelta to human readable format"""
     d = duration_date_time
     hours = d.seconds // 3600
     minutes = d.seconds // 60 % 60
