@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="ru" class="h-100">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}FooDate{% endblock %}</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}FooDate{% endblock %}</title>
+    <meta name="description" content="{% block description %}{% endblock %}">
 
-        {% include 'include/yandex_metrica.html' %}
+    {% include 'include/yandex_metrica.html' %}
 
-        <meta property="og:type" content="website">
-        <meta property="og:title" content="FooDate">
-        <meta property="og:description" content="😋 Держите еду под контролем!">
-        <meta property="og:url" content="https://foodate.ru">
-        <meta property="og:image" content="https://foodate.ru/static/images/logo/Preview.png">
-        <meta property="og:site_name" content="FooDate">
-        <meta property="og:locale" content="ru_RU">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="FooDate">
+    <meta property="og:description" content="😋 Держите еду под контролем!">
+    <meta property="og:url" content="https://foodate.ru">
+    <meta property="og:image" content="https://foodate.ru/static/images/logo/Preview.png">
+    <meta property="og:site_name" content="FooDate">
+    <meta property="og:locale" content="ru_RU">
 
         {% load static %}
         <script>
