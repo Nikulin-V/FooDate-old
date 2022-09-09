@@ -1,6 +1,13 @@
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path
 
+from book.sitemaps import BookViewSitemap
 from book.views import HomeView, ProductsView, RecipesView, ProductView, RecipeView
+from core.views import robots_txt
+
+sitemaps = {
+    'book': BookViewSitemap
+}
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -8,4 +15,7 @@ urlpatterns = [
     path('products/<str:product_slug>', ProductView.as_view(), name='product'),
     path('recipes/', RecipesView.as_view(), name='recipes'),
     path('recipes/<str:recipe_slug>', RecipeView.as_view(), name='recipe'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', robots_txt),
 ]
