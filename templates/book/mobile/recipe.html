@@ -7,6 +7,10 @@
     {{ recipe.name }}
 {% endblock %}
 
+{% block description %}
+    Информация о рецепте "{{ recipe.name }}".
+{% endblock %}
+
 {% block content %}
     <link href="{% static 'css/book/recipe.css' %}" rel="stylesheet">
 

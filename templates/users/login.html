@@ -6,6 +6,10 @@
     Вход
 {% endblock %}
 
+{% block description %}
+    Вход в аккаунт FooDate
+{% endblock %}
+
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/users/login.css' %}">
     {% if request|is_mobile or request|is_tablet %}
