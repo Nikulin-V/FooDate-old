@@ -1,4 +1,4 @@
-name: Docker Image CI/CD
+name: Development Docker Image CI/CD
 
 on:
   push:
@@ -30,16 +30,16 @@ jobs:
         docker push ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
 
   deploy:
-    needs: [test, build]
+    needs: [ test, build ]
     runs-on: self-hosted
     environment:
       name: development
-      url: https://foodate.ru
+      url: https://dev.foodate.ru
     steps:
-    - uses: actions/checkout@v1
-    - name: Deploy to foodate.ru
-      run: |
-        docker login -u gitlab-ci-token -p ${{ secrets.GITLAB_TOKEN }} ${{ secrets.GITLAB_URL }}
-        docker pull ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
-        docker rm -f foodate || true
-        docker run -d -p 445:445 --name foodate --env DEBUG=${{ secrets.DEBUG }} --env SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}' --env EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} --env EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} -v /home/vasil1y/apps/foodate/db.sqlite3:/code/db.sqlite3 -v /home/vasil1y/apps/foodate/uploads:/code/uploads ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
+      - uses: actions/checkout@v1
+      - name: Deploy to dev.foodate.ru
+        run: |
+          docker login -u gitlab-ci-token -p ${{ secrets.GITLAB_TOKEN }} ${{ secrets.GITLAB_URL }}
+          docker pull ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
+          docker rm -f dev.foodate || true
+          docker run -d -p 446:446 --name dev.foodate --env DEBUG=${{ secrets.DEBUG }} --env SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}' --env HOST=${{ secrets.HOST }} --env SCHEME=${{ secrets.SCHEME }} --env EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} --env EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} -v /home/vasil1y/apps/dev_foodate/db.sqlite3:/code/db.sqlite3 -v /home/vasil1y/apps/dev_foodate/uploads:/code/uploads ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID

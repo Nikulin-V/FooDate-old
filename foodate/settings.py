@@ -10,11 +10,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
-
 DEBUG = os.getenv('DEBUG', False) in ('1', 'True', 'true', 'T', 't')
-SCHEME = 'http'
-
-ALLOWED_HOSTS = ['foodate.tk', 'm.foodate.tk', 'book.foodate.tk']
+SCHEME = os.getenv('SCHEME', 'https')
+HOST = os.getenv('HOST', 'foodate.ru')
+PARENT_HOST = HOST
+ALLOWED_HOSTS = [HOST, f'm.{HOST}', f'book.{HOST}']
 
 # Application definition
 
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sitemaps',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_hosts',
@@ -61,13 +62,12 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'app.urls'
 ROOT_HOSTCONF = 'foodate.hosts'
 DEFAULT_HOST = 'app'
-PARENT_HOST = 'foodate.tk'
 HOST_SCHEME = f'{SCHEME}://'
-SESSION_COOKIE_DOMAIN = '.foodate.tk'
-CSRF_TRUSTED_ORIGINS = [f'{SCHEME}://*.foodate.tk']
+SESSION_COOKIE_DOMAIN = f'.{HOST}'
+CSRF_TRUSTED_ORIGINS = [f'{SCHEME}://*.{HOST}']
 
 CORS_ALLOWED_ORIGINS = [
-    f'{SCHEME}://foodate.tk', f'{SCHEME}://m.foodate.tk', f'{SCHEME}://book.foodate.tk'
+    f'{SCHEME}://{HOST}', f'{SCHEME}://m.{HOST}', f'{SCHEME}://book.{HOST}'
 ]
 
 TEMPLATES = [
@@ -143,9 +143,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Auth
 
 AUTH_USER_MODEL = 'users.User'
-LOGIN_URL = f'{SCHEME}://{PARENT_HOST}/auth/login'
+LOGIN_URL = f'{SCHEME}://{HOST}/auth/login'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = f'{SCHEME}://{PARENT_HOST}/auth/login'
+LOGOUT_REDIRECT_URL = f'{SCHEME}://{HOST}/auth/login'
 AUTHENTICATION_BACKENDS = ['core.backends.EmailAuthBackend']
 
 # Email
@@ -181,20 +181,9 @@ EMAIL_MAIL_HTML = 'users/email_verification.html'
 EMAIL_MAIL_PLAIN = 'users/email_verification.txt'
 EMAIL_TOKEN_LIFE = 60 * 60
 EMAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
-EMAIL_PAGE_DOMAIN = f'{SCHEME}://foodate.tk'
+EMAIL_PAGE_DOMAIN = f'{SCHEME}://{HOST}'
 EMAIL_MULTI_USER = True
 
-# User Agents
-#
-#
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-#         'LOCATION': '0.0.0.0:11211',
-#     }
-# }
-#
-# USER_AGENTS_CACHE = 'default'
 
 # hCaptcha
 

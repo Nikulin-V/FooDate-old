@@ -7,6 +7,10 @@
     Регистрация
 {% endblock %}
 
+{% block description %}
+    Создайте аккаунт на FooDate и готовьте с умом!
+{% endblock %}
+
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/users/signup.css' %}">
     {% if request|is_mobile or request|is_tablet %}

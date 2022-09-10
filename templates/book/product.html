@@ -7,6 +7,10 @@
     {{ product.name }}
 {% endblock %}
 
+{% block description %}
+    Информация о продукте "{{ product.name }}".
+{% endblock %}
+
 {% block content %}
     <link href="{% static 'css/book/product.css' %}" rel="stylesheet">
 
