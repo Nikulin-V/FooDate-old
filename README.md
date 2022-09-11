@@ -1,28 +1,46 @@
-<!--suppress CheckImageSize -->
-<div style="width: 75%;max-width: 700px;margin: auto">
-    <div style="width: 100vw;margin: auto;display: flex; align-items: center;">
-        <img src="static/images/logo/Preview.png" width="100" height="100" alt="Logo">
-        <span style="font-size: xxx-large;margin-left: 10px;color: #269926;">FooDate</span>
-    </div>
-    <p style="font-size: larger">
-        FooDate is not just a web application, it is your opportunity to reduce food costs and to help in 
-        the fight against world hunger.
-    </p>
-    <p style="text-align: center;font-size: larger">
-        Every year in the world, almost <br> 
-        <span style="color: #269926">1 billion tons of food</span> is sent to waste.
-    </p>
-    <a href="https://foodate.ru">
-        <div style="background-color: #269926;width: 200px;height: 50px;color: white;text-align: center;font-size: x-large;
-                    border: 5px solid #008500; border-radius: 30px;margin: auto">
-            Open FooDate
-        </div>
+
+<div style="text-align:center">
+    <a href="https://FooDate.ru">
+        <img src="static/images/logo/title-with-logo.png"  alt="Logo" title="FooDate" width="384" height="112"/>
     </a>
-    <p style="font-size: larger">
-        This app will help you keep track of the contents of your fridge: shelf life, energy value, etc.
-        It will help you make a shopping list and even advise what you can cook.
-    </p>
-    <p style="font-size: larger">
-        We are what we eat. Control yourself!
-    </p>
 </div>
+
+
+[FooDate](https://FooDate.ru) is not just a web application, 
+it is your opportunity to reduce food costs and free up time from cooking.
+
+We can make cooking more pleasant!
+
+<div style="text-align:center">
+    <a href="https://FooDate.ru">
+        <img src="static/images/logo/open-button.png"  alt="Open FooDate button" title="Open FooDate" width="200" height="65"/>
+    </a>
+</div>
+
+This app will help you keep track of the contents of your fridge: shelf life, energy value, etc. It will help you make a shopping list and even advise what you can cook.
+
+We are what we eat. Control yourself!
+
+
+
+
+## You can
+
+- Track the contents of the refrigerator and monitor the shelf life of products
+- Make a permanent list of necessary products and always know what you need to buy
+- Monitor the calorie and nutritional content of products
+- Cook according to recipes suggested based on the contents of the refrigerator
+
+
+## Authors
+
+- [Vasiliy Nikulin](https://www.github.com/vasil1y-777)
+- [Kirill Kozhevnikov](https://github.com/Kirill439867398256)
+- [Viktor Zhikharev](https://github.com/kvasoslave)
+- [Vsewolod Pritchin](https://github.com/Vsewolod)
+- [Vasiliy Abakshin](https://github.com/Ne-Vasiliy965)
+
+## Feedback
+
+If you have any feedback, please reach out to us at foodate@ya.ru
+
