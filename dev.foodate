@@ -1,23 +1,24 @@
 server {
-   listen 446;
-   listen [::]:446;
-   server_name dev.foodate.ru www.dev.foodate.ru;
-   root /code/www;
+    listen 446;
+    listen [::]:446;
+    server_name dev.foodate.ru www.dev.foodate.ru;
+    root /code/www;
+    daemon off;
 
-   location / {
-       uwsgi_pass unix:///run/uwsgi/app/django/socket;
-       include uwsgi_params;
-       uwsgi_read_timeout 300s;
-       client_max_body_size 32m;
-   }
+    location / {
+        uwsgi_pass unix:///run/uwsgi/app/django/socket;
+        include uwsgi_params;
+        uwsgi_read_timeout 300s;
+        client_max_body_size 32m;
+    }
 
-   location /static/ {
-       autoindex on;
-       alias /code/www/static/;
-   }
+    location /static/ {
+        autoindex on;
+        alias /code/www/static/;
+    }
 
-   location /uploads/ {
-       autoindex on;
-       alias /code/www/uploads/;
-   }
+    location /uploads/ {
+        autoindex on;
+        alias /code/www/uploads/;
+    }
 }
