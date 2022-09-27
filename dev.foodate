@@ -10,10 +10,10 @@ server {
    }
 
    location /static/ {
-      alias ${{ secrets.STATIC_ROOT }}/;
+      alias /code/www/static/;
    }
 
-   location /media/ {
-       alias ${{ secrets.MEDIA_ROOT }}/;
+   location /uploads/ {
+       alias /code/www/uploads/;
    }
 }
