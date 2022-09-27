@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'foodate.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.getenv('DB_ROOT', str(BASE_DIR / 'db.sqlite3')),
+        'NAME': os.getenv('DB_ROOT', BASE_DIR / 'db.sqlite3'),
     }
 }
 
@@ -132,8 +132,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.getenv('STATIC_ROOT', BASE_DIR / 'www/')
-STATICFILES_DIRS = (BASE_DIR / 'static')
+STATIC_ROOT = os.getenv('STATIC_ROOT', BASE_DIR / 'www')
+STATICFILES_DIRS = (BASE_DIR / 'static',)
 MEDIA_URL = 'uploads/'
 MEDIA_ROOT = os.getenv('MEDIA_ROOT', BASE_DIR / 'uploads')
 
