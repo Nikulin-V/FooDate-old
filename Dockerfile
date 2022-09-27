@@ -1,5 +1,9 @@
-FROM python:3-alpine
+FROM tiangolo/uwsgi-nginx
 MAINTAINER Nikulin Vasily 'nikulin.vasily.777@ya.ru'
+
+ENV UWSGI_INI /code/django.ini
+COPY dev.foodate /etc/nginx/sites-enabled
+CMD service nginx restart
 
 WORKDIR /code
 COPY requirements.txt /code

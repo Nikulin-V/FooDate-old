@@ -1,0 +1,19 @@
+server {
+   listen 446;
+   server_name dev.foodate.ru;
+
+   location / {
+       uwsgi_pass unix:///run/uwsgi/app/django/socket;
+       include uwsgi_params;
+       uwsgi_read_timeout 300s;
+       client_max_body_size 32m;
+   }
+
+   location /static/ {
+      alias ${{ secrets.STATIC_ROOT }}/;
+   }
+
+   location /media/ {
+       alias ${{ secrets.MEDIA_ROOT }}/;
+   }
+}
