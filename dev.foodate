@@ -3,7 +3,6 @@ server {
     listen [::]:446;
     server_name dev.foodate.ru www.dev.foodate.ru;
     root /code/www;
-    daemon off;
 
     location / {
         uwsgi_pass unix:///run/uwsgi/app/django/socket;

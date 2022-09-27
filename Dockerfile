@@ -12,6 +12,6 @@ COPY . /code
 
 EXPOSE 446
 
-CMD service nginx restart
+CMD ["nginx", "-g", "daemon off;"]
 CMD python manage.py migrate && python manage.py collectstatic --no-input
 CMD uwsgi --ini dev.foodate.ini
