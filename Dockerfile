@@ -1,7 +1,7 @@
 FROM tiangolo/uwsgi-nginx
 MAINTAINER Nikulin Vasily 'nikulin.vasily.777@ya.ru'
 
-ENV UWSGI_INI /code/django.ini
+ENV UWSGI_INI /code/dev.foodate.ini
 COPY dev.foodate /etc/nginx/sites-enabled
 CMD service nginx restart
 
