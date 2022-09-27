@@ -14,4 +14,4 @@ COPY . /code
 EXPOSE 446
 
 CMD python manage.py migrate && python manage.py collectstatic --no-input
-CMD uwsgi --ini django.ini
+CMD uwsgi --ini dev.foodate.ini
