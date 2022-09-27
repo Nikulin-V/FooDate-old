@@ -50,7 +50,7 @@ jobs:
           --env SCHEME=${{ secrets.SCHEME }} \
           --env STATIC_ROOT=${{ secrets.STATIC_ROOT }} \
           --env MEDIA_ROOT=${{ secrets.MEDIA_ROOT }} \
-          --env DB_ROOT=${{ secrets.DB_ROOT }} \
           --env EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} \
           --env EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} \
+          -v ${{ secrets.DB_ROOT }}:/code/db.sqlite3 \
           ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
