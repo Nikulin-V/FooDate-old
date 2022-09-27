@@ -1,6 +1,8 @@
 server {
    listen 446;
-   server_name dev.foodate.ru;
+   listen [::]:446;
+   server_name dev.foodate.ru www.dev.foodate.ru;
+   root /code/www;
 
    location / {
        uwsgi_pass unix:///run/uwsgi/app/django/socket;
