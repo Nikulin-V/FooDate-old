@@ -9,4 +9,5 @@ COPY . /code
 
 EXPOSE 446
 
-CMD python manage.py migrate && python manage.py collectstatic --no-input && python manage.py runserver 0.0.0.0:446 --insecure
+CMD python manage.py migrate && python manage.py collectstatic --no-input
+CMD uwsgi --ini django.ini
