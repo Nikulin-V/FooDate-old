@@ -1,7 +1,7 @@
 server {
-    listen 446;
+    listen 446 default;
     listen [::]:446;
-    server_name dev.foodate.ru www.dev.foodate.ru;
+    server_name dev.foodate.ru book.dev.foodate m.dev.foodate www.dev.foodate.ru www.book.dev.foodate www.m.dev.foodate;
     root /code/www;
 
     location / {

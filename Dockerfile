@@ -2,7 +2,7 @@ FROM tiangolo/uwsgi-nginx
 MAINTAINER Nikulin Vasily 'nikulin.vasily.777@ya.ru'
 
 ENV UWSGI_INI /code/dev.foodate.ini
-COPY dev.foodate /etc/nginx/sites-enabled
+COPY dev.foodate.nginxconf /etc/nginx/sites-enabled
 
 WORKDIR /code
 COPY requirements.txt /code
@@ -13,4 +13,4 @@ COPY . /code
 EXPOSE 446
 
 CMD python manage.py migrate && python manage.py collectstatic --no-input
-CMD uwsgi --ini dev.foodate.ini
+CMD gunicorn /code/foodate/wsgi.py:application --bind 0.0.0.0:446
