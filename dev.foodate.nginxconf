@@ -12,11 +12,10 @@ server {
     }
 
     location /static/ {
-        autoindex on;
-        alias /var/dev.foodate/www/static/;
+        alias /code/www/static/;
     }
 
     location /uploads/ {
-        alias /home/vasil1y/apps/dev_foodate/uploads/;
+        alias /code/www/uploads/;
     }
 }
