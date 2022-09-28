@@ -17,7 +17,6 @@ server {
     }
 
     location /uploads/ {
-        autoindex on;
         alias /home/vasil1y/apps/dev_foodate/uploads/;
     }
 }
