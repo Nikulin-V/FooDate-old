@@ -13,4 +13,4 @@ COPY . /code
 EXPOSE 446
 
 CMD python manage.py migrate && python manage.py collectstatic --no-input
-CMD sudo venv/bin/gunicorn foodate.wsgi:application --bind 0.0.0.0:446
+CMD gunicorn foodate.wsgi:application --bind 0.0.0.0:446
