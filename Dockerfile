@@ -1,16 +1,18 @@
-FROM tiangolo/uwsgi-nginx
+FROM python:3.9-alpine
 MAINTAINER Nikulin Vasily 'nikulin.vasily.777@ya.ru'
 
-ENV UWSGI_INI /code/dev.foodate.ini
-COPY dev.foodate.nginxconf /etc/nginx/sites-enabled
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBEFFERED 1
 
 WORKDIR /code
+
+RUN apk --update add
+RUN pip install --upgrade pip
+
 COPY requirements.txt /code
 RUN pip install -r requirements.txt
 
-COPY . /code
-
-EXPOSE 446
+COPY . .
 
 CMD python manage.py migrate && python manage.py collectstatic --no-input
-CMD gunicorn foodate.wsgi:application --bind 0.0.0.0:446
+CMD python manage.py runserver 0.0.0.0:446 --insecure
