@@ -1,33 +1,21 @@
 version: "3.9"
 
 services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx_dev.foodate
-    ports:
-      - "446:446"
-    volumes:
-      - ./dev.foodate:/etc/nginx/sites-enabled/dev.foodate
-      - /var/www/foodate.ru/static:/static
-      - /home/vasil1y/apps/dev.foodate/uploads:/uploads
-    depends_on:
-      - web
-
   web:
-    build: .
-    container_name: dev.foodate
-    command: python manage.py migrate && \
-      python manage.py collectstatic --no-input && \
-      uwsgi --ini dev.foodate.ini
+    container_name: foodate
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
     volumes:
-      - /var/www/foodate.ru/static:/www/static
-      - /home/vasil1y/apps/dev.foodate/uploads:/www/uploads
+      - /var/www/foodate.ru/static:/code/www/static
+      - /home/vasil1y/apps/foodate/uploads:/code/www/uploads
     depends_on:
       - db
-    expose:
-      - "446"
 
   db:
+    container_name: dev.db
     image: nouchka/sqlite3:latest
     volumes:
       - /home/vasil1y/apps/dev.foodate/db.sqlite3:/code/db.sqlite3
