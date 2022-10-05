@@ -1,4 +1,4 @@
-name: Development Docker Image CI/CD
+name: Development
 
 on:
   push:
