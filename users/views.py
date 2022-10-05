@@ -2,9 +2,9 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
 from django.views import View
 from django_email_verification import send_email, verify_view
+from django_hosts import reverse
 
 from core.constants import MAIL_SERVICES_LINKS
 from users.forms import UserRegistrationForm, UserChangeForm
@@ -53,12 +53,12 @@ class SignupView(View):
 
     def get(self, request):
         form = UserRegistrationForm()
-        context = {'form': form, 'registered': False}
+        context = {'form': form}
         return render(request, self.template, context)
 
     def post(self, request):
         form = UserRegistrationForm(request.POST)
-        context = {'form': form, 'registered': False, 'errors': []}
+        context = {'form': form, 'errors': []}
         if form.is_valid():
             email = form.cleaned_data['email']
             if not self.email_used(email):
@@ -72,7 +72,7 @@ class SignupView(View):
                 user.save()
                 send_email(user)
                 login(request, user)
-                context['registered'] = True
+                return HttpResponseRedirect(reverse('profile'))
             else:
                 context['errors'].append('Пользователь с таким email уже существует.')
 
@@ -108,4 +108,4 @@ class TokenVerifyView(LoginRequiredMixin, View):
     @verify_view
     def get(self, request, token):
         verify_view(token)
-        return reverse('email_verify')
+        return HttpResponseRedirect(reverse('email_verify'))

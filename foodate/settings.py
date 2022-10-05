@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 from django.contrib.auth import get_user_model
+from django_hosts import reverse
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -132,9 +133,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = BASE_DIR / 'www/static'
+STATICFILES_DIRS = (BASE_DIR / 'static',)
 MEDIA_URL = 'uploads/'
-MEDIA_ROOT = BASE_DIR / 'uploads'
+MEDIA_ROOT = BASE_DIR / 'www/uploads'
 
 # Default primary key field type
 
@@ -179,9 +181,9 @@ EMAIL_FROM_ADDRESS = EMAIL_HOST_USER
 EMAIL_MAIL_SUBJECT = 'Подтверждение email'
 EMAIL_MAIL_HTML = 'users/email_verification.html'
 EMAIL_MAIL_PLAIN = 'users/email_verification.txt'
-EMAIL_TOKEN_LIFE = 60 * 60
-EMAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
-EMAIL_PAGE_DOMAIN = f'{SCHEME}://{HOST}'
+EMAIL_MAIL_TOKEN_LIFE = 60 * 60
+EMAIL_MAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
+EMAIL_MAIL_PAGE_DOMAIN = f'{SCHEME}://{HOST}'
 EMAIL_MULTI_USER = True
 
 
