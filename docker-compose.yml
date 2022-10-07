@@ -1,19 +1,23 @@
 version: "3.9"
 
 services:
-
   web:
-    build: .
-    command: python3 manage.py runserver 0.0.0.0:445
+    container_name: foodate
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "445:445"
+      - "8000:8000"
+    volumes:
+      - /var/www/foodate.ru/static:/code/www/static
+      - /home/vasil1y/apps/foodate/uploads:/code/www/uploads
     depends_on:
       - db
 
-  db_and_uploads:
+  db:
+    container_name: dev.db
     image: nouchka/sqlite3:latest
     volumes:
-      - ./db.sqlite3:/code/db.sqlite3
-      - ./static/uploads:/code/uploads
+      - /home/vasil1y/apps/dev.foodate/db.sqlite3:/code/db.sqlite3
     environment:
       - SQLITE3_DB=/code/db.sqlite3

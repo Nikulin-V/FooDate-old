@@ -3,11 +3,13 @@
 {% load static %}
 
 {% block title %}
-    Страница не найдена
+    Доступ запрещён
 {% endblock %}
 
 {% block content %}
-    <div class="d-flex justify-content-center">
+    <div class="d-flex flex-column justify-content-center text-center mt-5">
+        <h4 class="text-apple">Доступ запрещён</h4>
+        <p class="text-secondary small">Ошибка 403</p>
         <img src="{% static 'images/error_pages/forbidden.png' %}"
              class="mx-auto my-auto mt-5
             {% if request|is_pc %}

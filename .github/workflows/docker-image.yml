@@ -1,10 +1,11 @@
-name: Development Docker Image CI/CD
+name: Development
 
 on:
   push:
     branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
+
 
 jobs:
 
@@ -16,6 +17,7 @@ jobs:
       run: |
         python3 set_example_env.py
         pip3 install -r requirements.txt
+        python3 manage.py collectstatic
         python3 manage.py test
 
   build:
@@ -42,4 +44,14 @@ jobs:
           docker login -u gitlab-ci-token -p ${{ secrets.GITLAB_TOKEN }} ${{ secrets.GITLAB_URL }}
           docker pull ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
           docker rm -f dev.foodate || true
-          docker run -d -p 446:446 --name dev.foodate --env DEBUG=${{ secrets.DEBUG }} --env SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}' --env HOST=${{ secrets.HOST }} --env SCHEME=${{ secrets.SCHEME }} --env EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} --env EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} -v /home/vasil1y/apps/dev_foodate/db.sqlite3:/code/db.sqlite3 -v /home/vasil1y/apps/dev_foodate/uploads:/code/uploads ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
+          docker run -d -p 8001:8001 --name dev.foodate \
+          --env DEBUG=${{ secrets.DEBUG }} \
+          --env SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}' \
+          --env HOST=${{ secrets.HOST }} \
+          --env SCHEME=${{ secrets.SCHEME }} \
+          --env EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} \
+          --env EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} \
+          -v ${{ secrets.DB_ROOT }}:/code/db.sqlite3 \
+          -v ${{ secrets.STATIC_ROOT }}:/code/www/static \
+          -v ${{ secrets.MEDIA_ROOT }}:/code/www/uploads \
+          ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID

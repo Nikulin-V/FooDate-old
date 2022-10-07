@@ -1,4 +1,3 @@
-
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path
 
@@ -20,3 +19,9 @@ urlpatterns = [
          name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', robots_txt),
 ]
+
+handler400 = 'app.error_views.bad_request'
+handler403 = 'app.error_views.forbidden'
+handler404 = 'app.error_views.not_found'
+handler500 = 'app.error_views.internal_server_error'
+

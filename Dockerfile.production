@@ -1,12 +1,20 @@
-FROM python:3-alpine
+FROM python:3.9-alpine
 MAINTAINER Nikulin Vasily 'nikulin.vasily.777@ya.ru'
 
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBEFFERED 1
+
 WORKDIR /code
+
+RUN apk --update add
+RUN pip install --upgrade pip
+
 COPY requirements.txt /code
 RUN pip install -r requirements.txt
 
-COPY . /code
+COPY . .
 
-EXPOSE 445
+EXPOSE 8000
 
-CMD python manage.py migrate && python manage.py runserver 0.0.0.0:445 --insecure
+CMD python manage.py migrate && python manage.py collectstatic --no-input
+CMD gunicorn foodate.wsgi:application --bind 0.0.0.0:8000 --reload -w 4
