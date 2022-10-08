@@ -65,5 +65,6 @@ urlpatterns = [
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('email/', include(email_urls)),
     path('email/<str:token>', views.TokenVerifyView.as_view(), name='token_verify'),
-    path('email-verify/', views.EmailVerifyView.as_view(), name='email_verify')
+    path('email-verify/', views.EmailVerifyView.as_view(), name='email_verify'),
+    path('accounts/', include('allauth.urls')),
 ]

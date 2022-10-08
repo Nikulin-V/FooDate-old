@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sitemaps',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_hosts',
@@ -42,6 +43,19 @@ INSTALLED_APPS = [
     'django_email_verification',
     'rest_framework.authtoken',
     'corsheaders',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.apple',
+    'allauth.socialaccount.providers.discord',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.mailru',
+    'allauth.socialaccount.providers.odnoklassniki',
+    'allauth.socialaccount.providers.telegram',
+    'allauth.socialaccount.providers.vk',
+    'allauth.socialaccount.providers.yandex',
 ]
 
 MIDDLEWARE = [
@@ -148,7 +162,23 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_URL = f'{SCHEME}://{HOST}/auth/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = f'{SCHEME}://{HOST}/auth/login'
-AUTHENTICATION_BACKENDS = ['core.backends.EmailAuthBackend']
+AUTHENTICATION_BACKENDS = [
+    'core.backends.EmailAuthBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+SOCIALACCOUNT_PROVIDERS = {
+    'vk': {
+        'APP': {
+            'client_id': os.getenv('VK_APP_ID'),
+            'secret': os.getenv('VK_API_SECRET'),
+            'key': os.getenv('VK_SERVICE_KEY')
+        }
+    }
+}
+
 
 # Email
 
