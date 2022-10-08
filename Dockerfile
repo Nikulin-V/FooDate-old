@@ -16,5 +16,6 @@ COPY . .
 
 EXPOSE 8001
 
-RUN python manage.py migrate && python manage.py collectstatic --no-input
-CMD python manage.py runserver 0.0.0.0:8001
+CMD python manage.py migrate && \
+    python manage.py collectstatic --no-input && \
+    python manage.py runserver 0.0.0.0:8001
