@@ -8,6 +8,7 @@ from django_hosts import reverse
 
 from core.constants import MAIL_SERVICES_LINKS
 from users.forms import UserRegistrationForm, UserChangeForm
+from users.utils import is_email_used
 
 User = get_user_model()
 
@@ -34,15 +35,19 @@ class ProfileView(LoginRequiredMixin, View):
     def post(self, request):
         user = request.user
         form = ProfileView.form(request.POST)
+        context = {'form': form, 'errors': []}
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name'] or user.first_name
             user.last_name = form.cleaned_data['last_name'] or user.last_name
-            if user.email != form.cleaned_data['email']:
-                user.email = form.cleaned_data['email']
-                user.is_email_verified = False
+            new_email = form.cleaned_data['email']
+            if user.email != new_email:
+                if not is_email_used(new_email):
+                    user.email = new_email
+                    user.is_email_verified = False
+                else:
+                    context['errors'].append('Пользователь с таким email уже существует.')
             user.save()
             return HttpResponseRedirect(reverse('profile'))
-        context = {'form': form}
         return render(request, self.template, context)
 
 
@@ -61,7 +66,7 @@ class SignupView(View):
         context = {'form': form, 'errors': []}
         if form.is_valid():
             email = form.cleaned_data['email']
-            if not self.email_used(email):
+            if not is_email_used(email):
                 user = User.objects.create(
                     username=form.cleaned_data['username'],
                     email=email,
@@ -77,10 +82,6 @@ class SignupView(View):
                 context['errors'].append('Пользователь с таким email уже существует.')
 
         return render(request, self.template, context)
-
-    @staticmethod
-    def email_used(email):
-        return len(get_user_model().objects.filter(email=email, is_email_verified=True)) != 0
 
 
 class EmailVerifyView(View):

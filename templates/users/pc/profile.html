@@ -55,6 +55,9 @@
                 {% for error in form.errors.values %}
                     {{ error }}
                 {% endfor %}
+                {% for error in errors %}
+                    {{ error }}
+                {% endfor %}
             </div>
             <input class="btn btn-outline-apple mx-auto mt-3 w-50" type="submit" value="Сохранить">
         </form>
