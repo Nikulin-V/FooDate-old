@@ -6,7 +6,7 @@
     width: 50px;
 }
 
-.icon:hover {
+.social-icon:hover {
     transition: .5s;
     transform: scale(1.2);
 }

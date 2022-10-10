@@ -101,11 +101,11 @@ class EmailVerifyView(View):
                 email_service, email_link = MAIL_SERVICES_LINKS.get(email_domain)
                 context['email_link'] = f'https://{email_link}'
                 context['email_service'] = email_service
-            else:
-                context['errors'].append(
-                    'Пользователь с таким подтверждённым email уже существует.\n'
-                    'Если это ваш email, напишите на foodate@ya.ru'
-                )
+        else:
+            context['errors'].append(
+                'Пользователь с таким подтверждённым email уже существует.\n'
+                'Если это ваш email, напишите на foodate@ya.ru'
+            )
 
         return render(request, self.template, context)
 
