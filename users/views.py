@@ -90,15 +90,22 @@ class EmailVerifyView(View):
     def get(self, request):
         user = request.user
         context = {
-            'email_verified': user.is_email_verified
+            'email_verified': user.is_email_verified,
+            'errors': []
         }
 
-        if not user.is_email_verified:
-            send_email(user)
-            email_domain = user.email.split('@')[1].split('.')[0]
-            email_service, email_link = MAIL_SERVICES_LINKS.get(email_domain)
-            context['email_link'] = f'https://{email_link}'
-            context['email_service'] = email_service
+        if not is_email_used(user.email):
+            if not user.is_email_verified:
+                send_email(user)
+                email_domain = user.email.split('@')[1].split('.')[0]
+                email_service, email_link = MAIL_SERVICES_LINKS.get(email_domain)
+                context['email_link'] = f'https://{email_link}'
+                context['email_service'] = email_service
+            else:
+                context['errors'].append(
+                    'Пользователь с таким подтверждённым email уже существует.\n'
+                    'Если это ваш email, напишите на foodate@ya.ru'
+                )
 
         return render(request, self.template, context)
 
