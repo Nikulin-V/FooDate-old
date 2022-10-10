@@ -71,7 +71,7 @@ class SignupView(View):
                 user.set_password(form.cleaned_data['password'])
                 user.save()
                 send_email(user)
-                login(request, user)
+                login(request, user, backend='core.backends.EmailAuthBackend')
                 return HttpResponseRedirect(reverse('profile'))
             else:
                 context['errors'].append('Пользователь с таким email уже существует.')
