@@ -195,7 +195,7 @@ EMAIL_MAIL_PLAIN = 'users/email_verification.txt'
 EMAIL_MAIL_TOKEN_LIFE = 60 * 60
 EMAIL_MAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
 EMAIL_MAIL_PAGE_DOMAIN = f'{SCHEME}://{HOST}'
-EMAIL_MULTI_USER = True
+EMAIL_MULTI_USER = False
 
 
 # hCaptcha
