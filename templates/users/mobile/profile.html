@@ -9,9 +9,11 @@
     </div>
 
     <div class="col mx-auto my-4 d-flex flex-column align-items-center">
+        <h4 class="mb-4">Личная информация</h4>
+
         <form method="post" class="mb-4 d-flex flex-column align-items-center">
             {% csrf_token %}
-            <table class="table table-borderless">
+            <table class="table table-borderless mb-0">
                 <tr>
                     <td>
                         Email:
@@ -79,6 +81,30 @@
                 </div>
             </div>
         </form>
+
+        <h4 class="mb-4">Социальные сети</h4>
+
+        {% if 'vk-oauth2' in social %}
+            <img src="{% static 'images/icons/vk.png' %}"
+                 class="social-icon social-icon-connected"
+                 alt="VK">
+            <span data-toggle="tooltip" data-placement="top" title=""
+                  data-bs-original-title="VK подключен">
+                <img src="{% static 'images/icons/tick.png' %}" class="email-icon"
+                     alt="VK connected">
+            </span>
+        {% else %}
+            <a href="{% url 'social:begin' 'vk-oauth2' %}">
+                <img src="{% static 'images/icons/vk.png' %}"
+                     class="social-icon"
+                     alt="VK">
+                <span data-toggle="tooltip" data-placement="top" title=""
+                      data-bs-original-title="Подключить VK">
+                    <img src="{% static 'images/icons/cross.png' %}" class="email-icon"
+                         alt="VK not connected">
+                </span>
+            </a>
+        {% endif %}
     </div>
 </div>
 <script>

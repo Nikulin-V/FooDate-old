@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.views import View
 from django_email_verification import send_email, verify_view
 from django_hosts import reverse
+from social_django.models import UserSocialAuth
 
 from core.constants import MAIL_SERVICES_LINKS
 from users.forms import UserRegistrationForm, UserChangeForm
@@ -22,6 +23,8 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
 
+        connected_social_auths = UserSocialAuth.objects.filter(user=user).values_list('provider', flat=True)
+
         form = ProfileView.form(
             initial={
                 'first_name': user.first_name,
@@ -29,7 +32,7 @@ class ProfileView(LoginRequiredMixin, View):
                 'email': user.email,
             }
         )
-        context = {'form': form}
+        context = {'form': form, 'social': connected_social_auths}
         return render(request, self.template, context)
 
     def post(self, request):

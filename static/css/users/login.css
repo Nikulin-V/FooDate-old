@@ -1,12 +1,3 @@
 .form-control {
     border: none;
 }
-
-.social-icon {
-    width: 50px;
-}
-
-.social-icon:hover {
-    transition: .5s;
-    transform: scale(1.2);
-}
