@@ -1,3 +1,6 @@
+{% load hosts %}
+{% load static %}
+{% load i18n %}
 {% if next %}
     {% if user.is_authenticated %}
         {% include "users/include/error_403.html" %}
@@ -39,6 +42,7 @@
                 Забыли пароль?
             </a>
         </div>
+        {% include 'include/social_auth_icons.html' %}
     </form>
 </div>
 

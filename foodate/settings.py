@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sitemaps',
-    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_hosts',
@@ -43,19 +42,7 @@ INSTALLED_APPS = [
     'django_email_verification',
     'rest_framework.authtoken',
     'corsheaders',
-
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.apple',
-    'allauth.socialaccount.providers.discord',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.mailru',
-    'allauth.socialaccount.providers.odnoklassniki',
-    'allauth.socialaccount.providers.telegram',
-    'allauth.socialaccount.providers.vk',
-    'allauth.socialaccount.providers.yandex',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -96,6 +83,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
             ],
             'builtins': [
                 'django_hosts.templatetags.hosts_override',
@@ -163,22 +151,15 @@ LOGIN_URL = f'{SCHEME}://{HOST}/auth/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = f'{SCHEME}://{HOST}/auth/login'
 AUTHENTICATION_BACKENDS = [
+    'social_core.backends.vk.VKOAuth2',
     'core.backends.EmailAuthBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 1
+# Social auth
 
-SOCIALACCOUNT_PROVIDERS = {
-    'vk': {
-        'APP': {
-            'client_id': os.getenv('VK_APP_ID'),
-            'secret': os.getenv('VK_API_SECRET'),
-            'key': os.getenv('VK_SERVICE_KEY')
-        }
-    }
-}
-
+SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('VK_APP_ID')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('VK_API_SECRET')
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
 # Email
 

@@ -66,5 +66,5 @@ urlpatterns = [
     path('email/', include(email_urls)),
     path('email/<str:token>', views.TokenVerifyView.as_view(), name='token_verify'),
     path('email-verify/', views.EmailVerifyView.as_view(), name='email_verify'),
-    path('accounts/', include('allauth.urls')),
+    path('', include('social_django.urls')),
 ]
