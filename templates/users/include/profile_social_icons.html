@@ -46,3 +46,27 @@
         </a>
     {% endif %}
 </div>
+
+<div class="row mt-3">
+    {% if 'google-oauth2' in social %}
+        <img src="{% static 'images/icons/google.png' %}"
+             class="social-icon social-icon-connected"
+             alt="Google">
+        <span data-toggle="tooltip" data-placement="top" title=""
+              data-bs-original-title="Google подключён">
+            <img src="{% static 'images/icons/tick.png' %}" class="email-icon"
+                 alt="Google подключён">
+        </span>
+    {% else %}
+        <a href="{% url 'social:begin' 'google-oauth2' %}">
+            <img src="{% static 'images/icons/google.png' %}"
+                 class="social-icon"
+                 alt="Google">
+            <span data-toggle="tooltip" data-placement="top" title=""
+                  data-bs-original-title="Подключить Google">
+                <img src="{% static 'images/icons/cross.png' %}" class="email-icon"
+                     alt="Google не подключён">
+            </span>
+        </a>
+    {% endif %}
+</div>

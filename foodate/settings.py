@@ -153,6 +153,7 @@ LOGOUT_REDIRECT_URL = f'{SCHEME}://{HOST}/auth/login'
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.vk.VKOAuth2',
     'social_core.backends.yandex.YandexOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
     'core.backends.EmailAuthBackend',
 ]
 
@@ -176,6 +177,9 @@ SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
 SOCIAL_AUTH_YANDEX_OAUTH2_KEY = os.getenv('YANDEX_CLIENT_ID')
 SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = os.getenv('YANDEX_CLIENT_SECRET')
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_CLIENT_ID')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 
 # Email
 
