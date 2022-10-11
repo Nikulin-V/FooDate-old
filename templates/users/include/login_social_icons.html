@@ -1,0 +1,23 @@
+{% load static %}
+<div class="row">
+    <div class="col-4"></div>
+    <div class="col-2">
+        <a href="{% url 'social:begin' 'vk-oauth2' %}">
+            <img src="{% static 'images/icons/vk.png' %}"
+                 class="social-icon"
+                 data-toggle="tooltip"
+                 title="Войти через VK"
+                 alt="VK">
+        </a>
+    </div>
+    <div class="col-2">
+        <a href="{% url 'social:begin' 'yandex-oauth2' %}">
+            <img src="{% static 'images/icons/yandex.png' %}"
+                 class="social-icon"
+                 data-toggle="tooltip"
+                 title="Войти через Яндекс"
+                 alt="VK">
+        </a>
+    </div>
+    <div class="col-4"></div>
+</div>
