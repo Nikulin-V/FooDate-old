@@ -1,14 +1,16 @@
 {% load static %}
 <div class="row">
     {% if 'vk-oauth2' in social %}
-        <img src="{% static 'images/icons/vk.png' %}"
-             class="social-icon social-icon-connected"
-             alt="VK">
-        <span data-toggle="tooltip" data-placement="top" title=""
-              data-bs-original-title="VK подключён">
-            <img src="{% static 'images/icons/tick.png' %}" class="email-icon"
-                 alt="VK подключён">
-        </span>
+        <div>
+            <img src="{% static 'images/icons/vk.png' %}"
+                 class="social-icon social-icon-connected"
+                 alt="VK">
+            <span data-toggle="tooltip" data-placement="top" title=""
+                  data-bs-original-title="VK подключён">
+                <img src="{% static 'images/icons/tick.png' %}" class="email-icon"
+                     alt="VK подключён">
+            </span>
+        </div>
     {% else %}
         <a href="{% url 'social:begin' 'vk-oauth2' %}">
             <img src="{% static 'images/icons/vk.png' %}"
@@ -25,14 +27,16 @@
 
 <div class="row mt-3">
     {% if 'yandex-oauth2' in social %}
-        <img src="{% static 'images/icons/yandex.png' %}"
-             class="social-icon social-icon-connected"
-             alt="Яндекс">
-        <span data-toggle="tooltip" data-placement="top" title=""
-              data-bs-original-title="Яндекс подключён">
-            <img src="{% static 'images/icons/tick.png' %}" class="email-icon"
-                 alt="Яндекс подключён">
-        </span>
+        <div>
+            <img src="{% static 'images/icons/yandex.png' %}"
+                 class="social-icon social-icon-connected"
+                 alt="Яндекс">
+            <span data-toggle="tooltip" data-placement="top" title=""
+                  data-bs-original-title="Яндекс подключён">
+                <img src="{% static 'images/icons/tick.png' %}" class="email-icon"
+                     alt="Яндекс подключён">
+            </span>
+        </div>
     {% else %}
         <a href="{% url 'social:begin' 'yandex-oauth2' %}">
             <img src="{% static 'images/icons/yandex.png' %}"
@@ -49,14 +53,16 @@
 
 <div class="row mt-3">
     {% if 'google-oauth2' in social %}
-        <img src="{% static 'images/icons/google.png' %}"
-             class="social-icon social-icon-connected"
-             alt="Google">
-        <span data-toggle="tooltip" data-placement="top" title=""
-              data-bs-original-title="Google подключён">
-            <img src="{% static 'images/icons/tick.png' %}" class="email-icon"
-                 alt="Google подключён">
-        </span>
+        <div>
+            <img src="{% static 'images/icons/google.png' %}"
+                 class="social-icon social-icon-connected"
+                 alt="Google">
+            <span data-toggle="tooltip" data-placement="top" title=""
+                  data-bs-original-title="Google подключён">
+                <img src="{% static 'images/icons/tick.png' %}" class="email-icon"
+                     alt="Google подключён">
+            </span>
+        </div>
     {% else %}
         <a href="{% url 'social:begin' 'google-oauth2' %}">
             <img src="{% static 'images/icons/google.png' %}"
