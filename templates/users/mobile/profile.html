@@ -9,9 +9,11 @@
     </div>
 
     <div class="col mx-auto my-4 d-flex flex-column align-items-center">
+        <h4 class="mb-4">Личная информация</h4>
+
         <form method="post" class="mb-4 d-flex flex-column align-items-center">
             {% csrf_token %}
-            <table class="table table-borderless">
+            <table class="table table-borderless mb-0">
                 <tr>
                     <td>
                         Email:
@@ -56,6 +58,9 @@
                 {% for error in form.errors.values %}
                     {{ error }}
                 {% endfor %}
+                {% for error in errors %}
+                    {{ error }}
+                {% endfor %}
             </div>
             <div class="mb-3">
                 <input class="btn btn-outline-apple mx-auto mt-5" type="submit"
@@ -76,6 +81,10 @@
                 </div>
             </div>
         </form>
+
+        <h4 class="mb-4">Социальные сети</h4>
+
+        {% include 'users/include/profile_social_icons.html' %}
     </div>
 </div>
 <script>

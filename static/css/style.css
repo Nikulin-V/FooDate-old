@@ -217,3 +217,17 @@ ul.errorlist li {
         font-size: medium;
     }
 }
+
+.social-icon {
+    width: 50px;
+}
+
+.social-icon:hover {
+    transition: .5s;
+    transform: scale(1.2);
+}
+
+.social-icon-connected:hover {
+    transition: none;
+    transform: none;
+}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_email_verification',
     'rest_framework.authtoken',
     'corsheaders',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -82,6 +83,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
             ],
             'builtins': [
                 'django_hosts.templatetags.hosts_override',
@@ -148,7 +150,36 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_URL = f'{SCHEME}://{HOST}/auth/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = f'{SCHEME}://{HOST}/auth/login'
-AUTHENTICATION_BACKENDS = ['core.backends.EmailAuthBackend']
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.yandex.YandexOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'core.backends.EmailAuthBackend',
+]
+
+# Social auth
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('VK_APP_ID')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('VK_API_SECRET')
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_YANDEX_OAUTH2_KEY = os.getenv('YANDEX_CLIENT_ID')
+SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = os.getenv('YANDEX_CLIENT_SECRET')
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_CLIENT_ID')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 
 # Email
 
@@ -183,8 +214,8 @@ EMAIL_MAIL_HTML = 'users/email_verification.html'
 EMAIL_MAIL_PLAIN = 'users/email_verification.txt'
 EMAIL_MAIL_TOKEN_LIFE = 60 * 60
 EMAIL_MAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
-EMAIL_MAIL_PAGE_DOMAIN = f'{SCHEME}://{HOST}'
-EMAIL_MULTI_USER = True
+EMAIL_PAGE_DOMAIN = f'{SCHEME}://{HOST}'
+EMAIL_MULTI_USER = False
 
 
 # hCaptcha
