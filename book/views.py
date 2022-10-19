@@ -1,4 +1,5 @@
 from django.core.files.storage import FileSystemStorage
+from django.http import Http404
 from django.shortcuts import render
 from django.views import View
 # noinspection PyPackageRequirements
@@ -154,6 +155,8 @@ class ProductView(View):
 
     def get(self, request, product_slug):
         product: ProductCard = ProductCard.cards.filter(slug=product_slug).first()
+        if not product:
+            raise Http404()
         photos = ProductPhoto.objects.filter(product=product, is_published=True).all()
         context = {
             'product': product,
@@ -265,6 +268,8 @@ class RecipeView(View):
 
     def get(self, request, recipe_slug):
         recipe: Recipe = Recipe.recipes.filter(slug=recipe_slug).first()
+        if not recipe:
+            raise Http404()
         photos = RecipePhoto.objects.filter(recipe=recipe, is_published=True).all()
         context = {
             'recipe': recipe,
