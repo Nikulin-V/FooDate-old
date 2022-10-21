@@ -14,7 +14,7 @@ def robots_txt(request):
         'Disallow: /admin/',
         'Disallow: /auth/password_reset',
         'Disallow: /auth/password_reset/done',
-        'Disallow: /auth/reset/done'
+        'Disallow: /auth/reset/done',
         f'Host: {host}',
         f'Sitemap: {SCHEME}://{host}/sitemap.xml'
     ]
