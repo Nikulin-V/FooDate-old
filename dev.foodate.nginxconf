@@ -1,0 +1,21 @@
+server {
+    listen 446 default;
+    listen [::]:446;
+    server_name dev.foodate.ru book.dev.foodate m.dev.foodate www.dev.foodate.ru www.book.dev.foodate www.m.dev.foodate;
+    root /code/www;
+
+    location / {
+        uwsgi_pass unix:///run/uwsgi/app/django/socket;
+        include uwsgi_params;
+        uwsgi_read_timeout 300s;
+        client_max_body_size 32m;
+    }
+
+    location /static/ {
+        alias /code/www/static/;
+    }
+
+    location /uploads/ {
+        alias /code/www/uploads/;
+    }
+}
