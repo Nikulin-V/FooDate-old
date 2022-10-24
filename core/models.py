@@ -1,7 +1,6 @@
 from django.core import validators
 from django.db import models
 from django.utils.safestring import mark_safe
-# noinspection PyPackageRequirements
 from slugify import slugify
 from sorl.thumbnail import get_thumbnail
 
