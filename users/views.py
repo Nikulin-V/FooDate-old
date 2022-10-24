@@ -5,9 +5,11 @@ from django.shortcuts import render
 from django.views import View
 from django_email_verification import send_email, verify_view
 from django_hosts import reverse
+from social_django.models import UserSocialAuth
 
 from core.constants import MAIL_SERVICES_LINKS
 from users.forms import UserRegistrationForm, UserChangeForm
+from users.utils import is_email_used
 
 User = get_user_model()
 
@@ -21,6 +23,8 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
 
+        connected_social_auths = UserSocialAuth.objects.filter(user=user).values_list('provider', flat=True)
+
         form = ProfileView.form(
             initial={
                 'first_name': user.first_name,
@@ -28,21 +32,25 @@ class ProfileView(LoginRequiredMixin, View):
                 'email': user.email,
             }
         )
-        context = {'form': form}
+        context = {'form': form, 'social': connected_social_auths}
         return render(request, self.template, context)
 
     def post(self, request):
         user = request.user
         form = ProfileView.form(request.POST)
+        context = {'form': form, 'errors': []}
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name'] or user.first_name
             user.last_name = form.cleaned_data['last_name'] or user.last_name
-            if user.email != form.cleaned_data['email']:
-                user.email = form.cleaned_data['email']
-                user.is_email_verified = False
+            new_email = form.cleaned_data['email']
+            if user.email != new_email:
+                if not is_email_used(new_email):
+                    user.email = new_email
+                    user.is_email_verified = False
+                else:
+                    context['errors'].append('Пользователь с таким email уже существует.')
             user.save()
             return HttpResponseRedirect(reverse('profile'))
-        context = {'form': form}
         return render(request, self.template, context)
 
 
@@ -61,7 +69,7 @@ class SignupView(View):
         context = {'form': form, 'errors': []}
         if form.is_valid():
             email = form.cleaned_data['email']
-            if not self.email_used(email):
+            if not is_email_used(email):
                 user = User.objects.create(
                     username=form.cleaned_data['username'],
                     email=email,
@@ -71,16 +79,12 @@ class SignupView(View):
                 user.set_password(form.cleaned_data['password'])
                 user.save()
                 send_email(user)
-                login(request, user)
+                login(request, user, backend='core.backends.EmailAuthBackend')
                 return HttpResponseRedirect(reverse('profile'))
             else:
                 context['errors'].append('Пользователь с таким email уже существует.')
 
         return render(request, self.template, context)
-
-    @staticmethod
-    def email_used(email):
-        return len(get_user_model().objects.filter(email=email, is_email_verified=True)) != 0
 
 
 class EmailVerifyView(View):
@@ -89,15 +93,22 @@ class EmailVerifyView(View):
     def get(self, request):
         user = request.user
         context = {
-            'email_verified': user.is_email_verified
+            'email_verified': user.is_email_verified,
+            'errors': []
         }
 
-        if not user.is_email_verified:
-            send_email(user)
-            email_domain = user.email.split('@')[1].split('.')[0]
-            email_service, email_link = MAIL_SERVICES_LINKS.get(email_domain)
-            context['email_link'] = f'https://{email_link}'
-            context['email_service'] = email_service
+        if not is_email_used(user.email):
+            if not user.is_email_verified:
+                send_email(user)
+                email_domain = user.email.split('@')[1].split('.')[0]
+                email_service, email_link = MAIL_SERVICES_LINKS.get(email_domain)
+                context['email_link'] = f'https://{email_link}'
+                context['email_service'] = email_service
+        else:
+            context['errors'].append(
+                'Пользователь с таким подтверждённым email уже существует.\n'
+                'Если это ваш email, напишите на foodate@ya.ru'
+            )
 
         return render(request, self.template, context)
 

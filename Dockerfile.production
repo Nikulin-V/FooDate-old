@@ -16,5 +16,6 @@ COPY . .
 
 EXPOSE 8000
 
-CMD python manage.py migrate && python manage.py collectstatic --no-input
-CMD gunicorn foodate.wsgi:application --bind 0.0.0.0:8000 --reload -w 4
+CMD python manage.py migrate && \
+    python manage.py collectstatic --no-input && \
+    gunicorn foodate.wsgi:application --bind 0.0.0.0:8000 --reload -w 4

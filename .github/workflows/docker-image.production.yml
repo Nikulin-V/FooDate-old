@@ -15,6 +15,7 @@ jobs:
           python3 set_example_env.py
           pip3 install -r requirements.txt
           python3 manage.py collectstatic
+          python3 manage.py migrate
           python3 manage.py test
 
   build:
@@ -42,13 +43,8 @@ jobs:
           docker pull ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
           docker rm -f foodate || true
           docker run -d -p 8000:8000 --name foodate \
-          --env DEBUG=${{ secrets.DEBUG }} \
-          --env SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}' \
-          --env HOST=${{ secrets.HOST }} \
-          --env SCHEME=${{ secrets.SCHEME }} \
-          --env EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} \
-          --env EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} \
           -v ${{ secrets.DB_ROOT }}:/code/db.sqlite3 \
           -v ${{ secrets.STATIC_ROOT }}:/code/www/static \
           -v ${{ secrets.MEDIA_ROOT }}:/code/www/uploads \
+          -v ${{ secrets.ENV_ROOT }}:/code/.env \
           ${{ secrets.GITLAB_IMAGE }}:$GITHUB_RUN_ID
