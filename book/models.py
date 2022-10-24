@@ -2,7 +2,6 @@ from django.core import validators
 from django.db import models
 from django.db.models import Q
 from django.utils.safestring import mark_safe
-# noinspection PyPackageRequirements
 from django_quill.fields import QuillField
 from slugify import slugify
 
