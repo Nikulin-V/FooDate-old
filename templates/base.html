@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru" class="h-100">
 <head>
@@ -12,11 +13,10 @@
     <meta property="og:title" content="FooDate">
     <meta property="og:description" content="😋 В здоровом теле - здоровая еда!">
     <meta property="og:url" content="https://foodate.ru">
-    <meta property="og:image" content="https://foodate.ru/static/images/logo/Preview.png">
+    <meta property="og:image" content="https://foodate.ru/static/images/logo/Logo_ellipse.png">
     <meta property="og:site_name" content="FooDate">
     <meta property="og:locale" content="ru_RU">
 
-    {% load static %}
     <script>
         const staticUrl = "{% get_static_prefix %}";
         const mediaUrl = "{% get_media_prefix %}";
