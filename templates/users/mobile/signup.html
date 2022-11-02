@@ -8,7 +8,7 @@
             {{ form.username }}
         </div>
         <div class="row mb-3">
-            Email:
+            <label for="id_email">Email:</label>
             {{ form.email }}
         </div>
         <div class="row mb-3">
@@ -36,7 +36,7 @@
             {% endfor %}
         </div>
         <input class="btn btn-apple mx-auto" type="submit" value="Зарегистрироваться"/>
-        <p class="text-secondary small mt-3">Зарегистрироваться через социальные сети:</p>
+        <p class="text-secondary small mt-3">Зарегистрироваться через<br> социальные сети:</p>
         {% include 'users/include/login_social_icons.html' %}
     </form>
 </div>

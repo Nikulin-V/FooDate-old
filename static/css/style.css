@@ -231,3 +231,8 @@ ul.errorlist li {
     transition: none;
     transform: none;
 }
+
+.social-icon-col {
+    padding: 0;
+    min-width: 60px;
+}
