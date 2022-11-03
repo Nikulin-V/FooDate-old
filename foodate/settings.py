@@ -156,6 +156,9 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
     'core.backends.EmailAuthBackend',
 ]
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Social auth
 
@@ -216,7 +219,6 @@ EMAIL_MAIL_TOKEN_LIFE = 60 * 60
 EMAIL_MAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
 EMAIL_PAGE_DOMAIN = f'{SCHEME}://{HOST}'
 EMAIL_MULTI_USER = False
-
 
 # hCaptcha
 

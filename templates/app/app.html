@@ -16,6 +16,11 @@
             <div class="col">
                 <h3>Ваши продукты</h3>
             </div>
+            {% if user.is_guest %}
+                <div class="col small text-danger text-center">
+                    Войдите в аккаунт или зарегистрируйтесь, чтобы не потерять данные о продуктах.
+                </div>
+            {% endif %}
             <div class="col text-end" id="add-more-products-div"></div>
             <hr class="mb-0">
             <span class="text-secondary small">

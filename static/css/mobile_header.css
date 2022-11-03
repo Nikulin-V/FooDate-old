@@ -30,7 +30,7 @@ main {
 
 .nav-btn {
     align-self: center;
-    margin: 0 5px;
+    margin: 5px 5px;
 }
 
 *, *:before, *:after {

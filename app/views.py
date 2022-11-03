@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views import View
 from django_hosts import reverse_lazy
@@ -6,7 +5,7 @@ from django_hosts import reverse_lazy
 from app.forms import NewProductForm
 from app.models import Product
 from core.decorators import mobile_redirect
-from core.middleware import get_token
+from core.middleware import get_token, user_exists_check
 
 
 class HomeView(View):
@@ -20,7 +19,7 @@ class HomeView(View):
         return render(request, self.template)
 
 
-class AppView(LoginRequiredMixin, View):
+class AppView(View):
     """Fridge page"""
 
     template = 'app/app.html'
@@ -29,12 +28,12 @@ class AppView(LoginRequiredMixin, View):
 
     @mobile_redirect(mobile_reverse)
     def get(self, request, saved=None):
+        user_exists_check(request)
         context = {
             'form': self.form() if saved is None else self.form(request.POST),
             'token': get_token(),
             'saved': saved
         }
-
         return render(request, self.template, context)
 
     @mobile_redirect(mobile_reverse)
@@ -47,7 +46,6 @@ class AppView(LoginRequiredMixin, View):
             amount_unit = form.cleaned_data['amount_unit']
             production_date = form.cleaned_data['production_date']
             purchase_date = form.cleaned_data['purchase_date']
-
             new_product = Product.products.create(
                 product_card=product_card,
                 amount=amount,
@@ -57,7 +55,6 @@ class AppView(LoginRequiredMixin, View):
             )
             new_product.save()
             saved = True
-
         return self.get(request, saved)
 
 

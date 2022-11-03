@@ -11,6 +11,7 @@ from django.urls import path, include
 from django_email_verification import urls as email_urls
 
 from users import views
+from users.views import CustomLoginView
 
 urlpatterns = [
     path(
@@ -20,7 +21,7 @@ urlpatterns = [
     ),
     path(
         'login/',
-        auth_views.LoginView.as_view(template_name='users/login.html'),
+        CustomLoginView.as_view(template_name='users/login.html'),
         name='login',
     ),
     path(
