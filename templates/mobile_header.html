@@ -25,6 +25,21 @@
                 Главная
             </a>
         </li>
+        <li class="list-group-item mobile-header-item">
+            <a class="nav-link" href="{% url 'app' host 'app_mobile' %}">
+                Холодильник
+            </a>
+        </li>
+        <li class="list-group-item mobile-header-item">
+            <a class="nav-link" href="{% url 'products' host 'book' %}">
+                Продукты
+            </a>
+        </li>
+        <li class="list-group-item mobile-header-item">
+            <a class="nav-link" href="{% url 'recipes' host 'book' %}">
+                Рецепты
+            </a>
+        </li>
         {% if user.is_authenticated %}
             {% if user.is_staff %}
                 <li class="list-group-item mobile-header-item">
@@ -33,32 +48,29 @@
                     </a>
                 </li>
             {% endif %}
-
-            <li class="list-group-item mobile-header-item">
-                <a class="nav-link" href="{% url 'app' host 'app_mobile' %}">
-                    Холодильник
-                </a>
-            </li>
-            <li class="list-group-item mobile-header-item">
-                <a class="nav-link" href="{% url 'products' host 'book' %}">
-                    Продукты
-                </a>
-            </li>
-            <li class="list-group-item mobile-header-item">
-                <a class="nav-link" href="{% url 'recipes' host 'book' %}">
-                    Рецепты
-                </a>
-            </li>
-            <li class="list-group-item mobile-header-item">
-                <a class="nav-link" href="{% url 'profile' host 'app' %}">
-                    Профиль
-                </a>
-            </li>
-            <li class="list-group-item mobile-header-item">
-                <a class="nav-link" href="{% url 'logout' host 'app' %}">
-                    Выйти
-                </a>
-            </li>
+            {% if not user.is_guest %}
+                <li class="list-group-item mobile-header-item">
+                    <a class="nav-link" href="{% url 'profile' host 'app' %}">
+                        Профиль
+                    </a>
+                </li>
+                <li class="list-group-item mobile-header-item">
+                    <a class="nav-link" href="{% url 'logout' host 'app' %}">
+                        Выйти
+                    </a>
+                </li>
+            {% else %}
+                <li class="list-group-item mobile-header-item">
+                    <a class="btn-outline-white btn nav-btn" href="{% url 'login' host 'app' %}">
+                        Вход
+                    </a>
+                </li>
+                <li class="list-group-item mobile-header-item">
+                    <a class="btn-outline-white btn nav-btn" href="{% url 'signup' host 'app' %}">
+                        Регистрация
+                    </a>
+                </li>
+            {% endif %}
         {% else %}
             <li class="list-group-item mobile-header-item">
                 <a class="btn-outline-white btn nav-btn" href="{% url 'login' host 'app' %}">

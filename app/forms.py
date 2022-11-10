@@ -3,12 +3,9 @@ from datetimewidget.widgets import DateTimeWidget
 from django import forms
 
 from app.models import Product
-from core.fields import CustomCaptchaField
 
 
 class NewProductForm(forms.ModelForm):
-    captcha = CustomCaptchaField()
-
     class Meta:
         model = Product
         fields = ('product_card', 'amount', 'amount_unit', 'production_date', 'purchase_date')

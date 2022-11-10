@@ -4,7 +4,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 
 from app.sitemaps import HomeViewSitemap, AppViewSitemap
-from app.views import HomeView, AppView, PrivacyPolicyView
+from app.views import HomeView, AppView, PrivacyPolicyView, CleanGuests
 from core.views import robots_txt
 from foodate import settings
 
@@ -15,6 +15,7 @@ sitemaps = {
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
+    path('app/clean', CleanGuests.as_view(), name='clean-guests'),
     path('app/', AppView.as_view(), name='app'),
     path('privacy-policy/', PrivacyPolicyView.as_view(), name='privacy-policy'),
     path('admin/', admin.site.urls, name='admin'),

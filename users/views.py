@@ -1,15 +1,20 @@
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
 from django_email_verification import send_email, verify_view
 from django_hosts import reverse
 from social_django.models import UserSocialAuth
 
 from core.constants import MAIL_SERVICES_LINKS
 from users.forms import UserRegistrationForm, UserChangeForm
-from users.utils import is_email_used
+from users.utils import is_email_used, is_guest_username
 
 User = get_user_model()
 
@@ -22,9 +27,7 @@ class ProfileView(LoginRequiredMixin, View):
 
     def get(self, request):
         user = request.user
-
         connected_social_auths = UserSocialAuth.objects.filter(user=user).values_list('provider', flat=True)
-
         form = ProfileView.form(
             initial={
                 'first_name': user.first_name,
@@ -69,21 +72,28 @@ class SignupView(View):
         context = {'form': form, 'errors': []}
         if form.is_valid():
             email = form.cleaned_data['email']
-            if not is_email_used(email):
-                user = User.objects.create(
-                    username=form.cleaned_data['username'],
-                    email=email,
-                    first_name=form.cleaned_data['first_name'],
-                    last_name=form.cleaned_data['last_name'],
-                )
-                user.set_password(form.cleaned_data['password'])
-                user.save()
-                send_email(user)
-                login(request, user, backend='core.backends.EmailAuthBackend')
-                return HttpResponseRedirect(reverse('profile'))
+            username = form.cleaned_data['username']
+            if not is_guest_username(username):
+                if not is_email_used(email):
+                    user = User.objects.create(
+                        username=form.cleaned_data['username'],
+                        email=email,
+                        first_name=form.cleaned_data['first_name'],
+                        last_name=form.cleaned_data['last_name'],
+                    )
+                    user.set_password(form.cleaned_data['password'])
+                    user.save()
+                    if request.user and not request.user.is_anonymous and request.user.is_guest:
+                        request.user.delete()
+                    send_email(user)
+                    login(request, user, backend='core.backends.EmailAuthBackend')
+                    return HttpResponseRedirect(reverse('profile'))
+                else:
+                    context['errors'].append('Пользователь с таким email уже существует.')
             else:
-                context['errors'].append('Пользователь с таким email уже существует.')
-
+                context['errors'].append(
+                    'Имена пользователей с префиксом "Гость" используются только гостевыми аккаунтами'
+                )
         return render(request, self.template, context)
 
 
@@ -96,7 +106,6 @@ class EmailVerifyView(View):
             'email_verified': user.is_email_verified,
             'errors': []
         }
-
         if not is_email_used(user.email):
             if not user.is_email_verified:
                 send_email(user)
@@ -107,9 +116,8 @@ class EmailVerifyView(View):
         else:
             context['errors'].append(
                 'Пользователь с таким подтверждённым email уже существует.\n'
-                'Если это ваш email, напишите на foodate@ya.ru'
+                'Если это ваш email, напишите на support@foodate.ru'
             )
-
         return render(request, self.template, context)
 
 
@@ -120,3 +128,21 @@ class TokenVerifyView(LoginRequiredMixin, View):
     def get(self, request, token):
         verify_view(token)
         return HttpResponseRedirect(reverse('email_verify'))
+
+
+class CustomLoginView(LoginView):
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        if request.user and not request.user.is_anonymous and request.user.is_guest:
+            request.user.delete()
+        if self.redirect_authenticated_user and self.request.user.is_authenticated:
+            redirect_to = self.get_success_url()
+            if redirect_to == self.request.path:
+                raise ValueError(
+                    "Redirection loop for authenticated user detected. Check that "
+                    "your LOGIN_REDIRECT_URL doesn't point to a login page."
+                )
+            return HttpResponseRedirect(redirect_to)
+        return super().dispatch(request, *args, **kwargs)

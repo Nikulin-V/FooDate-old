@@ -156,6 +156,9 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
     'core.backends.EmailAuthBackend',
 ]
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Social auth
 
@@ -217,7 +220,6 @@ EMAIL_MAIL_PAGE_TEMPLATE = 'users/email_verification_confirm.html'
 EMAIL_PAGE_DOMAIN = f'{SCHEME}://{HOST}'
 EMAIL_MULTI_USER = False
 
-
 # hCaptcha
 
 HCAPTCHA_SITEKEY = '4e5c5150-8547-4f93-bffb-94d4132c22b3'
@@ -233,6 +235,8 @@ REST_FRAMEWORK = {
 }
 
 if DEBUG:
+    if HOST.endswith('.tk'):
+        ALLOWED_HOSTS.append('localhost')
     INSTALLED_APPS += ['debug_toolbar']
     MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
     mimetypes.add_type('application/javascript', '.js')

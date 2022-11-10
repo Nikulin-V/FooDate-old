@@ -16,6 +16,11 @@
             <div class="col">
                 <h3>Ваши продукты</h3>
             </div>
+            {% if user.is_guest %}
+                <div class="col small text-danger text-center">
+                    Войдите в аккаунт или зарегистрируйтесь, чтобы не потерять данные о продуктах.
+                </div>
+            {% endif %}
             <div class="col text-end" id="add-more-products-div"></div>
             <hr class="mb-0">
             <span class="text-secondary small">
@@ -65,7 +70,7 @@
                                     {{ form.amount }}
                                     <span class="mx-2"></span>{{ form.amount_unit }}
                                 </div>
-                                {{ form.amount.errors}}
+                                {{ form.amount.errors }}
                                 {{ form.amount_unit.errors }}
                             </div>
                             <div class="row">
@@ -110,4 +115,20 @@
         {% endif %}
     {% endif %}
     <script type="text/babel" src="{% static 'js/app/app.js' %}"></script>
+
+    {% if user.is_guest %}
+        <!-- Guest cleanup -->
+        <script language="JavaScript">
+            window.onbeforeunload = function (e) {
+                $.ajax({
+                    url: '{% url 'clean-guests' %}'.split(':')[1],
+                    type: 'POST',
+                    headers: {
+                        "X-CSRFToken": csrftoken,
+                    },
+                    mode: 'same-origin',
+                });
+            };
+        </script>
+    {% endif %}
 {% endblock %}

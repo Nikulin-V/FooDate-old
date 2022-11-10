@@ -32,13 +32,13 @@ We are what we eat. Control yourself!
 - Cook according to recipes suggested based on the contents of the refrigerator
 
 
-## Authors
+## Team
 
 - [Vasiliy Nikulin](https://www.github.com/vasil1y-777)
 - [Kirill Kozhevnikov](https://github.com/Kirill439867398256)
-- [Viktor Zhikharev](https://github.com/kvasoslave)
 - [Vsewolod Pritchin](https://github.com/Vsewolod)
-- [Vasiliy Abakshin](https://github.com/Ne-Vasiliy965)
+- [Aleksandr Gerasimov](https://github.com/Aleksander1Byte)
+- Kirill Pronin
 
 ## Feedback
 

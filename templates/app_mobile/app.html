@@ -17,6 +17,12 @@
         <hr class="m-0 text-apple">
     </div>
 
+    {% if user.is_guest %}
+        <div class="col small text-danger text-center">
+            Войдите в аккаунт или зарегистрируйтесь,<br> чтобы не потерять данные о продуктах.
+        </div>
+    {% endif %}
+
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col">
