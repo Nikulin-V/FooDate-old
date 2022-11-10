@@ -135,9 +135,8 @@ class CustomLoginView(LoginView):
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
-        user_ = request.user
-        if not user_.is_anonymous:
-            user_.save()
+        if request.user and not request.user.is_anonymous and request.user.is_guest:
+            request.user.delete()
         if self.redirect_authenticated_user and self.request.user.is_authenticated:
             redirect_to = self.get_success_url()
             if redirect_to == self.request.path:
@@ -146,8 +145,4 @@ class CustomLoginView(LoginView):
                     "your LOGIN_REDIRECT_URL doesn't point to a login page."
                 )
             return HttpResponseRedirect(redirect_to)
-        temp = super().dispatch(request, *args, **kwargs)
-        if isinstance(temp, HttpResponseRedirect):
-            if user_ and not user_.is_anonymous and user_.is_guest:
-                user_.delete()
-        return temp
+        return super().dispatch(request, *args, **kwargs)
