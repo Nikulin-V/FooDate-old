@@ -235,6 +235,8 @@ REST_FRAMEWORK = {
 }
 
 if DEBUG:
+    if HOST.endswith('.tk'):
+        ALLOWED_HOSTS.append('localhost')
     INSTALLED_APPS += ['debug_toolbar']
     MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
     mimetypes.add_type('application/javascript', '.js')

@@ -1,9 +1,16 @@
+import datetime
+
+from django.contrib.auth import get_user_model
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.utils import timezone
+from django_hosts import reverse
 from django.views import View
 from django_hosts import reverse_lazy
 
 from app.forms import NewProductForm
 from app.models import Product
+from core.constants import OLD_DATE
 from core.decorators import mobile_redirect
 from core.middleware import get_token, user_exists_check
 
@@ -17,6 +24,16 @@ class HomeView(View):
     @mobile_redirect(mobile_reverse)
     def get(self, request):
         return render(request, self.template)
+
+
+class CleanGuests(View):
+    def post(self, request):
+        user = get_user_model()
+        user.objects.filter(
+            password='',
+            date_joined__range=(OLD_DATE, timezone.now() - datetime.timedelta(hours=4)),
+        ).delete()
+        return HttpResponseRedirect(reverse('app'))
 
 
 class AppView(View):

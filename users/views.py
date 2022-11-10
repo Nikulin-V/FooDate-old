@@ -83,6 +83,8 @@ class SignupView(View):
                     )
                     user.set_password(form.cleaned_data['password'])
                     user.save()
+                    if request.user and not request.user.is_anonymous and request.user.is_guest:
+                        request.user.delete()
                     send_email(user)
                     login(request, user, backend='core.backends.EmailAuthBackend')
                     return HttpResponseRedirect(reverse('profile'))
