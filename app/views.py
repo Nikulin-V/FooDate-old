@@ -10,9 +10,9 @@ from django_hosts import reverse_lazy
 
 from app.forms import NewProductForm
 from app.models import Product
-from core.constants import OLD_DATE
 from core.decorators import mobile_redirect
 from core.middleware import get_token, user_exists_check
+from users.settings import GUEST_LIFETIME_HOURS, OLD_DATE
 
 
 class HomeView(View):
@@ -31,7 +31,7 @@ class CleanGuests(View):
         user = get_user_model()
         user.objects.filter(
             password='',
-            date_joined__range=(OLD_DATE, timezone.now() - datetime.timedelta(hours=4)),
+            date_joined__range=(OLD_DATE, timezone.now() - datetime.timedelta(hours=GUEST_LIFETIME_HOURS)),
         ).delete()
         return HttpResponseRedirect(reverse('app'))
 
