@@ -3,6 +3,7 @@ let energyValueField = $('#energy-value');
 let energyValueKkal = (Math.round(energy(energyValue, energyValueUnit, 'ккал') * 10) / 10).toString().replace('.', ',');
 let energyValueKDz = (Math.round(energy(energyValue, energyValueUnit, 'кДж') * 10) / 10).toString().replace('.', ',');
 energyValueUnitSelect.on('change', changeEnergy);
+changeEnergy()
 
 function changeEnergy() {
     if (energyValueUnit) {
