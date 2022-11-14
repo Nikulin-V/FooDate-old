@@ -159,7 +159,7 @@ class ProductView(View):
             raise Http404()
         photos = ProductPhoto.objects.filter(product=product, is_published=True).all()
         context = {
-            'product': product,
+            'item': product,
             'photos': photos
         }
         return render(
@@ -272,7 +272,7 @@ class RecipeView(View):
             raise Http404()
         photos = RecipePhoto.objects.filter(recipe=recipe, is_published=True).all()
         context = {
-            'recipe': recipe,
+            'item': recipe,
             'photos': photos
         }
         return render(
