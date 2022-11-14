@@ -1,0 +1,10 @@
+{% load static %}
+<script>
+    let minStorageTemperature = '{{ item.min_storage_temperature }}';
+    let maxStorageTemperature = '{{ item.max_storage_temperature }}';
+    let storageTemperatureUnit = '{{ item.storage_temperature_unit }}';
+    let energyValue = '{{ item.energy_value }}';
+    let energyValueUnit = '{{ item.energy_value_unit }}'
+</script>
+<script type="text/javascript" src="{% static 'js/book/storage_temperature_change.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/book/energy_value_change.js' %}"></script>
