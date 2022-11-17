@@ -41,7 +41,7 @@ a.text-apple:focus {
 }
 
 .border-apple {
-    border-color: #269926;
+    border-color: #269926 !important;
 }
 
 .bg-apple {

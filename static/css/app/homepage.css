@@ -12,6 +12,10 @@
     .main {
         width: 100%
     }
+
+    h4 {
+        font-size: 22px;
+    }
 }
 
 .card:hover {
@@ -21,6 +25,7 @@
 .card-body {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 h5 {
