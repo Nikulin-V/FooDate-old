@@ -4,23 +4,25 @@
 {% load duration %}
 
 {% block title %}
-    {{ recipe.name }}
+    {{ item.name }}
 {% endblock %}
 
 {% block description %}
-    Информация о рецепте "{{ recipe.name }}".
+    Информация о рецепте "{{ item.name }}".
 {% endblock %}
 
 {% block content %}
-    <link href="{% static 'css/book/recipe.css' %}" rel="stylesheet">
+    {% with recipe=item %}
 
-    <div style="position: sticky; top: 0; height: 45px; max-height: 45px;
+        <link href="{% static 'css/book/recipe.css' %}" rel="stylesheet">
+
+        <div style="position: sticky; top: 0; height: 45px; max-height: 45px;
          background-color: white; z-index: 99;">
-        <h4 class="text-apple text-center h-100 m-0 pt-1">Рецепт</h4>
-        <hr class="m-0 text-apple">
-    </div>
-    <div class="container-fluid text-center">
-        {% if recipe.image %}
+            <h4 class="text-apple text-center h-100 m-0 pt-1">Рецепт</h4>
+            <hr class="m-0 text-apple">
+        </div>
+        <div class="container-fluid text-center">
+            {% if recipe.image %}
             <div class="row d-flex align-items-center h-50">
                 <img src="{% uploads recipe.image %}" alt="{{ recipe.name }}"
                  class="img-fluid recipe-img w-auto">
@@ -105,14 +107,8 @@
                 </div>
             {% endif %}
         </div>
-    </div>
-    <script>
-        let minStorageTemperature = '{{ recipe.min_storage_temperature }}';
-        let maxStorageTemperature = '{{ recipe.max_storage_temperature }}';
-        let storageTemperatureUnit = '{{ recipe.storage_temperature_unit }}';
-        let energyValue = '{{ recipe.energy_value }}';
-        let energyValueUnit = '{{ recipe.energy_value_unit }}'
-    </script>
-    <script type="text/javascript" src="{% static 'js/constants.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/book/recipe.js' %}"></script>
+        </div>
+        {% include 'book/include/unit_change_scripts.html' %}
+
+    {% endwith %}
 {% endblock %}

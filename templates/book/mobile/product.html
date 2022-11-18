@@ -4,23 +4,25 @@
 {% load duration %}
 
 {% block title %}
-    {{ product.name }}
+    {{ item.name }}
 {% endblock %}
 
 {% block description %}
-    Информация о продукте "{{ product.name }}".
+    Информация о продукте "{{ item.name }}".
 {% endblock %}
 
 {% block content %}
-    <link href="{% static 'css/book/product.css' %}" rel="stylesheet">
+    {% with product=item %}
 
-    <div style="position: sticky; top: 0; height: 45px; max-height: 45px;
+        <link href="{% static 'css/book/product.css' %}" rel="stylesheet">
+
+        <div style="position: sticky; top: 0; height: 45px; max-height: 45px;
          background-color: white; z-index: 99;">
-        <h4 class="text-apple text-center h-100 m-0 pt-1">Продукт</h4>
-        <hr class="m-0 text-apple">
-    </div>
-    <div class="container-fluid text-center">
-        {% if product.image %}
+            <h4 class="text-apple text-center h-100 m-0 pt-1">Продукт</h4>
+            <hr class="m-0 text-apple">
+        </div>
+        <div class="container-fluid text-center">
+            {% if product.image %}
             <div class="row d-flex align-items-center h-50">
                 <img src="{% uploads product.image %}" alt="{{ product.name }}"
                  class="img-fluid product-img w-auto">
@@ -110,7 +112,7 @@
                 {% if product.composition %}
                     <tr class="accordion" id="composition-example">
                         <td class="align-top">
-                            Cостав
+                            Состав
                         </td>
                         <td class="text-start">
                             <p>{{ product.composition|capfirst }}</p>
@@ -160,14 +162,8 @@
                 </div>
             {% endif %}
         </div>
-    </div>
-    <script>
-        let minStorageTemperature = '{{ product.min_storage_temperature }}';
-        let maxStorageTemperature = '{{ product.max_storage_temperature }}';
-        let storageTemperatureUnit = '{{ product.storage_temperature_unit }}';
-        let energyValue = '{{ product.energy_value }}';
-        let energyValueUnit = '{{ product.energy_value_unit }}'
-    </script>
-    <script type="text/javascript" src="{% static 'js/constants.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/book/product.js' %}"></script>
+        </div>
+        {% include 'book/include/unit_change_scripts.html' %}
+
+    {% endwith %}
 {% endblock %}
