@@ -7,12 +7,12 @@ User = get_user_model()
 class UserRegistrationForm(forms.ModelForm):
     """Form of user registration"""
 
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput())
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Повторите пароль', widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = 'username', 'email', 'first_name', 'last_name'
+        fields = 'username', 'email', 'first_name', 'last_name', 'beta_testing', 'customer_development_interview'
 
     def clean_password2(self):
         if self.cleaned_data['password'] != self.cleaned_data['password2']:
@@ -25,4 +25,4 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = 'first_name', 'last_name', 'email'
+        fields = 'first_name', 'last_name', 'email', 'beta_testing', 'customer_development_interview'

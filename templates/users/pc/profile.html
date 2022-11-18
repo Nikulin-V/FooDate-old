@@ -52,6 +52,24 @@
                         {{ form.last_name }}
                     </div>
                 </div>
+                <hr>
+                <h5 class="mb-4">Участие в развитии проекта</h5>
+                <div class="row mb-3">
+                    <div class="col-10 small">
+                        {{ form.beta_testing.label_tag }}
+                    </div>
+                    <div class="col-2">
+                        {{ form.beta_testing }}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-10 small">
+                        {{ form.customer_development_interview.label_tag }}
+                    </div>
+                    <div class="col-2">
+                        {{ form.customer_development_interview }}
+                    </div>
+                </div>
                 <div class="text-danger mb-3">
                     {% for error in form.errors.values %}
                         {{ error }}
