@@ -54,6 +54,26 @@
                     </td>
                 </tr>
             </table>
+            <hr style="width: 75%">
+            <h5 class="my-3">Участие в развитии проекта</h5>
+            <div class="row w-75 justify-content-center">
+                <div class="row mb-3">
+                    <div class="col-10 small">
+                        {{ form.beta_testing.label_tag }}
+                    </div>
+                    <div class="col">
+                        {{ form.beta_testing }}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-10 small">
+                        {{ form.customer_development_interview.label_tag }}
+                    </div>
+                    <div class="col">
+                        {{ form.customer_development_interview }}
+                    </div>
+                </div>
+            </div>
             <div class="text-danger">
                 {% for error in form.errors.values %}
                     {{ error }}
@@ -82,6 +102,7 @@
             </div>
         </form>
 
+        <hr style="width: 100%">
         <h4 class="mb-4">Социальные сети</h4>
 
         {% include 'users/include/profile_social_icons.html' %}

@@ -33,6 +33,8 @@ class ProfileView(LoginRequiredMixin, View):
                 'first_name': user.first_name,
                 'last_name': user.last_name,
                 'email': user.email,
+                'beta_testing': user.beta_testing,
+                'customer_development_interview': user.customer_development_interview
             }
         )
         context = {'form': form, 'social': connected_social_auths}
@@ -45,6 +47,8 @@ class ProfileView(LoginRequiredMixin, View):
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name'] or user.first_name
             user.last_name = form.cleaned_data['last_name'] or user.last_name
+            user.beta_testing = form.cleaned_data['beta_testing']
+            user.customer_development_interview = form.cleaned_data['customer_development_interview']
             new_email = form.cleaned_data['email']
             if user.email != new_email:
                 if not is_email_used(new_email):
