@@ -1,7 +1,9 @@
 <div class="mx-auto text-center w-75">
     <h4 class="mt-3">Регистрация</h4>
     <hr>
-    <form method="post" class="form-control">
+    <form method="post"
+          class="form-control"
+          onsubmit="ym(89625714,'reachGoal','RegisterForm')">
         {% csrf_token %}
         <div class="row mb-3">
             <label for="id_username">Логин:</label>
