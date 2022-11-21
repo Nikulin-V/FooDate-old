@@ -236,3 +236,59 @@ ul.errorlist li {
     padding: 0;
     min-width: 60px;
 }
+
+input[type='range'] {
+    height: 30px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+input[type='range'],
+input[type='range']::-webkit-slider-runnable-track,
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+    width: 200px;
+    height: 10px;
+    background: #cecece;
+}
+
+input[type='range']::-webkit-slider-thumb {
+    position: relative;
+    height: 30px;
+    width: 30px;
+    margin-top: -10px;
+    background: #269926;
+    border-radius: 50%;
+    border: 2px solid #fbfbfb;
+}
+
+input[type='range']::-webkit-slider-thumb::before {
+    position: absolute;
+    content: '';
+    height: 10px; /* equal to height of runnable track */
+    width: 500px; /* make this bigger than the widest range input element */
+    left: -502px; /* this should be -2px - width */
+    top: 8px; /* don't change this */
+    background: #269926;
+}
+
+/** FF*/
+input[type="range"]::-moz-range-progress {
+    background-color: #269926;
+}
+
+input[type="range"]::-moz-range-track {
+    background-color: #cecece;
+}
+
+/* IE*/
+input[type="range"]::-ms-fill-lower {
+    background-color: #269926;
+}
+
+input[type="range"]::-ms-fill-upper {
+    background-color: #cecece;
+}

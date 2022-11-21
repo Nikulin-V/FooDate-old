@@ -1,0 +1,92 @@
+{% load static %}
+<div class="container-fluid time-calculator-form mt-5 text-center">
+    <div class="row">
+        <label class="fs-5 text-secondary mb-0" for="productsBuyTimeRange">
+            Сколько времени вы тратите на покупку продуктов?
+        </label>
+        <p id="productsBuyTimeValue" class="fs-5 text-apple balsamiq">1 час</p>
+        <input type="range" id="productsBuyTimeRange" min="5" max="180" step="5" value="60">
+    </div>
+    <div class="row mt-3">
+        <label class="fs-5 text-secondary mb-0" for="productsBuyCountRange">
+            Сколько раз в неделю вы ходите в магазин?
+        </label>
+        <p id="productsBuyCountValue" class="fs-5 text-apple balsamiq">3 раза в неделю</p>
+        <input type="range" id="productsBuyCountRange" min="1" max="7" value="3">
+    </div>
+    <div class="row mt-5">
+        <div id="answerCard" class="mx-auto balsamiq">
+            <p class="fs-3 text-center text-apple">
+                <span class="text-secondary fs-4">Мы сэкономим вам</span><br>
+                <span id="timeResult">9540</span> минут
+                <br>
+                в год
+            </p>
+            <p class="text-secondary fs-5">
+                И освободим от очередей, пробок и выбора продуктов
+            </p>
+        </div>
+    </div>
+</div>
+<style>
+    .time-calculator-form {
+        max-width: 700px;
+        padding: 30px;
+        border: #269926 1px solid;
+        border-radius: 20px;
+    }
+
+    #answerCard {
+        background-color: #f1f1f1;
+        border-radius: 20px;
+        width: auto;
+        margin: auto;
+        padding: 20px 40px;
+    }
+
+    @media screen and (max-width: 900px) {
+        .fs-3 {
+            font-size: x-large !important;
+        }
+
+        .fs-4 {
+            font-size: large !important;
+        }
+
+        .fs-5 {
+            font-size: medium !important;
+        }
+    }
+</style>
+<script>
+    let timeRange = $('#productsBuyTimeRange');
+    let countRange = $('#productsBuyCountRange');
+    let timeAnswerField = $('#productsBuyTimeValue');
+    let countAnswerField = $('#productsBuyCountValue');
+    let resultField = $('#timeResult');
+
+    timeRange.on('input', function () {
+        if (parseInt(this.value) < 60)
+            timeAnswerField.html(this.value + ' минут')
+        else {
+            let hours = Math.trunc(parseInt(this.value) / 60)
+            let minutes = parseInt(this.value) % 60
+            let hoursWord = hours === 1 ? hours + ' час' : hours + ' часа'
+            let minutesWord = minutes !== 0 ? minutes + ' минут' : ''
+            timeAnswerField.html(hoursWord + ' ' + minutesWord)
+        }
+        resultField.html(getTimeResult())
+    })
+
+    countRange.on('input', function () {
+        if (2 <= parseInt(this.value) && parseInt(this.value) <= 4)
+            countAnswerField.html(this.value + ' раза в неделю');
+        else
+            countAnswerField.html(this.value + ' раз в неделю');
+        resultField.html(getTimeResult())
+    })
+
+    function getTimeResult() {
+        return parseInt(timeRange.val()) * parseInt(countRange.val()) * 53
+    }
+</script>
