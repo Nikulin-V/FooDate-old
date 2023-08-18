@@ -36,9 +36,7 @@ We are what we eat. Control yourself!
 
 - [Vasiliy Nikulin](https://www.github.com/vasil1y-777)
 - [Kirill Kozhevnikov](https://github.com/Kirill439867398256)
-- [Vsewolod Pritchin](https://github.com/Vsewolod)
 - [Aleksandr Gerasimov](https://github.com/Aleksander1Byte)
-- Kirill Pronin
 
 ## Feedback
 
