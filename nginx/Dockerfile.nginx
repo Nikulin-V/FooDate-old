@@ -1,0 +1,7 @@
+FROM nginxinc/nginx-unprivileged
+MAINTAINER Nikulin Vasily 'vasil1y.nikulin@ya.ru'
+
+COPY ./config /etc/nginx/sites-available
+COPY ./config /etc/nginx/sites-enabled
+
+EXPOSE 8080
