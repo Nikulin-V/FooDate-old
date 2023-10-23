@@ -15,7 +15,8 @@ DEBUG = os.getenv('DEBUG', False) in ('1', 'True', 'true', 'T', 't')
 SCHEME = os.getenv('SCHEME', 'https')
 HOST = os.getenv('HOST', 'foodate.ru')
 PARENT_HOST = HOST
-ALLOWED_HOSTS = [HOST, f'm.{HOST}', f'book.{HOST}']
+VIRTUAL_MACHINE_IP = os.getenv('VM_IP')
+ALLOWED_HOSTS = [HOST, f'm.{HOST}', f'book.{HOST}', VIRTUAL_MACHINE_IP]
 
 # Application definition
 
