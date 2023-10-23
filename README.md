@@ -40,5 +40,5 @@ We are what we eat. Control yourself!
 
 ## Feedback
 
-If you have any feedback, please reach out to us at foodate@ya.ru
+If you have any feedback, please reach out to us at [foodate@ya.ru](mailto:foodate@ya.ru)
 
