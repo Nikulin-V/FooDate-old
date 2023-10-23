@@ -15,7 +15,7 @@ DEBUG = os.getenv('DEBUG', False) in ('1', 'True', 'true', 'T', 't')
 SCHEME = os.getenv('SCHEME', 'https')
 HOST = os.getenv('HOST', 'foodate.ru')
 PARENT_HOST = HOST
-ALLOWED_HOSTS = [HOST, f'm.{HOST}', f'book.{HOST}']
+ALLOWED_HOSTS = [HOST, f'm.{HOST}', f'book.{HOST}', '10.44.44.100']
 
 # Application definition
 
