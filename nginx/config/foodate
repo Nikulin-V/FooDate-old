@@ -1,0 +1,10 @@
+server {
+    listen 8080 ssl;
+    server_name foodate.ru book.foodate.ru m.foodate.ru www.foodate.ru www.book.foodate.ru www.m.foodate.ru;
+
+    location / {
+        proxy_pass http://10.44.44.100:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}

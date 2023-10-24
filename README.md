@@ -34,11 +34,11 @@ We are what we eat. Control yourself!
 
 ## Team
 
-- [Vasiliy Nikulin](https://www.github.com/vasil1y-777)
+- [Vasiliy Nikulin](https://www.github.com/Nikulin-V)
 - [Kirill Kozhevnikov](https://github.com/Kirill439867398256)
 - [Aleksandr Gerasimov](https://github.com/Aleksander1Byte)
 
 ## Feedback
 
-If you have any feedback, please reach out to us at foodate@ya.ru
+If you have any feedback, please reach out to us at [foodate@ya.ru](mailto:foodate@ya.ru)
 

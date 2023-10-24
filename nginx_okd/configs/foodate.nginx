@@ -1,0 +1,26 @@
+server {
+	listen 8080;
+	server_name foodate.ru book.foodate.ru m.foodate.ru www.foodate.ru www.book.foodate.ru www.m.foodate.ru;
+
+	location / {
+		proxy_pass http://10.44.44.100:8000;
+		proxy_set_header Host $host;
+		proxy_ssl_server_name on;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Proto $scheme;
+		proxy_set_header X-Forwarded-Port $server_port;
+	}
+
+	location /static/ {
+		proxy_pass http://10.44.44.100:770;
+	}
+
+	location /uploads/ {
+		proxy_pass http://10.44.44.100:770;
+	}
+
+	error_page 502 503 504 /50x.html;
+	location = /50x.html {
+		alias http://10.44.44.100:770;
+	}
+}
